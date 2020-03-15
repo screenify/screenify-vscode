@@ -1,13 +1,23 @@
+// {
+// 	"compilerOptions": {
+// 		"module": "commonjs",
+// 		"lib": ["dom"],
+// 		"target": "ES6",
+// 		"moduleResolution": "node",
+// 		"checkJs": false
+// 		/* Typecheck .js files. */
+// 	},
+// 	"exclude": [
+// 		"node_modules"
+// 	]
+// }
 {
-	"compilerOptions": {
-		"module": "commonjs",
-		"lib": ["dom"],
-		"target": "ES6",
-		"moduleResolution": "node",
-		"checkJs": false
-		/* Typecheck .js files. */
-	},
-	"exclude": [
-		"node_modules"
-	]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "checkJs": false,
+    /* Typecheck .js files. */
+    "lib": ["es6", "dom"]
+  },
+  "exclude": ["node_modules"]
 }

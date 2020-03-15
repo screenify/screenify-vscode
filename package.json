@@ -33,7 +33,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension.screenify.activate",
+        "command": "screenify.activate",
         "title": "Screenify 📸"
       }
     ]
