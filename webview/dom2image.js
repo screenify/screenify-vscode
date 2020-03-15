@@ -1,6 +1,6 @@
 /*! dom-to-image 10-06-2017 */
 !(function(a) {
-  //   "use strict";
+  "use strict";
   function b(a, b) {
     function c(a) {
       return (

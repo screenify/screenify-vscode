@@ -8,7 +8,7 @@ const writeSerializedBlobToFile = (serializeBlob, fileName) => {
   fs.writeFileSync(fileName, Buffer.from(bytes));
 };
 
-const P_TITLE = "Polacode 📸";
+const P_TITLE = "screenify 📸";
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -21,14 +21,14 @@ function activate(context) {
   );
   let panel;
 
-  vscode.window.registerWebviewPanelSerializer("polacode", {
+  vscode.window.registerWebviewPanelSerializer("screenify", {
     async deserializeWebviewPanel(_panel, state) {
       panel = _panel;
       panel.webview.html = getHtmlContent(htmlPath);
       panel.webview.postMessage({
         type: "restore",
         innerHTML: state.innerHTML,
-        bgColor: context.globalState.get("polacode.bgColor", "#2e3440")
+        bgColor: context.globalState.get("screenify.bgColor", "#2e3440")
       });
       const selectionListener = setupSelectionSync();
       panel.onDidDispose(() => {
@@ -38,8 +38,8 @@ function activate(context) {
     }
   });
 
-  vscode.commands.registerCommand("polacode.activate", () => {
-    panel = vscode.window.createWebviewPanel("polacode", P_TITLE, 2, {
+  vscode.commands.registerCommand("screenify.activate", () => {
+    panel = vscode.window.createWebviewPanel("screenify", P_TITLE, 2, {
       enableScripts: true,
       localResourceRoots: [
         vscode.Uri.file(path.join(context.extensionPath, "webview"))
@@ -56,7 +56,7 @@ function activate(context) {
     setupMessageListeners();
 
     const fontFamily = vscode.workspace.getConfiguration("editor").fontFamily;
-    const bgColor = context.globalState.get("polacode.bgColor", "#2e3440");
+    const bgColor = context.globalState.get("screenify.bgColor", "#2e3440");
     panel.webview.postMessage({
       type: "init",
       fontFamily,
@@ -68,7 +68,7 @@ function activate(context) {
 
   vscode.workspace.onDidChangeConfiguration(e => {
     if (
-      e.affectsConfiguration("polacode") ||
+      e.affectsConfiguration("screenify") ||
       e.affectsConfiguration("editor")
     ) {
       syncSettings();
@@ -96,13 +96,13 @@ function activate(context) {
         case "getAndUpdateCacheAndSettings":
           panel.webview.postMessage({
             type: "restoreBgColor",
-            bgColor: context.globalState.get("polacode.bgColor", "#2e3440")
+            bgColor: context.globalState.get("screenify.bgColor", "#2e3440")
           });
 
           syncSettings();
           break;
         case "updateBgColor":
-          context.globalState.update("polacode.bgColor", data.bgColor);
+          context.globalState.update("screenify.bgColor", data.bgColor);
           break;
         case "invalidPasteContent":
           vscode.window.showInformationMessage(
@@ -114,7 +114,7 @@ function activate(context) {
   }
 
   function syncSettings() {
-    const settings = vscode.workspace.getConfiguration("polacode");
+    const settings = vscode.workspace.getConfiguration("screenify");
     const editorSettings = vscode.workspace.getConfiguration("editor", null);
     panel.webview.postMessage({
       type: "updateSettings",

@@ -9,18 +9,68 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:extension.screenify.acticvate",
-    "onWebviewPanel:polacode"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/screenify/screenify-vscode.git"
+  },
+  "publisher": "adam",
+  "keywords": [
+    "Screenify",
+    "screenshot",
+    "snippet",
+    "share"
   ],
-  "main": "./extension.js",
+  "galleryBanner": {
+    "color": "#fbfbfb",
+    "theme": "light"
+  },
+  "icon": "icon.png",
+  "activationEvents": [
+    "onCommand:extension.screenify.activate",
+    "onWebviewPanel:screenify"
+  ],
+  "main": "./src/extension",
   "contributes": {
     "commands": [
       {
-        "command": "extension.screenify.acticvate",
-        "title": "Polacode 📸"
+        "command": "extension.screenify.activate",
+        "title": "Screenify 📸"
       }
     ]
+  },
+  "configuration": {
+    "title": "Screenify",
+    "properties": {
+      "Screenify.shadow": {
+        "type": "string",
+        "description": "Shadow of the snippet node. Use any value for CSS `box-shadow`",
+        "default": "rgba(0, 0, 0, 0.55) 0px 20px 68px"
+      },
+      "Screenify.transparentBackground": {
+        "type": "boolean",
+        "description": "Transparent background for containers",
+        "default": false
+      },
+      "Screenify.backgroundColor": {
+        "type": "string",
+        "description": "Background color of snippet container. Use any value for CSS `background-color`",
+        "format": "color-hex",
+        "default": "#f2f2f2"
+      },
+      "Screenify.target": {
+        "type": "string",
+        "description": "Shoot with or without container",
+        "default": "container",
+        "enum": [
+          "container",
+          "snippet"
+        ],
+        "enumDescriptions": [
+          "Shoot with the container.",
+          "Shoot with the snippet alone. If you want transparent padding, use `container` with `\"screenify.transparentBackground\": true`"
+        ]
+      }
+    }
   },
   "scripts": {
     "lint": "eslint .",
