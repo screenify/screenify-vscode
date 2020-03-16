@@ -2,7 +2,6 @@ const vscode = require("vscode");
 const fs = require("fs");
 const path = require("path");
 const { homedir } = require("os");
-
 const writeSerializedBlobToFile = (serializeBlob, fileName) => {
   const bytes = new Uint8Array(serializeBlob.split(","));
   fs.writeFileSync(fileName, Buffer.from(bytes));

@@ -1,6 +1,4 @@
 (function() {
-  const vscode = acquireVsCodeApi();
-
   let target = "container";
   let transparentBackground = false;
   let backgroundColor = "#f2f2f2";

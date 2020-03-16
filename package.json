@@ -29,14 +29,12 @@
     "onCommand:extension.screenify.activate",
     "onWebviewPanel:screenify"
   ],
-  "main": "./src/extension",
+  "main": "./src/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "screenify.activate",
-        "title": "Screenify 📸"
-      }
-    ]
+    "commands": [{
+      "command": "screenify.activate",
+      "title": "Screenify 📸"
+    }]
   },
   "configuration": {
     "title": "Screenify",
