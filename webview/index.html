@@ -83,28 +83,28 @@
     }
 
     .toolbar a {
-      background-color: chartreuse;
-      /* float: right; */
+      float: left;
       width: 11%;
       text-align: center;
       margin-top: 0%;
       padding: 0px 5px;
       transition: all 0.5s ease;
-      color: white;
+      color: transparent;
     }
 
     /* Change color on hover */
     .toolbar a:hover {
-      background-color: rgb(238, 216, 15);
+      background-color: grey;
     }
 
     /* Change color on selected icon */
     .selected {
-      background-color: rgb(238, 216, 15);
+      background-color: grey;
     }
 
     /* Resize image to container */
-    .toolbar a img {
+    .toolbar>a>img {
+      background-color: red;
       max-width: 100%;
       height: auto;
     }
@@ -114,13 +114,19 @@
 <body>
   <!--START Toolbar -->
   <div class="toolbar">
-    <a href="#" id="save"><img src="../assets/tools_icon/save-icon.png"></a>
-    <a href="#" id="brush" onclick="ChangeTool('brush')"><img src="../assets/tools_icon/brush-icon.png"></a>
-    <a href="#" id="line" onclick="ChangeTool('line')"><img src="../assets/tools_icon/line-icon.png"></a>
-    <a href="#" id="rectangle" onclick="ChangeTool('rectangle')"><img src="../assets/tools_icon/rectangle-icon.png"></a>
-    <a href="#" id="circle" onclick="ChangeTool('circle')"><img src="../assets/tools_icon/circle-icon.png"></a>
-    <a href="#" id="ellipse" onclick="ChangeTool('ellipse')"><img src="../assets/tools_icon/ellipse-icon.png"></a>
-    <a href="#" id="polygon" onclick="ChangeTool('polygon')"><img src="../assets/tools_icon/polygon-icon.png"></a>
+    <a href="#" id="save"><img style="color: #8fbcbb;" src="./assets/tools_icon/save-icon.png"></a>
+    <a href="#" id="brush" onclick="ChangeTool('brush')"><img style="color: #8fbcbb;" #d8dee9;background-color
+        src="./assets/tools_icon/brush-icon.png"></a>
+    <a href="#" id="line" onclick="ChangeTool('line')"><img style="color: #8fbcbb;"
+        src="./assets/tools_icon/line-icon.png"></a>
+    <a href="#" id="rectangle" onclick="ChangeTool('rectangle')"><img style="color: #8fbcbb;"
+        src="./assets/tools_icon/rectangle-icon.png"></a>
+    <a href="#" id="circle" onclick="ChangeTool('circle')"><img style="color: #8fbcbb;"
+        src="./assets/tools_icon/circle-icon.png"></a>
+    <a href="#" id="ellipse" onclick="ChangeTool('ellipse')"><img style="color: #8fbcbb;"
+        src="./assets/tools_icon/ellipse-icon.png"></a>
+    <a href="#" id="polygon" onclick="ChangeTool('polygon')"><img style="color: #8fbcbb;"
+        src="./assets/tools_icon/polygon-icon.png"></a>
   </div>
   <hr>
   <!-- End Toolbar -->
@@ -179,6 +185,7 @@
         </g>
       </g>
     </svg>
+    SNAP !
   </div>
   <script>
     const vscode = acquireVsCodeApi();

@@ -13,8 +13,8 @@
 
   const snippetNode = document.getElementById("snippet");
   const snippetContainerNode = document.getElementById("snippet-container");
-  const obturateur1 = document.getElementById("save");
-  const obturateur = document.getElementById("save_logo");
+  const obturateur = document.getElementById("save");
+  const obturateurLogo = document.getElementById("save_logo");
 
 
   snippetContainerNode.style.opacity = "1";
@@ -137,11 +137,11 @@
   });
 
 
+  clickerEventListener(obturateurLogo)
   clickerEventListener(obturateur)
-  clickerEventListener(obturateur1)
 
   /*
-  Abstraction
+  Abstraction of click event listener
   */
   function clickerEventListener(event) {
     event.addEventListener("click", () => {
@@ -208,21 +208,21 @@
 
   let isInAnimation = false;
 
-  obturateur.addEventListener("mouseover", () => {
+  obturateurLogo.addEventListener("mouseover", () => {
     if (!isInAnimation) {
-      isInAnimation = false;
+      isInAnimation = true;
 
       new Vivus(
-        "save", {
+        "save_logo", {
           duration: 40,
           onReady: () => {
-            obturateur.className = "obturateur filling";
+            obturateurLogo.className = "obturateur filling";
           }
         },
         () => {
           setTimeout(() => {
-            isInAnimation = true;
-            obturateur.className = "obturateur";
+            isInAnimation = false;
+            obturateurLogo.className = "obturateur";
           }, 700);
         }
       );
