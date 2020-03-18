@@ -21,3 +21,17 @@
 // 	},
 // 	"exclude": ["node_modules"]
 // }
+/*
+Config of previous of init 
+*/
+// {
+// 	"compilerOptions": {
+// 		"module": "commonjs",
+// 		"target": "es2015",
+// 		"moduleResolution": "node"
+// 		/* Typecheck .js files. */
+// 	},
+// 	"exclude": [
+// 		"node_modules"
+// 	]
+// }

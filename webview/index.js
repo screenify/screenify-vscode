@@ -1,5 +1,6 @@
-(function() {
+(function () {
   let target = "container";
+  const vscode = acquireVsCodeApi()
   let transparentBackground = false;
   let backgroundColor = "#f2f2f2";
 
@@ -20,7 +21,7 @@
   const getInitialHtml = fontFamily => {
     const cameraWithFlashEmoji = String.fromCodePoint(128248);
     const monoFontStack = `${fontFamily},SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace`;
-    return `<meta charset="utf-8"><div style="color: #d8dee9;background-color: #2e3440; font-family: ${monoFontStack};font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;"><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">0. Run command \`Polacode ${cameraWithFlashEmoji}\`</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">1. Copy some code</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">2. Paste into Polacode view</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">3. Click the button ${cameraWithFlashEmoji}</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div></div></div>`;
+    return `<meta charset="utf-8"><div style="color: #d8dee9;background-color: #2e3440; font-family: ${monoFontStack};font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;"><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">0. Run command \`Screenify ${cameraWithFlashEmoji}\`</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">1. Copy some code</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">2. Paste into Screenify view</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">3. Click the button ${cameraWithFlashEmoji}</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div></div></div>`;
   };
 
   const serializeBlob = (blob, cb) => {
@@ -30,6 +31,7 @@
       const bytes = new Uint8Array(fileReader.result);
       cb(Array.from(bytes).join(","));
     };
+
     function getBrightness(color) {
       const rgb = this.toRgb();
       return (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
@@ -54,9 +56,11 @@
     const b = (rgb >> 0) & 0xff;
     return (r * 299 + g * 587 + b * 114) / 1000;
   }
+
   function isDark(hexColor) {
     return getBrightness(hexColor) < 128;
   }
+
   function getSnippetBgColor(html) {
     const match = html.match(/background-color: (#[a-fA-F0-9]+)/);
     return match ? match[1] : undefined;
@@ -122,7 +126,9 @@
       snippetNode.innerHTML = innerHTML;
     }
 
-    vscode.setState({ innerHTML });
+    vscode.setState({
+      innerHTML
+    });
   });
 
   obturateur.addEventListener("click", () => {
@@ -193,8 +199,7 @@
       isInAnimation = true;
 
       new Vivus(
-        "save",
-        {
+        "save", {
           duration: 40,
           onReady: () => {
             obturateur.className = "obturateur filling";
@@ -213,11 +218,16 @@
   window.addEventListener("message", e => {
     if (e) {
       if (e.data.type === "init") {
-        const { fontFamily, bgColor } = e.data;
+        const {
+          fontFamily,
+          bgColor
+        } = e.data;
 
         const initialHtml = getInitialHtml(fontFamily);
         snippetNode.innerHTML = initialHtml;
-        vscode.setState({ innerHTML: initialHtml });
+        vscode.setState({
+          innerHTML: initialHtml
+        });
 
         // update backdrop color, using bgColor from last pasted snippet
         // cannot deduce from initialHtml since it's always using Nord color

@@ -26,36 +26,38 @@
   },
   "icon": "icon.png",
   "activationEvents": [
-    "onCommand:extension.screenify.activate",
+    "onCommand:screenify.activate",
     "onWebviewPanel:screenify"
   ],
-  "main": "./src/extension.js",
+  "main": "./src/extension",
   "contributes": {
-    "commands": [{
-      "command": "screenify.activate",
-      "title": "Screenify 📸"
-    }]
+    "commands": [
+      {
+        "command": "screenify.activate",
+        "title": "Screenify 📸"
+      }
+    ]
   },
   "configuration": {
     "title": "Screenify",
     "properties": {
-      "Screenify.shadow": {
+      "screenify.shadow": {
         "type": "string",
         "description": "Shadow of the snippet node. Use any value for CSS `box-shadow`",
         "default": "rgba(0, 0, 0, 0.55) 0px 20px 68px"
       },
-      "Screenify.transparentBackground": {
+      "screenify.transparentBackground": {
         "type": "boolean",
         "description": "Transparent background for containers",
         "default": false
       },
-      "Screenify.backgroundColor": {
+      "screenify.backgroundColor": {
         "type": "string",
         "description": "Background color of snippet container. Use any value for CSS `background-color`",
         "format": "color-hex",
         "default": "#f2f2f2"
       },
-      "Screenify.target": {
+      "screenify.target": {
         "type": "string",
         "description": "Shoot with or without container",
         "default": "container",
