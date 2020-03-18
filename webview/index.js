@@ -13,7 +13,9 @@
 
   const snippetNode = document.getElementById("snippet");
   const snippetContainerNode = document.getElementById("snippet-container");
-  const obturateur = document.getElementById("save");
+  const obturateur1 = document.getElementById("save");
+  const obturateur = document.getElementById("save_logo");
+
 
   snippetContainerNode.style.opacity = "1";
   const oldState = vscode.getState();
@@ -134,13 +136,22 @@
     });
   });
 
-  obturateur.addEventListener("click", () => {
-    if (target === "container") {
-      shootAll();
-    } else {
-      shootSnippet();
-    }
-  });
+
+  clickerEventListener(obturateur)
+  clickerEventListener(obturateur1)
+
+  /*
+  Abstraction
+  */
+  function clickerEventListener(event) {
+    event.addEventListener("click", () => {
+      if (target === "container") {
+        shootAll();
+      } else {
+        shootSnippet();
+      }
+    });
+  }
 
   function shootAll() {
     const width = snippetContainerNode.offsetWidth * 2;
@@ -199,7 +210,7 @@
 
   obturateur.addEventListener("mouseover", () => {
     if (!isInAnimation) {
-      isInAnimation = true;
+      isInAnimation = false;
 
       new Vivus(
         "save", {
@@ -210,7 +221,7 @@
         },
         () => {
           setTimeout(() => {
-            isInAnimation = false;
+            isInAnimation = true;
             obturateur.className = "obturateur";
           }, 700);
         }

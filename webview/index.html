@@ -72,10 +72,58 @@
     .obturateur:not(.filling) path {
       opacity: 0.5;
     }
+
+    /* Tool_Icon */
+    .toolbar {
+      display: flex;
+      width: 100%;
+      height: 10%;
+      background-color: black;
+      overflow: auto;
+    }
+
+    .toolbar a {
+      background-color: chartreuse;
+      /* float: right; */
+      width: 11%;
+      text-align: center;
+      margin-top: 0%;
+      padding: 0px 5px;
+      transition: all 0.5s ease;
+      color: white;
+    }
+
+    /* Change color on hover */
+    .toolbar a:hover {
+      background-color: rgb(238, 216, 15);
+    }
+
+    /* Change color on selected icon */
+    .selected {
+      background-color: rgb(238, 216, 15);
+    }
+
+    /* Resize image to container */
+    .toolbar a img {
+      max-width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 
 <body>
+  <!--START Toolbar -->
+  <div class="toolbar">
+    <a href="#" id="save"><img src="../assets/tools_icon/save-icon.png"></a>
+    <a href="#" id="brush" onclick="ChangeTool('brush')"><img src="../assets/tools_icon/brush-icon.png"></a>
+    <a href="#" id="line" onclick="ChangeTool('line')"><img src="../assets/tools_icon/line-icon.png"></a>
+    <a href="#" id="rectangle" onclick="ChangeTool('rectangle')"><img src="../assets/tools_icon/rectangle-icon.png"></a>
+    <a href="#" id="circle" onclick="ChangeTool('circle')"><img src="../assets/tools_icon/circle-icon.png"></a>
+    <a href="#" id="ellipse" onclick="ChangeTool('ellipse')"><img src="../assets/tools_icon/ellipse-icon.png"></a>
+    <a href="#" id="polygon" onclick="ChangeTool('polygon')"><img src="../assets/tools_icon/polygon-icon.png"></a>
+  </div>
+  <hr>
+  <!-- End Toolbar -->
   <div id="snippet-container">
     <div id="snippet"
       style="color: #d8dee9;background-color: #2e3440;font-family: SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;">
@@ -111,7 +159,7 @@
   </div>
 
   <div id="save-container">
-    <svg id="save" class="obturateur" width="132px" height="132px" viewBox="0 0 132 132" version="1.1"
+    <svg id="save_logo" class="obturateur" width="132px" height="132px" viewBox="0 0 132 132" version="1.1"
       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
         stroke-linejoin="round">
