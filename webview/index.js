@@ -1,5 +1,8 @@
 (function () {
   let target = "container";
+  /**
+   * Requesting vscode-api
+   */
   const vscode = acquireVsCodeApi()
   let transparentBackground = false;
   let backgroundColor = "#f2f2f2";
