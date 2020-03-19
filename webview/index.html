@@ -78,7 +78,7 @@
       display: flex;
       width: 100%;
       height: 10%;
-      background-color: black;
+      background-color: white;
       overflow: auto;
     }
 
@@ -86,10 +86,11 @@
       float: left;
       width: 11%;
       text-align: center;
+      vertical-align: middle;
       margin-top: 0%;
       padding: 0px 5px;
       transition: all 0.5s ease;
-      color: transparent;
+      color: black;
     }
 
     /* Change color on hover */
@@ -103,8 +104,7 @@
     }
 
     /* Resize image to container */
-    .toolbar>a>img {
-      background-color: red;
+    .toolbar a img {
       max-width: 100%;
       height: auto;
     }
@@ -114,23 +114,20 @@
 <body>
   <!--START Toolbar -->
   <div class="toolbar">
-    <a href="#" id="save"><img style="color: #8fbcbb;" src="./assets/tools_icon/save-icon.png"></a>
-    <a href="#" id="brush" onclick="ChangeTool('brush')"><img style="color: #8fbcbb;" #d8dee9;background-color
-        src="./assets/tools_icon/brush-icon.png"></a>
-    <a href="#" id="line" onclick="ChangeTool('line')"><img style="color: #8fbcbb;"
-        src="./assets/tools_icon/line-icon.png"></a>
-    <a href="#" id="rectangle" onclick="ChangeTool('rectangle')"><img style="color: #8fbcbb;"
-        src="./assets/tools_icon/rectangle-icon.png"></a>
-    <a href="#" id="circle" onclick="ChangeTool('circle')"><img style="color: #8fbcbb;"
-        src="./assets/tools_icon/circle-icon.png"></a>
-    <a href="#" id="ellipse" onclick="ChangeTool('ellipse')"><img style="color: #8fbcbb;"
-        src="./assets/tools_icon/ellipse-icon.png"></a>
-    <a href="#" id="polygon" onclick="ChangeTool('polygon')"><img style="color: #8fbcbb;"
-        src="./assets/tools_icon/polygon-icon.png"></a>
+    <a class="selected" id="save"><img src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
+    <a #d8dee9;ba id="brush" onclick="ChangeTool('brush')"><img
+        src="https://img.icons8.com/wired/24/000000/paint-brush.png" /></a>
+    <a id="line" onclick="ChangeTool('line')"><img src="https://img.icons8.com/office/24/000000/line.png"></a>
+    <a id="rectangle" onclick="ChangeTool('rectangle')"><img
+        src="https://img.icons8.com/material-sharp/24/000000/rounded-rectangle-stroked.png" /></a>
+    <a id="circle" onclick="ChangeTool('circle')"><img
+        src="https://img.icons8.com/ios-glyphs/24/000000/circled.png"></a>
   </div>
   <hr>
   <!-- End Toolbar -->
+
   <div id="snippet-container">
+    <!-- <canvas id="my-canvas"> -->
     <div id="snippet"
       style="color: #d8dee9;background-color: #2e3440;font-family: SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;">
       <meta charset="utf-8" />
@@ -162,8 +159,8 @@
         </div>
       </div>
     </div>
+    <!-- </canvas> -->
   </div>
-
   <div id="save-container">
     <svg id="save_logo" class="obturateur" width="132px" height="132px" viewBox="0 0 132 132" version="1.1"
       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -199,6 +196,7 @@
   <script src="./dom2image.js"></script>
   <script src="./vivus.js"></script>
   <script src="./index.js"></script>
+  <script src="./paint.js"></script>
 </body>
 
 </html>
