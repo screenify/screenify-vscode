@@ -121,13 +121,13 @@
   <!--START Toolbar -->
   <div class="toolbar">
     <a href="save" id="save"><img alt="save" src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
-    <a class="selected" id="brush" onclick="ChangeTool('brush')"><img alt="brush"
+    <a href="brush" class="selected" id="brush" onclick="ChangeTool('brush')"><img alt="brush"
         src="https://img.icons8.com/wired/24/000000/paint-brush.png" /></a>
-    <a id="line" onclick="ChangeTool('line')"><img alt="line"
+    <a href="line" id="line" onclick="ChangeTool('line')"><img alt="line"
         src="https://img.icons8.com/office/24/000000/line.png"></a>
-    <a id="rectangle" onclick="ChangeTool('rectangle')"><img alt="rectangle"
+    <a href="rectangle" id="rectangle" onclick="ChangeTool('rectangle')"><img alt="rectangle"
         src="https://img.icons8.com/material-sharp/24/000000/rounded-rectangle-stroked.png" /></a>
-    <a id="circle" onclick="ChangeTool('circle')"><img alt="circle"
+    <a href="circle" id="circle" onclick="ChangeTool('circle')"><img alt="circle"
         src="https://img.icons8.com/ios-glyphs/24/000000/circled.png"></a>
   </div>
   <hr>
@@ -172,7 +172,7 @@
     </div>
   </div>
   <div id="save-container">
-    <canvas class="my-canvas" width="600" height="600"> </canvas>
+    <canvas class="my-canvas" width="600" height="600" style="background-color: white;"> </canvas>
     <svg id="save_logo" class="obturateur" width="132px" height="132px" viewBox="0 0 132 132" version="1.1"
       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
