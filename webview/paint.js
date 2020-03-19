@@ -1,5 +1,4 @@
  window.onload = function () {
-     console.log("Hello")
      // Reference to the canvas element
      let canvas;
      // Context provides functions used for drawing and 

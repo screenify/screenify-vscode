@@ -108,28 +108,37 @@
       max-width: 100%;
       height: auto;
     }
+
+    #my-canvas {
+      display: flex;
+      width: 100;
+      border: 3px solid #000000
+    }
   </style>
 </head>
 
 <body>
   <!--START Toolbar -->
   <div class="toolbar">
-    <a class="selected" id="save"><img src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
-    <a #d8dee9;ba id="brush" onclick="ChangeTool('brush')"><img
+    <a href="save" id="save"><img alt="save" src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
+    <a class="selected" id="brush" onclick="ChangeTool('brush')"><img alt="brush"
         src="https://img.icons8.com/wired/24/000000/paint-brush.png" /></a>
-    <a id="line" onclick="ChangeTool('line')"><img src="https://img.icons8.com/office/24/000000/line.png"></a>
-    <a id="rectangle" onclick="ChangeTool('rectangle')"><img
+    <a id="line" onclick="ChangeTool('line')"><img alt="line"
+        src="https://img.icons8.com/office/24/000000/line.png"></a>
+    <a id="rectangle" onclick="ChangeTool('rectangle')"><img alt="rectangle"
         src="https://img.icons8.com/material-sharp/24/000000/rounded-rectangle-stroked.png" /></a>
-    <a id="circle" onclick="ChangeTool('circle')"><img
+    <a id="circle" onclick="ChangeTool('circle')"><img alt="circle"
         src="https://img.icons8.com/ios-glyphs/24/000000/circled.png"></a>
   </div>
   <hr>
   <!-- End Toolbar -->
 
   <div id="snippet-container">
-    <!-- <canvas id="my-canvas"> -->
+    <!-- Snippet Opening Tab -->
     <div id="snippet"
       style="color: #d8dee9;background-color: #2e3440;font-family: SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;">
+      <!-- <canvas id="snippet"
+      style="color: #d8dee9;background-color: #2e3440;font-family: SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;"> -->
       <meta charset="utf-8" />
       <div
         style="color: #d8dee9;background-color: #2e3440;font-family: Input Mono;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;">
@@ -157,11 +166,13 @@
             style="color: #eceff4;">'</span><span style="color: #a3be8c;">3. Click the button 📸 </span><span
             style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span>
         </div>
+        <!-- </canvas> -->
       </div>
+      <!-- Snippet closing Tab -->
     </div>
-    <!-- </canvas> -->
   </div>
   <div id="save-container">
+    <canvas class="my-canvas" width="600" height="600"> </canvas>
     <svg id="save_logo" class="obturateur" width="132px" height="132px" viewBox="0 0 132 132" version="1.1"
       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
@@ -196,7 +207,7 @@
   <script src="./dom2image.js"></script>
   <script src="./vivus.js"></script>
   <script src="./index.js"></script>
-  <script src="./paint.js"></script>
+  <!-- <script src="./paint.js"></script> -->
 </body>
 
 </html>
