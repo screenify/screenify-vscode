@@ -109,10 +109,13 @@
       height: auto;
     }
 
-    #my-canvas {
+    #snippet-container canvas {
       display: flex;
       width: 100;
-      border: 3px solid #000000
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0
     }
   </style>
 </head>
@@ -133,9 +136,8 @@
   <hr>
   <!-- End Toolbar -->
 
-  <canvas class="snippet-container">
-    <!-- Snippet-container Opening Tab -->
-    <!-- <div id="snippet-container"> -->
+  <div id="snippet-container">
+    <canvas class="my-canvas" width="100%" height="100%" style="background-color: transparent;"></canvas>
     <!-- Snippet Opening Tab -->
     <div id="snippet"
       style="color: #d8dee9;background-color: #2e3440;font-family: SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;">
@@ -172,8 +174,7 @@
       </div>
       <!-- Snippet closing Tab -->
     </div>
-    <!-- </div> -->
-  </canvas>
+  </div>
   <div id="save-container">
     <svg id="save_logo" class="obturateur" width="132px" height="132px" viewBox="0 0 132 132" version="1.1"
       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

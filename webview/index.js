@@ -305,8 +305,8 @@
  let savedImageData;
  // Stores whether I'm currently dragging the mouse
  let dragging = false;
- let strokeColor = 'black';
- let fillColor = 'black';
+ let strokeColor = 'red';
+ let fillColor = 'red';
  let line_Width = 2;
  let polygonSides = 6;
  // Tool currently using
