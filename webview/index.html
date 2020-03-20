@@ -121,7 +121,7 @@
   <!--START Toolbar -->
   <div class="toolbar">
     <a href="save" id="save"><img alt="save" src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
-    <a href="brush" class="selected" id="brush" onclick="ChangeTool('brush')"><img alt="brush"
+    <a href="brush" id="brush" onclick="ChangeTool('brush')"><img alt="brush"
         src="https://img.icons8.com/wired/24/000000/paint-brush.png" /></a>
     <a href="line" id="line" onclick="ChangeTool('line')"><img alt="line"
         src="https://img.icons8.com/office/24/000000/line.png"></a>
@@ -133,8 +133,9 @@
   <hr>
   <!-- End Toolbar -->
 
-  <div id="snippet-container">
-    <canvas class="my-canvas" width="600" height="600" style="background-color: transparent;"> </canvas>
+  <canvas class="snippet-container">
+    <!-- Snippet-container Opening Tab -->
+    <!-- <div id="snippet-container"> -->
     <!-- Snippet Opening Tab -->
     <div id="snippet"
       style="color: #d8dee9;background-color: #2e3440;font-family: SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;">
@@ -171,7 +172,8 @@
       </div>
       <!-- Snippet closing Tab -->
     </div>
-  </div>
+    <!-- </div> -->
+  </canvas>
   <div id="save-container">
     <svg id="save_logo" class="obturateur" width="132px" height="132px" viewBox="0 0 132 132" version="1.1"
       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

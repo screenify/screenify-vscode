@@ -14,6 +14,7 @@
 
      const snippetNode = document.getElementById("snippet");
      const snippetContainerNode = document.getElementById("snippet-container");
+
      const obturateur = document.getElementById("save");
      const obturateurLogo = document.getElementById("save_logo");
 
