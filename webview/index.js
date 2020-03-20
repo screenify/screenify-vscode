@@ -363,8 +363,8 @@
  let loc = new Location(0, 0);
 
  // Call for our function to execute when page is loaded
- //  document.addEventListener('DOMContentLoaded', setupCanvas);
- setupCanvas()
+ document.addEventListener('DOMContentLoaded', setupCanvas);
+ //  setupCanvas()
 
  function setupCanvas() {
    // Get reference to canvas element
