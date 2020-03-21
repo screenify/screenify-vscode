@@ -155,21 +155,19 @@
        });
      }
 
-     snippetContainerNode.addEventListener("resize", reactToContainerResize)
-     window.addEventListener("resize", reactToContainerResize)
-     snippetNode.addEventListener("resize", reactToContainerResize)
-
-
      const ro = new ResizeObserver(entries => {
        for (let entry of entries) {
+
          const cr = entry.contentRect;
          //  console.log(`Element size: ${cr.width}px x ${cr.height}px`);
          reactToContainerResize(cr.width, cr.height)
        }
      });
 
+     // create an abstract function that will call react continer
      // // Observe one or multiple elements
      ro.observe(snippetNode);
+     ro.observe(snippetContainerNode)
 
      function reactToContainerResize(width, height) {
 
@@ -177,8 +175,8 @@
        // SaveCanvasImage()
        //  canvasWidth = width;
        //  canvasHeight = height
-       canvas.height = height - 10
-       canvas.width = width - 10
+       canvas.height = height;
+       canvas.width = width;
        // redraw the image
        RedrawCanvasImage()
        // canvas.update()
@@ -333,8 +331,8 @@
       */
      //  let canvasWidth = 600;
      //  let canvasHeight = 600;
-     let canvasWidth = snippetNode.offsetWidth - 3;
-     let canvasHeight = snippetNode.offsetHeight - 5;
+     let canvasWidth = snippetNode.offsetWidth;
+     let canvasHeight = snippetNode.offsetHeight;
 
 
      // Stores whether I'm currently using brush
