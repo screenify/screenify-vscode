@@ -6,7 +6,7 @@
       */
      const vscode = acquireVsCodeApi()
      // changed to true
-     let transparentBackground = true;
+     let transparentBackground = false;
      let backgroundColor = "#f2f2f2";
 
      vscode.postMessage({
@@ -15,10 +15,10 @@
 
      const snippetNode = document.getElementById("snippet");
      const snippetContainerNode = document.getElementById("snippet-container");
-
      const obturateur = document.getElementById("save");
      const obturateurLogo = document.getElementById("save_logo");
-
+     const canvas = document.getElementById('my-canvas');
+     const ctx = canvas.getContext('2d');
 
      snippetContainerNode.style.opacity = "1";
      const oldState = vscode.getState();
@@ -289,10 +289,8 @@
      // JavaScript Paint App JavaScript Canvas API
 
      // Reference to the canvas element
-     let canvas;
      // Context provides functions used for drawing and 
      // working with Canvas
-     let ctx;
      // Stores previously drawn image data to restore after
      // new drawings are added
      let savedImageData;
@@ -303,7 +301,15 @@
      let line_Width = 2;
      let polygonSides = 6;
      // Tool currently using
+
      let currentTool = 'brush';
+     //  let currentTool = 'rectangle';
+
+     /**
+        TODO:  
+        Change canvas 's height and width to the innerheight of snippetnode.
+      * 
+      */
      let canvasWidth = 600;
      let canvasHeight = 600;
 
@@ -357,33 +363,28 @@
      let loc = new Location(0, 0);
 
      // Call for our function to execute when page is loaded
-     document.addEventListener('DOMContentLoaded', setupCanvas);
+     //  document.addEventListener('DOMContentLoaded', setupCanvas);
      //  setupCanvas()
 
-     function setupCanvas() {
-       // Get reference to canvas element
-       canvas = document.getElementById('my-canvas');
-       // Get methods for manipulating the canvas
-       ctx = canvas.getContext('2d');
-       ctx.strokeStyle = strokeColor;
-       ctx.lineWidth = line_Width;
-       // Execute ReactToMouseDown when the mouse is clicked
-       canvas.addEventListener("mousedown", ReactToMouseDown);
-       // Execute ReactToMouseMove when the mouse is clicked
-       canvas.addEventListener("mousemove", ReactToMouseMove);
-       // Execute ReactToMouseUp when the mouse is clicked
-       canvas.addEventListener("mouseup", ReactToMouseUp);
-     }
+     //  function setupCanvas() {
+     // Get reference to canvas element
+     // Get methods for manipulating the canvas
+
+     ctx.strokeStyle = strokeColor;
+     ctx.lineWidth = line_Width;
+     // Execute ReactToMouseDown when the mouse is clicked
+     canvas.addEventListener("mousedown", ReactToMouseDown);
+     // Execute ReactToMouseMove when the mouse is clicked
+     canvas.addEventListener("mousemove", ReactToMouseMove);
+     // Execute ReactToMouseUp when the mouse is clicked
+     canvas.addEventListener("mouseup", ReactToMouseUp);
+     //  }
 
      function ChangeTool(toolClicked) {
-       document.getElementById("open").className = "";
-       document.getElementById("save").className = "";
        document.getElementById("brush").className = "";
        document.getElementById("line").className = "";
        document.getElementById("rectangle").className = "";
        document.getElementById("circle").className = "";
-       document.getElementById("ellipse").className = "";
-       document.getElementById("polygon").className = "";
        // Highlight the last selected tool on toolbar
        document.getElementById(toolClicked).className = "selected";
        // Change current tool used for drawing
@@ -651,6 +652,17 @@
 
    })();
 
+   function ChangeTool(toolClicked) {
+     document.getElementById("brush").className = "";
+     document.getElementById("line").className = "";
+     document.getElementById("rectangle").className = "";
+     document.getElementById("circle").className = "";
+     // Highlight the last selected tool on toolbar
+     document.getElementById(toolClicked).className = "selected";
+     // Change current tool used for drawing
+     currentTool = toolClicked;
+   }
+
    function getRgba(hex, transparentBackground) {
      const bigint = parseInt(hex.slice(1), 16);
      const r = (bigint >> 16) & 255;
@@ -659,4 +671,5 @@
      const a = transparentBackground ? 0 : 1;
      return `rgba(${r}, ${g}, ${b}, ${a})`;
    }
+
  }
