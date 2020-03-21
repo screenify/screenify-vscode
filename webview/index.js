@@ -44,7 +44,6 @@
          const rgb = this.toRgb();
          return (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
        }
-
        fileReader.readAsArrayBuffer(blob);
      };
 
@@ -156,6 +155,35 @@
        });
      }
 
+     snippetContainerNode.addEventListener("resize", reactToContainerResize)
+     window.addEventListener("resize", reactToContainerResize)
+     snippetNode.addEventListener("resize", reactToContainerResize)
+
+
+     const ro = new ResizeObserver(entries => {
+       for (let entry of entries) {
+         const cr = entry.contentRect;
+         //  console.log(`Element size: ${cr.width}px x ${cr.height}px`);
+         reactToContainerResize(cr.width, cr.height)
+       }
+     });
+
+     // // Observe one or multiple elements
+     ro.observe(snippetNode);
+
+     function reactToContainerResize(width, height) {
+
+       //  save the image
+       // SaveCanvasImage()
+       //  canvasWidth = width;
+       //  canvasHeight = height
+       canvas.height = height - 10
+       canvas.width = width - 10
+       // redraw the image
+       RedrawCanvasImage()
+       // canvas.update()
+     }
+     //
      function shootAll() {
        const width = snippetContainerNode.offsetWidth * 2;
        const height = snippetContainerNode.offsetHeight * 2;
@@ -275,18 +303,11 @@
        }
      });
      //closing tag of window load function stops here 
-     /**
-     Here I would like to
-     import the paintJS file
 
-       *
-       /
-     //  IDEAS  
-     //  #1 cahnge snippet contatiner to id canvas
      /**
-      * PaintJS
+      *                   PaintJS
+      // JavaScript Paint App JavaScript Canvas API
       */
-     // JavaScript Paint App JavaScript Canvas API
 
      // Reference to the canvas element
      // Context provides functions used for drawing and 
@@ -298,7 +319,7 @@
      let dragging = false;
      let strokeColor = 'red';
      let fillColor = 'red';
-     let line_Width = 2;
+     let line_Width = 1;
      let polygonSides = 6;
      // Tool currently using
 
@@ -310,8 +331,11 @@
         Change canvas 's height and width to the innerheight of snippetnode.
       * 
       */
-     let canvasWidth = 600;
-     let canvasHeight = 600;
+     //  let canvasWidth = 600;
+     //  let canvasHeight = 600;
+     let canvasWidth = snippetNode.offsetWidth - 3;
+     let canvasHeight = snippetNode.offsetHeight - 5;
+
 
      // Stores whether I'm currently using brush
      let usingBrush = false;
@@ -650,18 +674,18 @@
 
      }
 
-   })();
+     function ChangeTool(toolClicked) {
+       document.getElementById("brush").className = "";
+       document.getElementById("line").className = "";
+       document.getElementById("rectangle").className = "";
+       document.getElementById("circle").className = "";
+       // Highlight the last selected tool on toolbar
+       document.getElementById(toolClicked).className = "selected";
+       // Change current tool used for drawing
+       currentTool = toolClicked;
+     }
 
-   function ChangeTool(toolClicked) {
-     document.getElementById("brush").className = "";
-     document.getElementById("line").className = "";
-     document.getElementById("rectangle").className = "";
-     document.getElementById("circle").className = "";
-     // Highlight the last selected tool on toolbar
-     document.getElementById(toolClicked).className = "selected";
-     // Change current tool used for drawing
-     currentTool = toolClicked;
-   }
+   })();
 
    function getRgba(hex, transparentBackground) {
      const bigint = parseInt(hex.slice(1), 16);

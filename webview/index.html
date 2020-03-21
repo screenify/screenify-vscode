@@ -111,12 +111,14 @@
 
     #my-canvas {
       overflow: hidden;
-      resize: both;
       display: flex;
+      /* position: absolute; */
       /* padding: 20px; */
       border-radius: 5px;
-      width: calc(100% - 8rem);
-      position: absolute;
+      width: calc(100% - 10rem);
+      /* padding: 18px; */
+      /* margin-top: 64px; */
+      /* margin-bottom: 64px; */
       z-index: 1;
     }
   </style>
@@ -140,7 +142,7 @@
 
   <div id="snippet-container">
     <!-- Snippet Opening Tab -->
-    <canvas id="my-canvas" style="background-color: transparent"></canvas>
+    <canvas id="my-canvas" style="background-color: yellow"></canvas>
     <div id="snippet"
       style="color: #d8dee9;background-color: #2e3440;font-family: SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;">
       <!-- <canvas id="snippet"
