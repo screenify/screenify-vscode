@@ -157,9 +157,8 @@
 
      const ro = new ResizeObserver(entries => {
        for (let entry of entries) {
-
          const cr = entry.contentRect;
-         //  console.log(`Element size: ${cr.width}px x ${cr.height}px`);
+         //Element size: ${cr.width}px x ${cr.height}px`);
          reactToContainerResize(cr.width, cr.height)
        }
      });
@@ -167,30 +166,31 @@
      // create an abstract function that will call react continer
      // // Observe one or multiple elements
      ro.observe(snippetNode);
-     ro.observe(snippetContainerNode)
+     //  ro.observe(snippetContainerNode)
 
      function reactToContainerResize(width, height) {
-
        //  save the image
-       // SaveCanvasImage()
-       //  canvasWidth = width;
-       //  canvasHeight = height
+       canvasWidth = width;
+       canvasHeight = height
+       //  SaveCanvasImage()
        canvas.height = height;
        canvas.width = width;
        // redraw the image
-       RedrawCanvasImage()
-       // canvas.update()
+       //  RedrawCanvasImage()
      }
      //
      function shootAll() {
        const width = snippetContainerNode.offsetWidth * 2;
        const height = snippetContainerNode.offsetHeight * 2;
+
        const config = {
          width,
          height,
          style: {
            transform: "scale(2)",
-           "transform-origin": "center",
+           //  "transform-origin": "center",
+           "transform-origin": "left",
+
            background: getRgba(backgroundColor, transparentBackground)
          }
        };
@@ -209,14 +209,16 @@
      }
 
      function shootSnippet() {
-       const width = snippetNode.offsetWidth * 2;
-       const height = snippetNode.offsetHeight * 2;
+       const width = snippetContainerNode.offsetWidth * 2;
+       const height = snippetContainerNode.offsetHeight * 2;
+
        const config = {
          width,
          height,
          style: {
            transform: "scale(2)",
-           "transform-origin": "center",
+           //  "transform-origin": "center",
+           "transform-origin": "left",
            padding: 0,
            background: "none"
          }
@@ -329,10 +331,11 @@
         Change canvas 's height and width to the innerheight of snippetnode.
       * 
       */
+
      //  let canvasWidth = 600;
      //  let canvasHeight = 600;
-     let canvasWidth = snippetNode.offsetWidth;
-     let canvasHeight = snippetNode.offsetHeight;
+     let canvasWidth = snippetNode.clientWidth;
+     let canvasHeight = snippetNode.clientHeight;
 
 
      // Stores whether I'm currently using brush
@@ -683,6 +686,7 @@
        currentTool = toolClicked;
      }
 
+
    })();
 
    function getRgba(hex, transparentBackground) {
@@ -693,5 +697,4 @@
      const a = transparentBackground ? 0 : 1;
      return `rgba(${r}, ${g}, ${b}, ${a})`;
    }
-
  }

@@ -113,12 +113,11 @@
       overflow: hidden;
       display: flex;
       position: absolute;
-      /* padding: 20px; */
+      padding: 18px;
+      margin-top: 64px;
+      margin-bottom: 64px;
       border-radius: 5px;
-      width: calc(100% - 8rem);
-      /* padding: 18px; */
-      /* margin-top: 64px; */
-      /* margin-bottom: 64px; */
+      /* width: calc(100% - 10rem); */
       z-index: 1;
     }
   </style>
@@ -142,11 +141,8 @@
 
   <div id="snippet-container">
     <!-- Snippet Opening Tab -->
-    <canvas id="my-canvas" style="background-color: yellow"></canvas>
     <div id="snippet"
       style="color: #d8dee9;background-color: #2e3440;font-family: SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;">
-      <!-- <canvas id="snippet"
-      style="color: #d8dee9;background-color: #2e3440;font-family: SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;"> -->
       <meta charset="utf-8" />
       <div
         style="color: #d8dee9;background-color: #2e3440;font-family: Input Mono;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;">
@@ -178,6 +174,8 @@
       </div>
       <!-- Snippet closing Tab -->
     </div>
+    <canvas id="my-canvas" style="background-color: yellow"></canvas>
+
   </div>
   <div id="save-container">
     <svg id="save_logo" class="obturateur" width="132px" height="132px" viewBox="0 0 132 132" version="1.1"
