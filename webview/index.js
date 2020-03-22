@@ -188,8 +188,8 @@
          height,
          style: {
            transform: "scale(2)",
-           //  "transform-origin": "center",
-           "transform-origin": "left",
+           "transform-origin": "center",
+           //  "transform-origin": "left",
 
            background: getRgba(backgroundColor, transparentBackground)
          }
