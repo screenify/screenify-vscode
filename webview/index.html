@@ -33,6 +33,7 @@
       resize: both;
       display: flex;
       padding: 18px;
+      /* padding: 0px; */
       margin-top: 64px;
       margin-bottom: 64px;
       border-radius: 5px;
@@ -111,14 +112,14 @@
 
     #my-canvas {
       overflow: hidden;
-      display: flex;
+      display: flexbox;
       position: absolute;
-      /* padding: 0px; */
-      /* margin-top: 64px;
-      margin-bottom: 64px; */
+      /* padding: 18px; */
+      margin-top: 64px;
+      margin-bottom: 64px;
       border-radius: 5px;
-      /* width: calc(100% - 10rem); */
-      z-index: 1;
+      /* width: calc(100% - 12rem); */
+      z-index: 2;
     }
   </style>
 </head>
@@ -127,13 +128,13 @@
   <!--START Toolbar -->
   <div class="toolbar">
     <a href="save" id="save"><img src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
-    <a href="brush" class="selected" id="brush" onclick="ChangeTool('brush')"><img alt="brush"
+    <a href="brush" class="selected" id="brush" onclick="console.log('brush')"><img alt="brush"
         src="https://img.icons8.com/wired/24/000000/paint-brush.png" /></a>
-    <a href="line" id="line" onclick="ChangeTool('line')"><img alt="line"
+    <a href="line" id="line" onclick="changeTool('line')"><img alt="line"
         src="https://img.icons8.com/office/24/000000/line.png"></a>
-    <a href="rectangle" id="rectangle" onclick="ChangeTool('rectangle')"><img alt="rectangle"
+    <a href="rectangle" id="rectangle" onclick="changeTool('rectangle')"><img alt="rectangle"
         src="https://img.icons8.com/material-sharp/24/000000/rounded-rectangle-stroked.png" /></a>
-    <a href="circle" id="circle" onclick="ChangeTool('circle')"><img alt="circle"
+    <a href="circle" id="circle" onclick="changeTool('circle')"><img alt="circle"
         src="https://img.icons8.com/ios-glyphs/24/000000/circled.png"></a>
   </div>
   <hr>

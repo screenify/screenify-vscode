@@ -19,6 +19,13 @@
      const obturateurLogo = document.getElementById("save_logo");
      const canvas = document.getElementById('my-canvas');
      const ctx = canvas.getContext('2d');
+     const tools = document.getElementsByClassName('toolbar')[0];
+     //  I need to remove it 
+     //  const brush = document.getElementById("brush");
+     //  const line = document.getElementById("line");
+     //  const circle = document.getElementById("circle");
+     //  const rectangle = document.getElementById("rectangle");
+
 
      snippetContainerNode.style.opacity = "1";
      const oldState = vscode.getState();
@@ -138,14 +145,40 @@
        });
      });
 
+     clickEventListener(tools)
 
-     clickerEventListener(obturateurLogo)
-     clickerEventListener(obturateur)
+     function clickEventListener(tools) {
+       for (let i = 0; i < tools.childNodes.length; i++) {
+         node = tools.childNodes[i]
+         if (node.id) {
+           node.addEventListener("click", () => {
+             switch (node.id) {
+               case "brush":
+                 changeTool("brush")
+                 break;
+               case "line":
+                 changeTool("line")
+                 break;
+               case "circle":
+                 changeTool("circle")
+                 break;
+               case "rectangle":
+                 changeTool("rectangle")
+                 break;
+               default:
+                 break;
+             }
+           })
+         }
+       }
+     }
+     shootContainer(obturateurLogo)
+     shootContainer(obturateur)
 
      /*
      Abstraction of click event listener
      */
-     function clickerEventListener(event) {
+     function shootContainer(event) {
        event.addEventListener("click", () => {
          if (target === "container") {
            shootAll();
@@ -218,9 +251,7 @@
          style: {
            transform: "scale(2)",
            "transform-origin": "center",
-           padding: 0,
            background: "none"
-           //  getRgba(backgroundColor, true)
          }
        };
 
@@ -309,11 +340,6 @@
       // JavaScript Paint App JavaScript Canvas API
       */
 
-     // Reference to the canvas element
-     // Context provides functions used for drawing and 
-     // working with Canvas
-     // Stores previously drawn image data to restore after
-     // new drawings are added
      let savedImageData;
      // Stores whether I'm currently dragging the mouse
      let dragging = false;
@@ -405,7 +431,7 @@
      canvas.addEventListener("mouseup", ReactToMouseUp);
      //  }
 
-     function ChangeTool(toolClicked) {
+     function changeTool(toolClicked) {
        document.getElementById("brush").className = "";
        document.getElementById("line").className = "";
        document.getElementById("rectangle").className = "";
@@ -675,7 +701,7 @@
 
      }
 
-     function ChangeTool(toolClicked) {
+     function changeTool(toolClicked) {
        document.getElementById("brush").className = "";
        document.getElementById("line").className = "";
        document.getElementById("rectangle").className = "";
