@@ -19,12 +19,10 @@
      const obturateurLogo = document.getElementById("save_logo");
      const canvas = document.getElementById('my-canvas');
      const ctx = canvas.getContext('2d');
-     const tools = document.getElementsByClassName('toolbar')[0];
-     //  I need to remove it 
-     //  const brush = document.getElementById("brush");
-     //  const line = document.getElementById("line");
-     //  const circle = document.getElementById("circle");
-     //  const rectangle = document.getElementById("rectangle");
+     const brush = document.getElementById("brush");
+     const line = document.getElementById("line");
+     const circle = document.getElementById("circle");
+     const rectangle = document.getElementById("rectangle");
 
 
      snippetContainerNode.style.opacity = "1";
@@ -145,33 +143,20 @@
        });
      });
 
-     clickEventListener(tools)
+     brush.addEventListener("click", () => {
+       changeTool("brush")
 
-     function clickEventListener(tools) {
-       for (let i = 0; i < tools.childNodes.length; i++) {
-         node = tools.childNodes[i]
-         if (node.id) {
-           node.addEventListener("click", () => {
-             switch (node.id) {
-               case "brush":
-                 changeTool("brush")
-                 break;
-               case "line":
-                 changeTool("line")
-                 break;
-               case "circle":
-                 changeTool("circle")
-                 break;
-               case "rectangle":
-                 changeTool("rectangle")
-                 break;
-               default:
-                 break;
-             }
-           })
-         }
-       }
-     }
+     })
+
+     line.addEventListener("click", () => {
+       changeTool("line")
+
+     })
+
+     rectangle.addEventListener("click", () => {
+       changeTool("rectangle")
+
+     })
      shootContainer(obturateurLogo)
      shootContainer(obturateur)
 
@@ -353,13 +338,10 @@
      //  let currentTool = 'rectangle';
 
      /**
-        TODO:  
-        Change canvas 's height and width to the innerheight of snippetnode.
+        Changed canvas 's height and width to the innerheight of snippetnode.
       * 
       */
 
-     //  let canvasWidth = 600;
-     //  let canvasHeight = 600;
      let canvasWidth = snippetNode.clientWidth;
      let canvasHeight = snippetNode.clientHeight;
 
@@ -413,13 +395,8 @@
      // Holds x & y location of the mouse
      let loc = new Location(0, 0);
 
-     // Call for our function to execute when page is loaded
-     //  document.addEventListener('DOMContentLoaded', setupCanvas);
-     //  setupCanvas()
 
-     //  function setupCanvas() {
-     // Get reference to canvas element
-     // Get methods for manipulating the canvas
+
 
      ctx.strokeStyle = strokeColor;
      ctx.lineWidth = line_Width;
@@ -435,7 +412,6 @@
        document.getElementById("brush").className = "";
        document.getElementById("line").className = "";
        document.getElementById("rectangle").className = "";
-       document.getElementById("circle").className = "";
        // Highlight the last selected tool on toolbar
        document.getElementById(toolClicked).className = "selected";
        // Change current tool used for drawing
@@ -701,16 +677,16 @@
 
      }
 
-     function changeTool(toolClicked) {
-       document.getElementById("brush").className = "";
-       document.getElementById("line").className = "";
-       document.getElementById("rectangle").className = "";
-       document.getElementById("circle").className = "";
-       // Highlight the last selected tool on toolbar
-       document.getElementById(toolClicked).className = "selected";
-       // Change current tool used for drawing
-       currentTool = toolClicked;
-     }
+     //  function changeTool(toolClicked) {
+     //    document.getElementById("brush").className = "";
+     //    document.getElementById("line").className = "";
+     //    document.getElementById("rectangle").className = "";
+     //    document.getElementById("circle").className = "";
+     //    // Highlight the last selected tool on toolbar
+     //    document.getElementById(toolClicked).className = "selected";
+     //    // Change current tool used for drawing
+     //    currentTool = toolClicked;
+     //  }
 
      function getRgba(hex, transparentBackground) {
        const bigint = parseInt(hex.slice(1), 16);
