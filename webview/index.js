@@ -1,4 +1,4 @@
-    let index = function () {
+    window.onload = function () {
       (function () {
         let target = "container";
         /**
@@ -206,12 +206,11 @@
             style: {
               transform: "scale(2)",
               "transform-origin": "center",
-
               background: getRgba(backgroundColor, transparentBackground)
             }
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
-          canvas.style.transform = "translate( 240px, 140px)"
+          canvas.style.transform = "translate( 245px, 115px)"
           // Hide resizer before capture
           snippetNode.style.resize = "none";
           snippetContainerNode.style.resize = "none";
@@ -239,7 +238,7 @@
             }
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
-          canvas.style.transform = "translate( 240px, 140px)"
+          canvas.style.transform = "translate( 245px, 115px)"
 
           // Hide resizer before capture
           snippetNode.style.resize = "none";
@@ -375,13 +374,6 @@
           }
         }
 
-        // Holds x & y polygon point values
-        class PolygonPoint {
-          constructor(x, y) {
-            this.x = x,
-              this.y = y;
-          }
-        }
         // Stores top left x & y and size of rubber band box 
         let shapeBoundingBox = new ShapeBoundingBox(0, 0, 0, 0);
 
@@ -461,72 +453,6 @@
           }
         }
 
-        // Returns the angle using x and y
-        // x = Adjacent Side
-        // y = Opposite Side
-        // Tan(Angle) = Opposite / Adjacent
-        // Angle = ArcTan(Opposite / Adjacent)
-        function getAngleUsingXAndY(mouselocX, mouselocY) {
-          let adjacent = mousedown.x - mouselocX;
-          let opposite = mousedown.y - mouselocY;
-
-          return radiansToDegrees(Math.atan2(opposite, adjacent));
-        }
-
-        function radiansToDegrees(rad) {
-          if (rad < 0) {
-            // Correct the bottom error by adding the negative
-            // angle to 360 to get the correct result around
-            // the whole circle
-            return (360.0 + (rad * (180 / Math.PI))).toFixed(2);
-          } else {
-            return (rad * (180 / Math.PI)).toFixed(2);
-          }
-        }
-
-        // Converts degrees to radians
-        function degreesToRadians(degrees) {
-          return degrees * (Math.PI / 180);
-        }
-
-        //  function getPolygonPoints() {
-        //    // Get angle in radians based on x & y of mouse location
-        //    let angle = degreesToRadians(getAngleUsingXAndY(loc.x, loc.y));
-
-        //    // X & Y for the X & Y point representing the radius is equal to
-        //    // the X & Y of the bounding rubberband box
-        //    let radiusX = shapeBoundingBox.width;
-        //    let radiusY = shapeBoundingBox.height;
-        //    // Stores all points in the polygon
-        //    let polygonPoints = [];
-
-        //    // Each point in the polygon is found by breaking the 
-        //    // parts of the polygon into triangles
-        //    // Then I can use the known angle and adjacent side length
-        //    // to find the X = mouseLoc.x + radiusX * Sin(angle)
-        //    // You find the Y = mouseLoc.y + radiusY * Cos(angle)
-        //    for (let i = 0; i < polygonSides; i++) {
-        //      polygonPoints.push(new PolygonPoint(loc.x + radiusX * Math.sin(angle),
-        //        loc.y - radiusY * Math.cos(angle)));
-
-        //      // 2 * PI equals 360 degrees
-        //      // Divide 360 into parts based on how many polygon 
-        //      // sides you want 
-        //      angle += 2 * Math.PI / polygonSides;
-        //    }
-        //    return polygonPoints;
-        //  }
-
-        // Get the polygon points and draw the polygon
-        //  function getPolygon() {
-        //    let polygonPoints = getPolygonPoints();
-        //    ctx.beginPath();
-        //    ctx.moveTo(polygonPoints[0].x, polygonPoints[0].y);
-        //    for (let i = 1; i < polygonSides; i++) {
-        //      ctx.lineTo(polygonPoints[i].x, polygonPoints[i].y);
-        //    }
-        //    ctx.closePath();
-        //  }
 
         // Called to draw the line
         function drawRubberbandShape(loc) {
@@ -545,7 +471,6 @@
             // Creates rectangles
             ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top, shapeBoundingBox.width, shapeBoundingBox.height);
           }
-
         }
 
         function UpdateRubberbandOnMove(loc) {
@@ -633,26 +558,6 @@
           usingBrush = false;
         }
 
-        // Saves the image in your default download directory
-        function SaveImage() {
-          // Get a reference to the link element 
-          var imageFile = document.getElementById("img-file");
-          // Set that you want to download the image when link is clicked
-          imageFile.setAttribute('download', 'image.png');
-          // Reference the image in canvas for download
-          imageFile.setAttribute('href', canvas.toDataURL());
-        }
-
-        function OpenImage() {
-          let img = new Image();
-          // Once the image is loaded clear the canvas and draw it
-          img.onload = function () {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, 0, 0);
-          }
-          img.src = 'image.png';
-        }
-
         function getRgba(hex, transparentBackground) {
           const bigint = parseInt(hex.slice(1), 16);
           const r = (bigint >> 16) & 255;
@@ -664,4 +569,3 @@
       })
       ();
     }
-    window.load = index
