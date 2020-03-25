@@ -144,4 +144,9 @@ function getHtmlContent(htmlPath) {
   })
 }
 
+function deactivate() {
+  return null;
+}
+
 exports.activate = activate
+exports.deactivate = deactivate
