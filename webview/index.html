@@ -112,13 +112,11 @@
 
     #my-canvas {
       overflow: hidden;
-      display: flexbox;
+      display: flex;
       position: absolute;
-      /* padding: 18px; */
-      margin-top: 64px;
+      margin-top: 0px;
       margin-bottom: 64px;
       border-radius: 5px;
-      /* width: calc(100% - 12rem); */
       z-index: 2;
     }
   </style>
@@ -128,12 +126,12 @@
   <!--START Toolbar -->
   <div class="toolbar">
     <a href="save" id="save"><img src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
-    <a href="brush" class="selected" id="brush" onclick="console.log('brush')"><img alt="brush"
+    <a href="brush" class="selected" id="brush"><img alt="brush"
         src="https://img.icons8.com/wired/24/000000/paint-brush.png" /></a>
-    <a href="line" id="line" onclick="changeTool('line')"><img alt="line"
-        src="https://img.icons8.com/office/24/000000/line.png"></a>
-    <a href="rectangle" id="rectangle" onclick="changeTool('rectangle')"><img alt="rectangle"
+    <a href="line" id="line"><img alt="line" src="https://img.icons8.com/office/24/000000/line.png"></a>
+    <a href="rectangle" id="rectangle"><img alt=" rectangle"
         src="https://img.icons8.com/material-sharp/24/000000/rounded-rectangle-stroked.png" /></a>
+    <a><input type="color" id="color"></a>
   </div>
   <hr>
   <!-- End Toolbar -->
@@ -211,7 +209,7 @@
   <script src="./dom2image.js"></script>
   <script src="./vivus.js"></script>
   <script src="./index.js"></script>
-  <!-- <script src="./paint.js"></script> -->
+
 </body>
 
 </html>

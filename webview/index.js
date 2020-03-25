@@ -23,7 +23,7 @@
      const line = document.getElementById("line");
      const circle = document.getElementById("circle");
      const rectangle = document.getElementById("rectangle");
-
+     const color = document.getElementById("color")
 
      snippetContainerNode.style.opacity = "1";
      const oldState = vscode.getState();
@@ -145,24 +145,25 @@
 
      brush.addEventListener("click", () => {
        changeTool("brush")
-
      })
 
      line.addEventListener("click", () => {
        changeTool("line")
-
      })
 
      rectangle.addEventListener("click", () => {
        changeTool("rectangle")
-
      })
+
+     color.addEventListener("input", () => {
+       strokeColor = color.value;
+       fillColor = color.value;
+     })
+
      shootContainer(obturateurLogo)
      shootContainer(obturateur)
 
-     /*
-     Abstraction of click event listener
-     */
+     /* Abstraction of click event listener */
      function shootContainer(event) {
        event.addEventListener("click", () => {
          if (target === "container") {
@@ -172,7 +173,7 @@
          }
        });
      }
-
+     //  redsise event listener
      const ro = new ResizeObserver(entries => {
        for (let entry of entries) {
          const cr = entry.contentRect;
@@ -181,10 +182,8 @@
        }
      });
 
-     // create an abstract function that will call react continer
      // // Observe one or multiple elements
      ro.observe(snippetNode);
-     //  ro.observe(snippetContainerNode)
 
      function reactToContainerResize(width, height) {
        //  save the image
@@ -207,17 +206,18 @@
          style: {
            transform: "scale(2)",
            "transform-origin": "center",
-           //  "transform-origin": "left",
 
            background: getRgba(backgroundColor, transparentBackground)
          }
        };
-
+       // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
+       canvas.style.transform = "translate( 240px, 140px)"
        // Hide resizer before capture
        snippetNode.style.resize = "none";
        snippetContainerNode.style.resize = "none";
 
        domtoimage.toBlob(snippetContainerNode, config).then(blob => {
+         canvas.style.transform = "none"
          snippetNode.style.resize = "";
          snippetContainerNode.style.resize = "";
          serializeBlob(blob, serializedBlob => {
@@ -229,7 +229,6 @@
      function shootSnippet() {
        const width = snippetContainerNode.offsetWidth * 2;
        const height = snippetContainerNode.offsetHeight * 2;
-
        const config = {
          width,
          height,
@@ -239,12 +238,15 @@
            background: "none"
          }
        };
+       // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
+       canvas.style.transform = "translate( 240px, 140px)"
 
        // Hide resizer before capture
        snippetNode.style.resize = "none";
        snippetContainerNode.style.resize = "none";
 
        domtoimage.toBlob(snippetContainerNode, config).then(blob => {
+         canvas.style.transform = "none"
          snippetNode.style.resize = "";
          snippetContainerNode.style.resize = "";
          serializeBlob(blob, serializedBlob => {
@@ -332,19 +334,12 @@
      let fillColor = 'red';
      let line_Width = 1;
      let polygonSides = 6;
+
      // Tool currently using
-
      let currentTool = 'brush';
-     //  let currentTool = 'rectangle';
-
-     /**
-        Changed canvas 's height and width to the innerheight of snippetnode.
-      * 
-      */
-
+     /** Changed canvas 's height and width to the innerheight of snippetnode. */
      let canvasWidth = snippetNode.clientWidth;
      let canvasHeight = snippetNode.clientHeight;
-
 
      // Stores whether I'm currently using brush
      let usingBrush = false;
@@ -390,16 +385,15 @@
      }
      // Stores top left x & y and size of rubber band box 
      let shapeBoundingBox = new ShapeBoundingBox(0, 0, 0, 0);
+
      // Holds x & y position where clicked
      let mousedown = new MouseDownPos(0, 0);
+
      // Holds x & y location of the mouse
      let loc = new Location(0, 0);
-
-
-
-
      ctx.strokeStyle = strokeColor;
      ctx.lineWidth = line_Width;
+
      // Execute ReactToMouseDown when the mouse is clicked
      canvas.addEventListener("mousedown", ReactToMouseDown);
      // Execute ReactToMouseMove when the mouse is clicked
@@ -417,6 +411,7 @@
        // Change current tool used for drawing
        currentTool = toolClicked;
      }
+
      // Returns mouse x & y position based on canvas position in page
      function GetMousePosition(x, y) {
        // Get canvas size and position in web page
@@ -674,19 +669,7 @@
          ctx.drawImage(img, 0, 0);
        }
        img.src = 'image.png';
-
      }
-
-     //  function changeTool(toolClicked) {
-     //    document.getElementById("brush").className = "";
-     //    document.getElementById("line").className = "";
-     //    document.getElementById("rectangle").className = "";
-     //    document.getElementById("circle").className = "";
-     //    // Highlight the last selected tool on toolbar
-     //    document.getElementById(toolClicked).className = "selected";
-     //    // Change current tool used for drawing
-     //    currentTool = toolClicked;
-     //  }
 
      function getRgba(hex, transparentBackground) {
        const bigint = parseInt(hex.slice(1), 16);
@@ -696,7 +679,6 @@
        const a = transparentBackground ? 0 : 1;
        return `rgba(${r}, ${g}, ${b}, ${a})`;
      }
-
    })();
 
 
