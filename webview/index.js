@@ -320,11 +320,10 @@
          }
        }
      });
-     //closing tag of window load function stops here 
 
      /**
       *                   PaintJS
-      // JavaScript Paint App JavaScript Canvas API
+      * JavaScript Paint App JavaScript Canvas API
       */
 
      let savedImageData;
@@ -490,44 +489,44 @@
        return degrees * (Math.PI / 180);
      }
 
-     function getPolygonPoints() {
-       // Get angle in radians based on x & y of mouse location
-       let angle = degreesToRadians(getAngleUsingXAndY(loc.x, loc.y));
+     //  function getPolygonPoints() {
+     //    // Get angle in radians based on x & y of mouse location
+     //    let angle = degreesToRadians(getAngleUsingXAndY(loc.x, loc.y));
 
-       // X & Y for the X & Y point representing the radius is equal to
-       // the X & Y of the bounding rubberband box
-       let radiusX = shapeBoundingBox.width;
-       let radiusY = shapeBoundingBox.height;
-       // Stores all points in the polygon
-       let polygonPoints = [];
+     //    // X & Y for the X & Y point representing the radius is equal to
+     //    // the X & Y of the bounding rubberband box
+     //    let radiusX = shapeBoundingBox.width;
+     //    let radiusY = shapeBoundingBox.height;
+     //    // Stores all points in the polygon
+     //    let polygonPoints = [];
 
-       // Each point in the polygon is found by breaking the 
-       // parts of the polygon into triangles
-       // Then I can use the known angle and adjacent side length
-       // to find the X = mouseLoc.x + radiusX * Sin(angle)
-       // You find the Y = mouseLoc.y + radiusY * Cos(angle)
-       for (let i = 0; i < polygonSides; i++) {
-         polygonPoints.push(new PolygonPoint(loc.x + radiusX * Math.sin(angle),
-           loc.y - radiusY * Math.cos(angle)));
+     //    // Each point in the polygon is found by breaking the 
+     //    // parts of the polygon into triangles
+     //    // Then I can use the known angle and adjacent side length
+     //    // to find the X = mouseLoc.x + radiusX * Sin(angle)
+     //    // You find the Y = mouseLoc.y + radiusY * Cos(angle)
+     //    for (let i = 0; i < polygonSides; i++) {
+     //      polygonPoints.push(new PolygonPoint(loc.x + radiusX * Math.sin(angle),
+     //        loc.y - radiusY * Math.cos(angle)));
 
-         // 2 * PI equals 360 degrees
-         // Divide 360 into parts based on how many polygon 
-         // sides you want 
-         angle += 2 * Math.PI / polygonSides;
-       }
-       return polygonPoints;
-     }
+     //      // 2 * PI equals 360 degrees
+     //      // Divide 360 into parts based on how many polygon 
+     //      // sides you want 
+     //      angle += 2 * Math.PI / polygonSides;
+     //    }
+     //    return polygonPoints;
+     //  }
 
      // Get the polygon points and draw the polygon
-     function getPolygon() {
-       let polygonPoints = getPolygonPoints();
-       ctx.beginPath();
-       ctx.moveTo(polygonPoints[0].x, polygonPoints[0].y);
-       for (let i = 1; i < polygonSides; i++) {
-         ctx.lineTo(polygonPoints[i].x, polygonPoints[i].y);
-       }
-       ctx.closePath();
-     }
+     //  function getPolygon() {
+     //    let polygonPoints = getPolygonPoints();
+     //    ctx.beginPath();
+     //    ctx.moveTo(polygonPoints[0].x, polygonPoints[0].y);
+     //    for (let i = 1; i < polygonSides; i++) {
+     //      ctx.lineTo(polygonPoints[i].x, polygonPoints[i].y);
+     //    }
+     //    ctx.closePath();
+     //  }
 
      // Called to draw the line
      function drawRubberbandShape(loc) {
@@ -545,25 +544,8 @@
        } else if (currentTool === "rectangle") {
          // Creates rectangles
          ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top, shapeBoundingBox.width, shapeBoundingBox.height);
-       } else if (currentTool === "circle") {
-         // Create circles
-         let radius = shapeBoundingBox.width;
-         ctx.beginPath();
-         ctx.arc(mousedown.x, mousedown.y, radius, 0, Math.PI * 2);
-         ctx.stroke();
-       } else if (currentTool === "ellipse") {
-         // Create ellipses
-         // ctx.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle)
-         let radiusX = shapeBoundingBox.width / 2;
-         let radiusY = shapeBoundingBox.height / 2;
-         ctx.beginPath();
-         ctx.ellipse(mousedown.x, mousedown.y, radiusX, radiusY, Math.PI / 4, 0, Math.PI * 2);
-         ctx.stroke();
-       } else if (currentTool === "polygon") {
-         // Create polygons
-         getPolygon();
-         ctx.stroke();
        }
+
      }
 
      function UpdateRubberbandOnMove(loc) {
