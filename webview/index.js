@@ -1,4 +1,4 @@
-    window.onload = function () {
+    let index = function () {
       (function () {
         let target = "container";
         /**
@@ -664,3 +664,4 @@
       })
       ();
     }
+    window.load = index

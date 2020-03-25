@@ -28,7 +28,4 @@ suite('Extension Test Suite', () => {
 			);
 		});
 	})
-	test("should be able to save image to desktop", () => {
-
-	})
 })
