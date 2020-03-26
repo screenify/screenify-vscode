@@ -1,11 +1,8 @@
     window.onload = function () {
       (function () {
         let target = "container";
-        /**
-         * Requesting vscode-api
-         */
+        /**  vscode-api*/
         const vscode = acquireVsCodeApi()
-        // changed to true
         let transparentBackground = false;
         let backgroundColor = "#f2f2f2";
 
@@ -24,6 +21,7 @@
         const circle = document.getElementById("circle");
         const rectangle = document.getElementById("rectangle");
         const color = document.getElementById("color")
+        const snippetHeight = document.getElementById("snippetHeight")
 
         snippetContainerNode.style.opacity = "1";
         const oldState = vscode.getState();
@@ -113,6 +111,7 @@
             initialSpans[i].textContent = initialSpans[i].textContent.slice(indent);
           }
           return doc.body.innerHTML;
+          s
         }
 
         document.addEventListener("paste", e => {
@@ -186,14 +185,15 @@
         ro.observe(snippetNode);
 
         function reactToContainerResize(width, height) {
+          snippetHeight.innerText = height
           //  save the image
           canvasWidth = width;
           canvasHeight = height
-          //  SaveCanvasImage()
+          SaveCanvasImage()
           canvas.height = height;
           canvas.width = width;
           // redraw the image
-          //  RedrawCanvasImage()
+          RedrawCanvasImage()
         }
         //
         function shootAll() {
@@ -210,7 +210,10 @@
             }
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
-          canvas.style.transform = "translate( 245px, 115px)"
+          // canvas.style.transform = "translate( 245px, 625px)"
+          canvas.style.transform = "translate( 245px, 145px)"
+          // canvas.style.transform = `translate( 245px, ${(canvasHeight + 10 ) / 1.6}px)`
+
           // Hide resizer before capture
           snippetNode.style.resize = "none";
           snippetContainerNode.style.resize = "none";
@@ -238,7 +241,8 @@
             }
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
-          canvas.style.transform = "translate( 245px, 115px)"
+          canvas.style.transform = "translate(245px, 145px)"
+          // canvas.style.transform = `translate( 245px, ${(snippetNode.height + 10)  / 1.6}px)`
 
           // Hide resizer before capture
           snippetNode.style.resize = "none";
@@ -326,10 +330,10 @@
          */
 
         let savedImageData;
-        // Stores whether I'm currently dragging the mouse
+        // Stores whether I'm currently dragging the mouse or not
         let dragging = false;
-        let strokeColor = 'red';
-        let fillColor = 'red';
+        let strokeColor = color.value;
+        let fillColor = color.value;;
         let line_Width = 1;
         let polygonSides = 6;
 

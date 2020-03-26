@@ -39,6 +39,7 @@
       border-radius: 5px;
       box-shadow: rgba(0, 0, 0, 0.55) 0px 20px 68px;
       width: calc(100% - 8rem);
+      user-select: none;
     }
 
     #snippet>div {
@@ -114,7 +115,8 @@
       overflow: hidden;
       display: flex;
       position: absolute;
-      margin-top: 0px;
+      /* margin-top: 0px; */
+      padding: 0px;
       margin-bottom: 64px;
       border-radius: 5px;
       z-index: 2;
@@ -131,11 +133,11 @@
     <a href="line" id="line"><img alt="line" src="https://img.icons8.com/office/24/000000/line.png"></a>
     <a href="rectangle" id="rectangle"><img alt=" rectangle"
         src="https://img.icons8.com/material-sharp/24/000000/rounded-rectangle-stroked.png" /></a>
-    <a><input type="color" id="color"></a>
+    <a href="color picker"><input type="color" id="color" placeholder="red" value="#FF0000"></a>
   </div>
   <hr>
   <!-- End Toolbar -->
-
+  <h4 id="snippetHeight"></h4>
   <div id="snippet-container">
     <!-- Snippet Opening Tab -->
     <div id="snippet"
@@ -171,10 +173,10 @@
       </div>
       <!-- Snippet closing Tab -->
     </div>
-    <canvas id="my-canvas" style="background-color: transparent"></canvas>
+    <canvas id="my-canvas" style="background-color: green"></canvas>
 
   </div>
-  <div id="save-container">
+  <div id="save-container" style="user-select: none;">
     <svg id="save_logo" class="obturateur" width="132px" height="132px" viewBox="0 0 132 132" version="1.1"
       xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round"
@@ -195,7 +197,7 @@
         </g>
       </g>
     </svg>
-    SNAP !
+    <span style="user-select: none;">SNAP !</span>
   </div>
   <script>
     const vscode = acquireVsCodeApi();
