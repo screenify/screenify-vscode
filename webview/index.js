@@ -22,6 +22,9 @@
         const rectangle = document.getElementById("rectangle");
         const color = document.getElementById("color")
         const snippetHeight = document.getElementById("snippetHeight")
+        const snippetWidth = document.getElementById("snippetWidth")
+        const snippeInputHeight = document.getElementById("snippeInputHeight")
+        const snippeInputWidth = document.getElementById("snippeInputWidth")
 
         snippetContainerNode.style.opacity = "1";
         const oldState = vscode.getState();
@@ -158,7 +161,12 @@
           strokeColor = color.value;
           fillColor = color.value;
         })
-
+        snippeInputWidth.addEventListener("input", () => {
+          snippetNode.style.width = `${snippeInputWidth.value}px`
+        })
+        snippeInputHeight.addEventListener("input", () => {
+          snippetNode.style.height = `${snippeInputHeight.value}px`;
+        })
         shootContainer(obturateurLogo)
         shootContainer(obturateur)
 
@@ -186,14 +194,20 @@
 
         function reactToContainerResize(width, height) {
           snippetHeight.innerText = height
+          snippetWidth.innerText = width
           //  save the image
-          canvasWidth = width;
-          canvasHeight = height
           SaveCanvasImage()
-          canvas.height = height;
-          canvas.width = width;
+
+          canvasWidth = width + 20;
+          canvasHeight = height + 20;
+          canvas.height = height + 20;
+          canvas.width = width + 20;
           // redraw the image
           RedrawCanvasImage()
+          SaveCanvasImage();
+          RedrawCanvasImage()
+
+
         }
         //
         function shootAll() {
@@ -210,9 +224,8 @@
             }
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
-          // canvas.style.transform = "translate( 245px, 625px)"
-          canvas.style.transform = "translate( 245px, 145px)"
-          // canvas.style.transform = `translate( 245px, ${(canvasHeight + 10 ) / 1.6}px)`
+          // canvas.style.transform = `translate( 245px,${(canvas.height) / 30}px)`
+          canvas.style.transform = `translate(245px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
 
           // Hide resizer before capture
           snippetNode.style.resize = "none";
@@ -241,8 +254,8 @@
             }
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
-          canvas.style.transform = "translate(245px, 145px)"
-          // canvas.style.transform = `translate( 245px, ${(snippetNode.height + 10)  / 1.6}px)`
+          // canvas.style.transform = "translate(245px, 145px)"
+          canvas.style.transform = `translate(245px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
 
           // Hide resizer before capture
           snippetNode.style.resize = "none";
@@ -340,8 +353,8 @@
         // Tool currently using
         let currentTool = 'brush';
         /** Changed canvas 's height and width to the innerheight of snippetnode. */
-        let canvasWidth = snippetNode.clientWidth;
-        let canvasHeight = snippetNode.clientHeight;
+        let canvasWidth = snippetNode.clientWidth + 20;
+        let canvasHeight = snippetNode.clientHeight + 20;
 
         // Stores whether I'm currently using brush
         let usingBrush = false;
@@ -425,6 +438,8 @@
         function RedrawCanvasImage() {
           // Restore image
           ctx.putImageData(savedImageData, 0, 0);
+          // ctx.putImageData(savedImageData, canvas.width, canvas.height);
+
         }
 
         function UpdateRubberbandSizeData(loc) {

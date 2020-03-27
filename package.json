@@ -14,7 +14,6 @@
     "url": "https://github.com/screenify/screenify-vscode.git"
   },
   "publisher": "screenify-vscode",
-
   "galleryBanner": {
     "color": "#fbfbfb",
     "theme": "light"
@@ -26,15 +25,19 @@
   ],
   "main": "./src/extension",
   "contributes": {
-    "commands": [{
-      "command": "screenify.activate",
-      "title": "Screenify 📸"
-    }],
-    "keybindings": [{
-      "command": "screenify.activate",
-      "key": "ctrl+shift+s",
-      "mac": "cmd+shift+s"
-    }]
+    "commands": [
+      {
+        "command": "screenify.activate",
+        "title": "Screenify 📸"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "screenify.activate",
+        "key": "ctrl+shift+s",
+        "mac": "cmd+shift+s"
+      }
+    ]
   },
   "configuration": {
     "title": "Screenify",
@@ -70,7 +73,6 @@
       }
     }
   },
-
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
