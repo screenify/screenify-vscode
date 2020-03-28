@@ -224,9 +224,8 @@
             }
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
-          // canvas.style.transform = `translate( 245px,${(canvas.height) / 30}px)`
-          // canvas.style.transform = `translate(245px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
-          canvas.style.transform = `translate(${245}px, ${100}px)`
+          canvas.style.transform = `translate(${0.517*(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
+
 
 
           // Hide resizer before capture
@@ -256,9 +255,7 @@
             }
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
-          // canvas.style.transform = "translate(245px, 145px)"
-          // canvas.style.transform = `translate(245px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
-          canvas.style.transform = `translate(${290}px, ${5}px)`
+          canvas.style.transform = `translate(${0.517*(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
 
 
 
