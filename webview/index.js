@@ -254,8 +254,10 @@
               background: "none"
             }
           };
-          // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
-          canvas.style.transform = `translate(${0.517*(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
+          // Hacky adjust of the canvas postion befrore capturing in order to align correctly. the values are got by a linear transformaion formula (y = ax+b)
+          // Note: the susbstracted value 20 is the value to remove the added margin of the canvas to exacly match the dimentions of snippet
+          canvas.style.transform = `translate(${0.517*(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 45}px)`
+
 
 
 
