@@ -193,8 +193,8 @@
         ro.observe(snippetNode);
 
         function reactToContainerResize(width, height) {
-          snippetHeight.innerText = height
-          snippetWidth.innerText = width
+          snippetHeight.innerText = Math.floor(new Number(height))
+          snippetWidth.innerText = Math.floor(new Number(width))
           //  save the image
           SaveCanvasImage()
 
@@ -225,7 +225,9 @@
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
           // canvas.style.transform = `translate( 245px,${(canvas.height) / 30}px)`
-          canvas.style.transform = `translate(245px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
+          // canvas.style.transform = `translate(245px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
+          canvas.style.transform = `translate(${245}px, ${100}px)`
+
 
           // Hide resizer before capture
           snippetNode.style.resize = "none";
@@ -255,7 +257,10 @@
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly.
           // canvas.style.transform = "translate(245px, 145px)"
-          canvas.style.transform = `translate(245px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
+          // canvas.style.transform = `translate(245px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
+          canvas.style.transform = `translate(${290}px, ${5}px)`
+
+
 
           // Hide resizer before capture
           snippetNode.style.resize = "none";
