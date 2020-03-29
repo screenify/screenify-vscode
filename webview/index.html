@@ -13,6 +13,7 @@
       display: flex;
       flex-flow: column;
       align-items: center;
+      user-select: none;
     }
 
     #snippet-container {
@@ -20,17 +21,19 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
-      resize: both;
+      /* canceled the resize because it leads to instablity of capturing the */
+      /* resize: both; */
       background-color: #f2f2f2;
       border-radius: 4px;
       opacity: 0;
       transition: opacity 0.4s;
       width: calc(100% - 4rem);
+      user-select: none;
     }
 
     #snippet {
       overflow: hidden;
-      resize: both;
+      /* resize: both; */
       display: flex;
       padding: 18px;
       /* padding: 0px; */
@@ -93,6 +96,7 @@
       padding: 0px 5px;
       transition: all 0.5s ease;
       color: black;
+      user-select: none;
     }
 
     /* Change color on hover */
@@ -127,13 +131,14 @@
 <body>
   <!--START Toolbar -->
   <div class="toolbar">
-    <a href="save" id="save"><img src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
-    <a href="brush" class="selected" id="brush"><img alt="brush"
+    <a href="Save" id="save"><img src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
+    <a href="Brush" class="selected" id="brush"><img alt="brush"
         src="https://img.icons8.com/wired/24/000000/paint-brush.png" /></a>
-    <a href="line" id="line"><img alt="line" src="https://img.icons8.com/office/24/000000/line.png"></a>
-    <a href="rectangle" id="rectangle"><img alt=" rectangle"
+    <a href="Line" id="line"><img alt="line" src="https://img.icons8.com/office/24/000000/line.png"></a>
+    <a href="Rectangle" id="rectangle"><img alt=" rectangle"
         src="https://img.icons8.com/material-sharp/24/000000/rounded-rectangle-stroked.png" /></a>
-    <a href="color picker"><input type="color" id="color" placeholder="red" value="#FF0000"></a>
+    <a href="Color Picker"><input type="color" id="color" placeholder="red" value="#FF0000"></a>
+    <a href="Undo" id="undo"> <img src="https://img.icons8.com/android/24/000000/undo.png" /></a>
   </div>
   <hr>
   <!-- End Toolbar -->
@@ -148,8 +153,8 @@
     <div id="snippet"
       style="color: #d8dee9;background-color: #2e3440;font-family: SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;">
       <meta charset="utf-8" />
-      <div
-        style="color: #d8dee9;background-color: #2e3440;font-family: Input Mono;font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;">
+      <div style="color: #d8dee9;background-color: #2e3440;font-family: Input Mono;font-weight: normal;font-size:
+        12px;line-height: 18px;white-space: pre; user-select: none;">
         <div>
           <span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span
             style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span

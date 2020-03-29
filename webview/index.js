@@ -10,24 +10,25 @@
           type: "getAndUpdateCacheAndSettings"
         });
 
-        const snippetNode = document.getElementById("snippet");
-        const snippetContainerNode = document.getElementById("snippet-container");
-        const obturateur = document.getElementById("save");
-        const obturateurLogo = document.getElementById("save_logo");
-        const canvas = document.getElementById('my-canvas');
-        const ctx = canvas.getContext('2d');
-        const brush = document.getElementById("brush");
-        const line = document.getElementById("line");
-        const circle = document.getElementById("circle");
-        const rectangle = document.getElementById("rectangle");
-        const color = document.getElementById("color")
-        const snippetHeight = document.getElementById("snippetHeight")
-        const snippetWidth = document.getElementById("snippetWidth")
-        const snippeInputHeight = document.getElementById("snippeInputHeight")
-        const snippeInputWidth = document.getElementById("snippeInputWidth")
+        const oldState = vscode.getState(),
+          snippetNode = document.getElementById("snippet"),
+          snippetContainerNode = document.getElementById("snippet-container"),
+          obturateur = document.getElementById("save"),
+          obturateurLogo = document.getElementById("save_logo"),
+          canvas = document.getElementById('my-canvas'),
+          ctx = canvas.getContext('2d'),
+          brush = document.getElementById("brush"),
+          line = document.getElementById("line"),
+          circle = document.getElementById("circle"),
+          rectangle = document.getElementById("rectangle"),
+          color = document.getElementById("color"),
+          snippetHeight = document.getElementById("snippetHeight"),
+          snippetWidth = document.getElementById("snippetWidth"),
+          snippeInputHeight = document.getElementById("snippeInputHeight"),
+          snippeInputWidth = document.getElementById("snippeInputWidth"),
+          undo = document.getElementById("undo");
 
         snippetContainerNode.style.opacity = "1";
-        const oldState = vscode.getState();
         if (oldState && oldState.innerHTML) {
           snippetNode.innerHTML = oldState.innerHTML;
         }
@@ -118,6 +119,8 @@
         }
 
         document.addEventListener("paste", e => {
+          // clear the canvas
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
           const innerHTML = e.clipboardData.getData("text/html");
 
           const code = e.clipboardData.getData("text/plain");
@@ -132,6 +135,7 @@
               }
             });
             updateEnvironment(snippetBgColor);
+
           }
 
           if (minIndent !== 0) {
@@ -155,6 +159,10 @@
 
         rectangle.addEventListener("click", () => {
           changeTool("rectangle")
+        })
+
+        undo.addEventListener("click", () => {
+          undoChanges
         })
 
         color.addEventListener("input", () => {
@@ -225,7 +233,10 @@
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly. the values are got by a linear transformaion formula (y = ax+b)
           // Note: the susbstracted value 20 is the value to remove the added margin of the canvas to exacly match the dimentions of snippet
-          canvas.style.transform = `translate(${0.517*(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 45}px)`
+          // canvas.style.transform = `translate(${0.517*(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
+          canvas.style.transform = `translate(${ 0.517 *(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46}px)`
+
+
 
 
           // Hide resizer before capture
@@ -256,7 +267,8 @@
           };
           // Hacky adjust of the canvas postion befrore capturing in order to align correctly. the values are got by a linear transformaion formula (y = ax+b)
           // Note: the susbstracted value 20 is the value to remove the added margin of the canvas to exacly match the dimentions of snippet
-          canvas.style.transform = `translate(${0.517*(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 45}px)`
+          canvas.style.transform = `translate(${ 0.517 * (canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46}px)`
+          // canvas.style.transform = `translate(${465}px, ${55}px)`
 
 
 
@@ -345,6 +357,38 @@
          *                   PaintJS
          * JavaScript Paint App JavaScript Canvas API
          */
+        class Stack {
+          constructor() {
+            this.storage = [];
+          }
+
+          push(element) {
+            this.storage.push(element)
+          }
+          pop() {
+            return this.storage.pop()
+          }
+          size() {
+            return this.storage.length
+          }
+        }
+        class Queue {
+          constructor() {
+            this.storage = [];
+          }
+
+          push(element) {
+            this.storage.push(element)
+          }
+          pop() {
+            return this.storage.shift()
+          }
+          size() {
+            return this.storage.length
+          }
+        }
+        let undo_stack = new Stack()
+        let redo_queue = new Queue()
 
         let savedImageData;
         // Stores whether I'm currently dragging the mouse or not
@@ -353,7 +397,6 @@
         let fillColor = color.value;;
         let line_Width = 1;
         let polygonSides = 6;
-
         // Tool currently using
         let currentTool = 'brush';
         /** Changed canvas 's height and width to the innerheight of snippetnode. */
@@ -446,7 +489,7 @@
 
         }
 
-        function UpdateRubberbandSizeData(loc) {
+        function UpdateRubberbandBoxSizeData(loc) {
           // Height & width are the difference between were clicked
           // and current mouse position
           shapeBoundingBox.width = Math.abs(loc.x - mousedown.x);
@@ -479,6 +522,8 @@
 
         // Called to draw the line
         function drawRubberbandShape(loc) {
+
+          // canvasStack.push(loc)
           ctx.strokeStyle = strokeColor;
           ctx.fillStyle = fillColor;
           if (currentTool === "brush") {
@@ -496,10 +541,10 @@
           }
         }
 
-        function UpdateRubberbandOnMove(loc) {
+        function UpdateRubberbandBoxOnMove(loc) {
           // Stores changing height, width, x & y position of most 
           // top left point being either the click or mouse location
-          UpdateRubberbandSizeData(loc);
+          UpdateRubberbandBoxSizeData(loc);
 
           // Redraw the shape
           drawRubberbandShape(loc);
@@ -529,10 +574,14 @@
             ctx.lineTo(brushXPoints[i], brushYPoints[i]);
             ctx.closePath();
             ctx.stroke();
+            // TODO: return
+
+            // add to stack HERE
           }
         }
 
         function ReactToMouseDown(e) {
+          saveState()
           // Change the mouse pointer to a crosshair
           canvas.style.cursor = "crosshair";
           // Store location 
@@ -567,7 +616,7 @@
           } else {
             if (dragging) {
               RedrawCanvasImage();
-              UpdateRubberbandOnMove(loc);
+              UpdateRubberbandBoxOnMove(loc);
             }
           }
         };
@@ -576,7 +625,7 @@
           canvas.style.cursor = "default";
           loc = GetMousePosition(e.clientX, e.clientY);
           RedrawCanvasImage();
-          UpdateRubberbandOnMove(loc);
+          UpdateRubberbandBoxOnMove(loc);
           dragging = false;
           usingBrush = false;
         }
@@ -589,6 +638,35 @@
           const a = transparentBackground ? 0 : 1;
           return `rgba(${r}, ${g}, ${b}, ${a})`;
         }
+        // This is for the undo feature.
+        function restoreState(pop, push) {
+          saveState(push);
+          let restore_state = pop.pop();
+          let img = new Element('img', {
+            'src': restore_state
+          });
+          img.onload = function () {
+            savedImageData = img
+            // canvas.ctx.drawImage(img, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+            RedrawCanvasImage()
+          }
+        }
+        // let undo_history = []
+        // This is for the undo feature.
+        function saveState(history) {
+          if (history) history.push(canvas.toDataURL("image/png"));
+          else undo_stack.push(canvas.toDataURL("image/png"));
+
+        }
+
+        function undoCanges() {
+          restoreState(undo_Stack, null)
+        }
+
+        function redoChanges() {
+          restoreState(undo_Stack, redo_queue)
+        }
+
       })
       ();
     }
