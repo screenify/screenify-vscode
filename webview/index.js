@@ -390,7 +390,7 @@
         let undo_stack = new Stack()
         let redo_queue = new Queue()
 
-        let savedImageData;
+        let lastSavedImageData;
         // Stores whether I'm currently dragging the mouse or not
         let dragging = false;
         let strokeColor = color.value;
@@ -406,11 +406,8 @@
         // Stores whether I'm currently using brush
         let usingBrush = false;
         // Stores line x & ys used to make brush lines
-        let brushXPoints = new Array();
-        let brushYPoints = new Array();
-        // Stores whether mouse is down
-        let brushDownPos = new Array();
 
+        let brushPoints = new Arrar()
         // Stores size data used to create rubber band shapes
         // that will redraw as the user moves the mouse
         class ShapeBoundingBox {
@@ -479,13 +476,15 @@
 
         function SaveCanvasImage() {
           // Save image
-          savedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+          lastSavedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          undo_stack.push(lastSavedImageData)
         }
 
         function RedrawCanvasImage() {
           // Restore image
-          ctx.putImageData(savedImageData, 0, 0);
-          // ctx.putImageData(savedImageData, canvas.width, canvas.height);
+          ctx.putImageData(lastSavedImageData, 0, 0);
+          // ctx.putImageData(lastSavedImageData, canvas.width, canvas.height);
 
         }
 
@@ -569,27 +568,36 @@
 
         // Cycle through all brush points and connect them with lines
         function DrawBrush() {
-          for (let i = 1; i < brushXPoints.length; i++) {
-            ctx.beginPath();
-
-            // Check if the mouse button was down at this point
-            // and if so continue drawing
-            if (brushDownPos[i]) {
-              ctx.moveTo(brushXPoints[i - 1], brushYPoints[i - 1]);
-            } else {
-              ctx.moveTo(brushXPoints[i] - 1, brushYPoints[i]);
-            }
-            ctx.lineTo(brushXPoints[i], brushYPoints[i]);
-            ctx.closePath();
-            ctx.stroke();
-            // TODO: return
-
-            // add to stack HERE
+          if (brushPoints.length == 0) {
+            return;
           }
+          // ctx.clearRect(0, 0, canvas.width, canvas.height);
+          for (var i = 0; i < brushPoints.length; i++) {
+
+            let pt = brushPoints[i];
+            let begin = false;
+            // if (ctx.lineWidth != pt.size) {
+            //   //         // console.log("true")
+            //   ctx.lineWidth = pt.size;
+            //   begin = true;
+            // }
+            // if (ctx.strokeStyle != pt.color) {
+            //   ctx.strokeStyle = pt.color;
+            //   begin = true;
+            // }
+            if (pt.mode == "begin" || begin) {
+              ctx.beginPath();
+              ctx.moveTo(pt.x, pt.y);
+            }
+            ctx.lineTo(pt.x, pt.y);
+            if (pt.mode == "end" || (i == brushPoints.length - 1)) {
+              ctx.stroke();
+            }
+          }
+          ctx.stroke();
         }
 
         function ReactToMouseDown(e) {
-          saveState()
           // Change the mouse pointer to a crosshair
           canvas.style.cursor = "crosshair";
           // Store location 
@@ -605,7 +613,8 @@
           // Brush will store points in an array
           if (currentTool === 'brush') {
             usingBrush = true;
-            AddBrushPoint(loc.x, loc.y);
+            AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = fillColor, brushSize = line_Width, mode = "begin");
+
           }
         };
 
@@ -617,7 +626,9 @@
           if (currentTool === 'brush' && dragging && usingBrush) {
             // Throw away brush drawings that occur outside of the canvas
             if (loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
-              AddBrushPoint(loc.x, loc.y, true);
+              ctx.lineTo(loc.x, loc.y);
+              ctx.stroke();
+              AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = fillColor, brushSize = line_Width, mode = "draw");
             }
             RedrawCanvasImage();
             DrawBrush();
@@ -635,6 +646,7 @@
           RedrawCanvasImage();
           UpdateRubberbandBoxOnMove(loc);
           dragging = false;
+          AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = fillColor, brushSize = line_Width, mode = "end");
           usingBrush = false;
         }
 
@@ -647,25 +659,17 @@
           return `rgba(${r}, ${g}, ${b}, ${a})`;
         }
         // This is for the undo feature.
-        function restoreState(pop, push) {
-          saveState(push);
-          let restore_state = pop.pop();
-          let img = new Element('img', {
-            'src': restore_state
-          });
-          img.onload = function () {
-            savedImageData = img
-            // canvas.ctx.drawImage(img, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
-            RedrawCanvasImage()
+        function restoreState() {
+          if (currentTool = "brush") {
+            brushPoints.pop()
+            return;
           }
+          // make pop the last update you have done  
+          lastlastSavedImageData = undo_array.pop()
+          // redraw the canvas
+          RedrawCanvasImage()
         }
-        // let undo_history = []
-        // This is for the undo feature.
-        function saveState(history) {
-          if (history) history.push(canvas.toDataURL("image/png"));
-          else undo_stack.push(canvas.toDataURL("image/png"));
 
-        }
 
         function undoChanges() {
           restoreState(undo_Stack, null)
