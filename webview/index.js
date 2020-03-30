@@ -552,11 +552,19 @@
 
         // Store each point as the mouse moves and whether the mouse
         // button is currently being dragged
-        function AddBrushPoint(x, y, mouseDown) {
-          brushXPoints.push(x);
-          brushYPoints.push(y);
-          // Store true that mouse is down
-          brushDownPos.push(mouseDown);
+        function AddBrushPoint(x, y, mouseDown, brushColor, brushSize, mode = none, tool) {
+          let lastX = x;
+          let lastY = y;
+          let point = {
+            tool: tool,
+            "x": x,
+            "y": y,
+            "isDrawing": mouseDown,
+            size: brushSize,
+            color: brushColor,
+            mode: mode
+          }
+          brushPoints.push(point)
         }
 
         // Cycle through all brush points and connect them with lines
