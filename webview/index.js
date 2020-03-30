@@ -162,7 +162,7 @@
         })
 
         undo.addEventListener("click", () => {
-          undoChanges
+          undoChanges()
         })
 
         color.addEventListener("input", () => {
@@ -659,7 +659,7 @@
 
         }
 
-        function undoCanges() {
+        function undoChanges() {
           restoreState(undo_Stack, null)
         }
 
