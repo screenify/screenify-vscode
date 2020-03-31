@@ -21,7 +21,7 @@
           snippetHeight = document.getElementById("snippetHeight"),
           snippetWidth = document.getElementById("snippetWidth"),
           undo = document.getElementById("undo");
-          
+
         vscode.postMessage({
           type: "getAndUpdateCacheAndSettings"
         });
@@ -346,22 +346,25 @@
             }
           }
         });
+        window.addEventListener("keypress", ReactToKeyup)
         window.addEventListener("keyup", ReactToKeyup)
 
         function ReactToKeyup(event) {
-          event.preventDefault();
           // CTRL + S || cmd + S keypress
           if (event.which == 115 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
+            event.preventDefault();
             if (target === "container") {
               shootAll();
             } else {
               shootSnippet();
             }
+            
             // CTRL + Z || cmd + Z keyboard keypress
-
           } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
+            // event.preventDefault();
             undoChanges()
           }
+
         }
 
         /**
