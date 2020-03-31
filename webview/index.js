@@ -2,15 +2,12 @@
       (function () {
         let target = "container";
         /**  vscode-api*/
-        const vscode = acquireVsCodeApi()
         let transparentBackground = false;
         let backgroundColor = "#f2f2f2";
 
-        vscode.postMessage({
-          type: "getAndUpdateCacheAndSettings"
-        });
 
-        const oldState = vscode.getState(),
+        const vscode = acquireVsCodeApi(),
+          oldState = vscode.getState(),
           snippetNode = document.getElementById("snippet"),
           snippetContainerNode = document.getElementById("snippet-container"),
           obturateur = document.getElementById("save"),
@@ -19,13 +16,15 @@
           ctx = canvas.getContext('2d'),
           brush = document.getElementById("brush"),
           line = document.getElementById("line"),
-          circle = document.getElementById("circle"),
           rectangle = document.getElementById("rectangle"),
           color = document.getElementById("color"),
           snippetHeight = document.getElementById("snippetHeight"),
           snippetWidth = document.getElementById("snippetWidth"),
           undo = document.getElementById("undo");
-
+          
+        vscode.postMessage({
+          type: "getAndUpdateCacheAndSettings"
+        });
         snippetContainerNode.style.opacity = "1";
         if (oldState && oldState.innerHTML) {
           snippetNode.innerHTML = oldState.innerHTML;
