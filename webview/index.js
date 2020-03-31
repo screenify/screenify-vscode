@@ -24,8 +24,6 @@
           color = document.getElementById("color"),
           snippetHeight = document.getElementById("snippetHeight"),
           snippetWidth = document.getElementById("snippetWidth"),
-          snippeInputHeight = document.getElementById("snippeInputHeight"),
-          snippeInputWidth = document.getElementById("snippeInputWidth"),
           undo = document.getElementById("undo");
 
         snippetContainerNode.style.opacity = "1";
@@ -169,12 +167,7 @@
           strokeColor = color.value;
           fillColor = color.value;
         })
-        snippeInputWidth.addEventListener("input", () => {
-          snippetNode.style.width = `${snippeInputWidth.value}px`
-        })
-        snippeInputHeight.addEventListener("input", () => {
-          snippetNode.style.height = `${snippeInputHeight.value}px`;
-        })
+
         shootContainer(obturateurLogo)
         shootContainer(obturateur)
 
@@ -203,6 +196,8 @@
         function reactToContainerResize(width, height) {
           snippetHeight.innerText = Math.floor(new Number(height))
           snippetWidth.innerText = Math.floor(new Number(width))
+
+          // change this latter
           //  save the image
           SaveCanvasImage()
 
@@ -211,7 +206,7 @@
           canvas.height = height + 20;
           canvas.width = width + 20;
           // redraw the image
-          RedrawCanvasImage()
+          // RedrawCanvasImage()
           SaveCanvasImage();
           RedrawCanvasImage()
 
@@ -288,7 +283,7 @@
         }
 
         let isInAnimation = false;
-
+        // mouse hover event
         obturateurLogo.addEventListener("mouseover", () => {
           if (!isInAnimation) {
             isInAnimation = true;
@@ -352,6 +347,23 @@
             }
           }
         });
+        window.addEventListener("keyup", ReactToKeyup)
+
+        function ReactToKeyup(event) {
+          event.preventDefault();
+          // CTRL + S || cmd + S keypress
+          if (event.which == 115 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
+            if (target === "container") {
+              shootAll();
+            } else {
+              shootSnippet();
+            }
+            // CTRL + Z || cmd + Z keyboard keypress
+
+          } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
+            undoChanges()
+          }
+        }
 
         /**
          *                   PaintJS
@@ -364,7 +376,6 @@
         let strokeColor = color.value;
         let fillColor = color.value;;
         let line_Width = 1;
-        let polygonSides = 6;
         // Tool currently using
         let currentTool = 'brush';
         /** Changed canvas 's height and width to the innerheight of snippetnode. */
@@ -374,12 +385,9 @@
         // Stores whether I'm currently using brush
         let usingBrush = false;
         // Stores line x & ys used to make brush lines
-        let brushXPoints = new Array();
-        let brushYPoints = new Array();
         // Stores whether mouse is down
-        let brushDownPos = new Array();
         let brushPoints = new Array();
-        let undo_array = new Array();
+        const undo_array = new Array();
         // Stores size data used to create rubber band shapes
         // that will redraw as the user moves the mouse
         class ShapeBoundingBox {
@@ -448,8 +456,11 @@
 
         function SaveCanvasImage() {
           // Save image
-          undo_array.push(ctx.getImageData(0, 0, canvas.width, canvas.height))
-          savedImageData = undo_array[undo_array.length - 1]
+          savedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          undo_array.push({
+            currentTool: currentTool,
+            savedImageData: savedImageData
+          })
         }
 
         function RedrawCanvasImage() {
@@ -491,7 +502,6 @@
         // Called to draw the line
         function drawRubberbandShape(loc) {
 
-          // canvasStack.push(loc)
           ctx.strokeStyle = strokeColor;
           ctx.fillStyle = fillColor;
           if (currentTool === "brush") {
@@ -520,7 +530,7 @@
 
         // Store each point as the mouse moves and whether the mouse
         // button is currently being dragged
-        function AddBrushPoint(x, y, mouseDown, brushColor, brushSize, mode = null, tool) {
+        function AddBrushPoint(x, y, mouseDown, brushColor, brushSize, mode = none, tool) {
           let lastX = x;
           let lastY = y;
           let point = {
@@ -581,27 +591,29 @@
           // Brush will store points in an array
           if (currentTool === 'brush') {
             usingBrush = true;
+            // AddBrushPoint(loc.x, loc.y, mouseDown = false, mode = "begin");
             AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = fillColor, brushSize = line_Width, mode = "begin");
+
           }
         };
 
         function ReactToMouseMove(e) {
-          // SaveCanvasImage()
           canvas.style.cursor = "crosshair"
           //  currentTool != "eraser" ? "crosshair" : "not-allowed"
           loc = GetMousePosition(e.clientX, e.clientY);
 
           // If using brush tool and dragging store each point
           if (currentTool === 'brush' && dragging && usingBrush) {
-            SaveCanvasImage()
+            // SaveCanvasImage()
             // Throw away brush drawings that occur outside of the canvas
             if (loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
               ctx.lineTo(loc.x, loc.y);
               ctx.stroke();
-
               // command pattern stuff
               // AddBrushPoint(loc.x, loc.y, true);
+              // AddBrushPoint(loc.x, loc.y, mouseDown = true, mode = "draw");
               AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = fillColor, brushSize = line_Width, mode = "draw");
+
 
             }
             RedrawCanvasImage();
@@ -609,20 +621,21 @@
           } else {
             if (dragging) {
               RedrawCanvasImage();
-              UpdateRubberbandOnMove(loc);
+              UpdateRubberbandBoxOnMove(loc);
             }
 
           }
         };
 
         function ReactToMouseUp(e) {
-          // canvas.style.cursor = "c";
-          dragging = false;
+          canvas.style.cursor = "defualt";
           loc = GetMousePosition(e.clientX, e.clientY);
+          dragging = false;
           RedrawCanvasImage();
-          UpdateRubberbandOnMove(loc);
-          usingBrush = false;
+          UpdateRubberbandBoxOnMove(loc);
           AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = fillColor, brushSize = line_Width, mode = "end");
+          usingBrush = false;
+
         }
 
         function getRgba(hex, transparentBackground) {
@@ -634,23 +647,27 @@
           return `rgba(${r}, ${g}, ${b}, ${a})`;
         }
         // This is for the undo feature.
+
         function restoreState() {
-          if (currentTool = "brush") {
+          if (!undo_array.length) return;
+          restore_state = undo_array.pop()
+          if (restore_state.currentTool === "brush") {
             brushPoints.pop()
           }
           // make pop the last update you have done  
-          savedImageData = undo_array.pop()
+          savedImageData = restore_state.savedImageData
           // redraw the canvas
           RedrawCanvasImage()
+
         }
 
         function undoChanges() {
           restoreState()
         }
 
-        function redoChanges() {
-          restoreState(undo_Stack, redo_queue)
-        }
+        // function redoChanges() {
+        //   restoreState(undo_Stack, redo_queue)
+        // }
       })
       ();
     }
