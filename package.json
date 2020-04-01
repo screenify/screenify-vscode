@@ -25,15 +25,19 @@
   ],
   "main": "./src/extension",
   "contributes": {
-    "commands": [{
-      "command": "screenify.activate",
-      "title": "Screenify 📸"
-    }],
-    "keybindings": [{
-      "command": "screenify.activate",
-      "key": "ctrl+shift+s",
-      "mac": "cmd+shift+s"
-    }]
+    "commands": [
+      {
+        "command": "screenify.activate",
+        "title": "Screenify 📸"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "screenify.activate",
+        "key": "ctrl+shift+s",
+        "mac": "cmd+shift+s"
+      }
+    ]
   },
   "configuration": {
     "title": "Screenify",
@@ -87,6 +91,7 @@
   },
   "dependencies": {
     "fs": "0.0.1-security",
+    "node-powershell": "^4.0.0",
     "os": "^0.1.1",
     "path": "^0.12.7"
   }

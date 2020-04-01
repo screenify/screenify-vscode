@@ -20,11 +20,13 @@
           color = document.getElementById("color"),
           snippetHeight = document.getElementById("snippetHeight"),
           snippetWidth = document.getElementById("snippetWidth"),
-          undo = document.getElementById("undo");
+          undo = document.getElementById("undo"),
+          copyBtn = document.getElementById("copy");
 
         vscode.postMessage({
           type: "getAndUpdateCacheAndSettings"
         });
+
         snippetContainerNode.style.opacity = "1";
         if (oldState && oldState.innerHTML) {
           snippetNode.innerHTML = oldState.innerHTML;
@@ -54,6 +56,15 @@
         function shoot(serializedBlob) {
           vscode.postMessage({
             type: "shoot",
+            data: {
+              serializedBlob
+            }
+          });
+        }
+
+        function copy(serializedBlob) {
+          vscode.postMessage({
+            type: "copy",
             data: {
               serializedBlob
             }
@@ -162,6 +173,9 @@
           undoChanges()
         })
 
+        copyBtn.addEventListener("click", () => {
+          copyImage()
+        })
         color.addEventListener("input", () => {
           strokeColor = color.value;
           fillColor = color.value;
@@ -212,7 +226,7 @@
 
         }
         //
-        function shootAll() {
+        function shootAll(copyFlag = false) {
           const width = snippetContainerNode.offsetWidth * 2;
           const height = snippetContainerNode.offsetHeight * 2;
 
@@ -242,12 +256,13 @@
             snippetNode.style.resize = "";
             snippetContainerNode.style.resize = "";
             serializeBlob(blob, serializedBlob => {
-              shoot(serializedBlob);
+              if (copyFlag) copy(serializedBlob)
+              else shoot(serializedBlob);
             });
           });
         }
 
-        function shootSnippet() {
+        function shootSnippet(copyFlag = false) {
           const width = snippetContainerNode.offsetWidth * 2;
           const height = snippetContainerNode.offsetHeight * 2;
           const config = {
@@ -276,7 +291,8 @@
             snippetNode.style.resize = "";
             snippetContainerNode.style.resize = "";
             serializeBlob(blob, serializedBlob => {
-              shoot(serializedBlob);
+              if (copyFlag) copy(serializedBlob)
+              else shoot(serializedBlob);
             });
           });
         }
@@ -358,7 +374,7 @@
             } else {
               shootSnippet();
             }
-            
+
             // CTRL + Z || cmd + Z keyboard keypress
           } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             // event.preventDefault();
@@ -389,7 +405,8 @@
         // Stores line x & ys used to make brush lines
         // Stores whether mouse is down
         let brushPoints = new Array();
-        const undo_array = new Array();
+        // Stores the history of canvas data
+        let undo_array = new Array();
         // Stores size data used to create rubber band shapes
         // that will redraw as the user moves the mouse
         class ShapeBoundingBox {
@@ -665,6 +682,14 @@
 
         function undoChanges() {
           restoreState()
+        }
+
+        function copyImage() {
+          if (target === "container") {
+            shootAll(copyFlag = true);
+          } else {
+            shootSnippet(copyFlag = true);
+          }
         }
 
         // function redoChanges() {

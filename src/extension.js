@@ -1,9 +1,39 @@
 const vscode = require('vscode')
 const fs = require('fs')
 const path = require('path')
+const Shell = require('node-powershell');
 const {
   homedir
 } = require('os')
+//initialize a shell instance
+const ps = new Shell({
+  executionPolicy: 'Bypass',
+  noProfile: true
+});
+const exec = require('child_process').exec
+/*
+@Important
+  ps.addCommand(`Get-Process | ? { $_.name -like '*code*' }`);
+  ps.invoke()
+*/
+
+
+const copySerializedBlobToClipboard = (serializeBlob) => {
+  if (!serializeBlob) return;
+
+  // const bytes = new Uint8Array(serializeBlob.split(','))
+  // return fs.writeFileSync("temp_code", Buffer.from(bytes), URL = path)
+  // return vscode.env.clipboard.writeText()
+  // ps.addCommand(`Set-Clipboard -LiteralPath  'C:\Users\ADAM\Desktop\code.png'`);
+  // ps.invoke().then(res => {
+  //   console.log(result)
+  // }).catch(e => console.error(e))
+  exec(`Set-Clipboard -LiteralPath 'C:\Users\ADAM\Desktop\code.png'`, (err, stdout, stderr) => {
+    // if(err) console.err(err)
+    console.log(stdout, stderr); // to confirm the application has been run
+  });
+}
+
 
 const writeSerializedBlobToFile = (serializeBlob, fileName) => {
   const bytes = new Uint8Array(serializeBlob.split(','))
@@ -39,6 +69,7 @@ function activate(context) {
   })
 
   vscode.commands.registerCommand('screenify.activate', () => {
+    vscode.window.showInformationMessage("Screenify is enabled and running, happy shooting 📸 😊 ")
     panel = vscode.window.createWebviewPanel('screenify', P_TITLE, 2, {
       enableScripts: true,
       localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'webview'))]
@@ -87,10 +118,19 @@ function activate(context) {
             .then(uri => {
               if (uri) {
                 writeSerializedBlobToFile(data.serializedBlob, uri.fsPath)
+                vscode.window.showInformationMessage("Image saved successfully")
                 lastUsedImageUri = uri
               }
             })
           break
+
+        case 'copy':
+          copySerializedBlobToClipboard(data.serializedBlob)
+            .then(result => console.log(result))
+            .catch(e => console.log(e));
+          vscode.window.showInformationMessage("Image copied! 📋")
+          break
+
         case 'getAndUpdateCacheAndSettings':
           panel.webview.postMessage({
             type: 'restoreBgColor',
