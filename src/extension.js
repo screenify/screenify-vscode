@@ -3,9 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const Shell = require('node-powershell');
 const os = require('os');
-const {
-  Cli
-} = require("./shell")
+
 const P_TITLE = 'Screenify 📸';
 
 //initialize a shell instance
@@ -80,7 +78,7 @@ function activate(context) {
   const copySerializedBlobToClipboard = (serializeBlob) => {
     const bytes = new Uint8Array(serializeBlob.split(','))
     if (!serializeBlob) return;
-    return tempFile("temp_image.png", Buffer.from(bytes))
+    return tempFile(Buffer.from(bytes))
   }
 
   /**
@@ -97,21 +95,14 @@ function activate(context) {
    * @param {Buffer} data 
    * @return {Promise} 
    */
-  function tempFile(name = '', data = '') {
+
+  function tempFile(data = '') {
     return new Promise((resolve, reject) => {
-      const tempPath = path.join(os.tmpdir(), '%temp-');
-      fs.mkdtemp(tempPath, (err, folder) => {
-        if (err)
-          return reject(err)
-
-        const file_name = path.join(folder, name);
-
-        fs.writeFile(file_name, data, error_file => {
-          if (error_file)
-            return reject(error_file);
-
-          resolve(file_name)
-        })
+      const tempPath = path.join(os.tmpdir(), '%temp-screenify', "test_image.png");
+      copiedImageUrl = tempPath;
+      fs.writeFile(tempPath, data, error_file => {
+        if (error_file) return reject(error_file);
+        resolve(copiedImageUrl)
       })
     })
   }
@@ -141,7 +132,6 @@ function activate(context) {
 
         case 'copy':
           copySerializedBlobToClipboard(data.serializedBlob)
-
             .then(tempPath => {
               if (os.platform() === "win32") {
                 ps.addCommand(`Set-Clipboard -LiteralPath ${tempPath}`);
