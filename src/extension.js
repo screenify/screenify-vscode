@@ -2,45 +2,17 @@ const vscode = require('vscode')
 const fs = require('fs')
 const path = require('path')
 const Shell = require('node-powershell');
+const os = require('os');
 const {
-  homedir
-} = require('os')
+  Cli
+} = require("./shell")
+const P_TITLE = 'Screenify 📸';
+
 //initialize a shell instance
 const ps = new Shell({
   executionPolicy: 'Bypass',
   noProfile: true
 });
-const exec = require('child_process').exec
-/*
-@Important
-  ps.addCommand(`Get-Process | ? { $_.name -like '*code*' }`);
-  ps.invoke()
-*/
-
-
-const copySerializedBlobToClipboard = (serializeBlob) => {
-  if (!serializeBlob) return;
-
-  // const bytes = new Uint8Array(serializeBlob.split(','))
-  // return fs.writeFileSync("temp_code", Buffer.from(bytes), URL = path)
-  // return vscode.env.clipboard.writeText()
-  // ps.addCommand(`Set-Clipboard -LiteralPath  'C:\Users\ADAM\Desktop\code.png'`);
-  // ps.invoke().then(res => {
-  //   console.log(result)
-  // }).catch(e => console.error(e))
-  exec(`Set-Clipboard -LiteralPath 'C:\Users\ADAM\Desktop\code.png'`, (err, stdout, stderr) => {
-    // if(err) console.err(err)
-    console.log(stdout, stderr); // to confirm the application has been run
-  });
-}
-
-
-const writeSerializedBlobToFile = (serializeBlob, fileName) => {
-  const bytes = new Uint8Array(serializeBlob.split(','))
-  fs.writeFileSync(fileName, Buffer.from(bytes))
-}
-
-const P_TITLE = 'Screenify 📸'
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -48,7 +20,7 @@ const P_TITLE = 'Screenify 📸'
 function activate(context) {
   const htmlPath = path.resolve(context.extensionPath, 'webview/index.html')
 
-  let lastUsedImageUri = vscode.Uri.file(path.resolve(homedir(), 'Desktop/code.png'))
+  let lastUsedImageUri = vscode.Uri.file(path.resolve(os.homedir(), 'Desktop/code.png'))
   let panel
 
   vscode.window.registerWebviewPanelSerializer('screenify', {
@@ -100,6 +72,49 @@ function activate(context) {
       syncSettings()
     }
   })
+  /**
+   * 
+   * @param {Blob} serializeBlob 
+   * @return {Promise} 
+   */
+  const copySerializedBlobToClipboard = (serializeBlob) => {
+    const bytes = new Uint8Array(serializeBlob.split(','))
+    if (!serializeBlob) return;
+    return tempFile("temp_image.png", Buffer.from(bytes))
+  }
+
+  /**
+   * @param {Blob} serializeBlob 
+   * @return {Promise} 
+   */
+  const writeSerializedBlobToFile = (serializeBlob, fileName) => {
+    const bytes = new Uint8Array(serializeBlob.split(','))
+    fs.writeFileSync(fileName, Buffer.from(bytes))
+  }
+  /**
+   * @function tempFile
+   * @param {String} name 
+   * @param {Buffer} data 
+   * @return {Promise} 
+   */
+  function tempFile(name = '', data = '') {
+    return new Promise((resolve, reject) => {
+      const tempPath = path.join(os.tmpdir(), '%temp-');
+      fs.mkdtemp(tempPath, (err, folder) => {
+        if (err)
+          return reject(err)
+
+        const file_name = path.join(folder, name);
+
+        fs.writeFile(file_name, data, error_file => {
+          if (error_file)
+            return reject(error_file);
+
+          resolve(file_name)
+        })
+      })
+    })
+  }
 
   function setupMessageListeners() {
     panel.webview.onDidReceiveMessage(({
@@ -118,7 +133,7 @@ function activate(context) {
             .then(uri => {
               if (uri) {
                 writeSerializedBlobToFile(data.serializedBlob, uri.fsPath)
-                vscode.window.showInformationMessage("Image saved successfully")
+                vscode.window.showInformationMessage("Snippet saved ✅")
                 lastUsedImageUri = uri
               }
             })
@@ -126,9 +141,39 @@ function activate(context) {
 
         case 'copy':
           copySerializedBlobToClipboard(data.serializedBlob)
-            .then(result => console.log(result))
-            .catch(e => console.log(e));
-          vscode.window.showInformationMessage("Image copied! 📋")
+
+            .then(tempPath => {
+              if (os.platform() === "win32") {
+                ps.addCommand(`Set-Clipboard -LiteralPath ${tempPath}`);
+                // TODO:Complete
+              } else if (os.platform() === "darwin" || "linux") {
+                const {
+                  spawnSync
+                } = require('child_process');
+                if (os.platform() === "darwin") {
+                  const childProcess = spawnSync(`set the clipboard to POSIX file ${tempPath}`)
+                } else if (os.platform() === "linux") {
+                  const childProcess = spawnSync(`set the clipboard to POSIX file ${tempPath}`);
+                }
+
+                childProcess.stdout.on("data", function (data) {
+                  vscode.window.showInformationMessage("Snippet copied! 📋")
+                });
+
+                childProcess.stderr.on("data", function (data) {
+                  vscode.window.showInformationMessage("Ops! Something went wrong! ❌")
+                });
+                spawnSync.kill();
+              }
+              ps.invoke()
+                .then(res => {
+                  vscode.window.showInformationMessage("Snippet copied! 📋")
+                })
+            })
+            .catch(err => {
+              ps.dispose()
+              vscode.window.showInformationMessage("Ops! Something went wrong! ❌")
+            })
           break
 
         case 'getAndUpdateCacheAndSettings':

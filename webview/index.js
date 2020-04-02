@@ -379,6 +379,8 @@
           } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             // event.preventDefault();
             undoChanges()
+          } else if (event.which == 67 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
+            copyImage()
           }
 
         }
