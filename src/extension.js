@@ -238,9 +238,9 @@ function getHtmlContent(htmlPath) {
 }
 
 cloudinary.config({
-  cloud_name: "du4wwde3u",
-  api_key: "311596162754573",
-  api_secret: "hPq0pncqyavOiKv2jmkThOajZp0"
+  cloud_name: "",
+  api_key: "",
+  api_secret: ""
 });
 /**
  * @function upload
