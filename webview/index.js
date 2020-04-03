@@ -22,7 +22,7 @@
           snippetWidth = document.getElementById("snippetWidth"),
           undo = document.getElementById("undo"),
           copyBtn = document.getElementById("copy"),
-          uploadBtn = document.getElementById("uplaod");
+          upload = document.getElementById("upload");
 
         vscode.postMessage({
           type: "getAndUpdateCacheAndSettings"
@@ -67,8 +67,8 @@
           vscode.postMessage({
             type: "copy",
             data: {
-              serializedBlob,
-              upload,
+              "serializedBlob": serializedBlob,
+              "upload": upload
             }
           });
         }
@@ -178,12 +178,14 @@
         copyBtn.addEventListener("click", () => {
           copyImage()
         })
+
+        upload.addEventListener("click", () => {
+          uploadImage()
+        })
+
         color.addEventListener("input", () => {
           strokeColor = color.value;
           fillColor = color.value;
-        })
-        uploadBtn.addEventListener("click", () => {
-          uploadImage()
         })
 
         shootContainer(obturateurLogo)
@@ -231,7 +233,7 @@
 
         }
         //
-        function shootAll(copyFlag = false, upload) {
+        function shootAll(copyFlag = false, paste = false) {
           const width = snippetContainerNode.offsetWidth * 2;
           const height = snippetContainerNode.offsetHeight * 2;
 
@@ -261,13 +263,13 @@
             snippetNode.style.resize = "";
             snippetContainerNode.style.resize = "";
             serializeBlob(blob, serializedBlob => {
-              if (copyFlag) copy(serializedBlob, upload)
+              if (copyFlag) copy(serializedBlob, paste)
               else shoot(serializedBlob);
             });
           });
         }
 
-        function shootSnippet(copyFlag = false, upload) {
+        function shootSnippet(copyFlag = false, paste = false) {
           const width = snippetContainerNode.offsetWidth * 2;
           const height = snippetContainerNode.offsetHeight * 2;
           const config = {
@@ -296,7 +298,7 @@
             snippetNode.style.resize = "";
             snippetContainerNode.style.resize = "";
             serializeBlob(blob, serializedBlob => {
-              if (copyFlag) copy(serializedBlob, upload)
+              if (copyFlag) copy(serializedBlob, paste)
               else shoot(serializedBlob);
             });
           });
@@ -691,18 +693,17 @@
           restoreState()
         }
 
-        function copyImage(upload) {
+        function copyImage(upload = false) {
           if (target === "container") {
-            shootAll(copyFlag = true, upload);
+            shootAll(copyFlag = true, uplad);
           } else {
-            shootSnippet(copyFlag = true, upload);
+            shootSnippet(copyFlag = true);
           }
         }
 
         function uploadImage() {
           copyImage(upload = true)
         }
-
 
         // function redoChanges() {
         //   restoreState(undo_Stack, redo_queue)
