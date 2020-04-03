@@ -3,7 +3,6 @@ const fs = require('fs')
 const path = require('path')
 const Shell = require('node-powershell');
 const os = require('os');
-
 const P_TITLE = 'Screenify 📸';
 
 //initialize a shell instance
@@ -75,10 +74,15 @@ function activate(context) {
    * @param {Blob} serializeBlob 
    * @return {Promise} 
    */
-  const copySerializedBlobToClipboard = (serializeBlob) => {
+  const copySerializedBlobToClipboard = (serializeBlob, opetation = "copy") => {
     const bytes = new Uint8Array(serializeBlob.split(','))
     if (!serializeBlob) return;
-    return tempFile(Buffer.from(bytes))
+    if (operation == "paste") {
+      // TODO: complete
+
+    } else {
+      return tempFile(Buffer.from(bytes))
+    }
   }
 
   /**
@@ -131,7 +135,7 @@ function activate(context) {
           break
 
         case 'copy':
-          copySerializedBlobToClipboard(data.serializedBlob)
+          copySerializedBlobToClipboard(data.serializedBlob, data.operation="copy")
             .then(tempPath => {
               if (os.platform() === "win32") {
                 ps.addCommand(`Set-Clipboard -LiteralPath ${tempPath}`);
