@@ -695,14 +695,14 @@
 
         function copyImage(upload = false) {
           if (target === "container") {
-            shootAll(copyFlag = true, uplad);
+            shootAll(copyFlag = true, upload);
           } else {
-            shootSnippet(copyFlag = true);
+            shootSnippet(copyFlag = true, upload);
           }
         }
 
         function uploadImage() {
-          copyImage(upload = true)
+          copyImage(true)
         }
 
         // function redoChanges() {

@@ -3,6 +3,8 @@ const fs = require('fs')
 const path = require('path')
 const Shell = require('node-powershell');
 const os = require('os');
+const cloudinary = require('cloudinary');
+
 const P_TITLE = 'Screenify 📸';
 
 //initialize a shell instance
@@ -74,15 +76,11 @@ function activate(context) {
    * @param {Blob} serializeBlob 
    * @return {Promise} 
    */
-  const copySerializedBlobToClipboard = (serializeBlob, upload) => {
+  const copySerializedBlobToClipboard = (serializeBlob, isUpload) => {
     const bytes = new Uint8Array(serializeBlob.split(','))
-    if (!serializeBlob) return;
-    if (upload) {
-      // TODO: complete
-      // implement image uploading...
-    } else {
-      return tempFile(Buffer.from(bytes))
-    }
+    if (!serializeBlob) return; // returns null
+    if (isUpload) return upload(Buffer.from(bytes)) // upload
+    return tempFile(Buffer.from(bytes)) //copy
   }
 
   /**
@@ -135,48 +133,55 @@ function activate(context) {
           break
 
         case 'copy':
-          if (data.uplaod) {
+          // upload image
+          if (data.upload) {
             copySerializedBlobToClipboard(data.serializedBlob, data.upload)
               .then(url => {
-                vscode.window.showInformationMessage("Snippet uploaded! ✅:", url)
+                vscode.env.clipboard.writeText(url).then((text) => {
+                  clipboard_content = url;
+                  vscode.window.showInformationMessage("Snippet uploaded! ✅    Url is copied to the clipboard 📋:", url)
+                });
               }).catch(e => {
                 vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
               })
-          }
-          copySerializedBlobToClipboard(data.serializedBlob)
-            .then(tempPath => {
-              if (os.platform() === "win32") {
-                ps.addCommand(`Set-Clipboard -LiteralPath ${tempPath}`);
-                // TODO:Complete
-              } else if (os.platform() === "darwin" || "linux") {
-                const {
-                  spawnSync
-                } = require('child_process');
-                if (os.platform() === "darwin") {
-                  const childProcess = spawnSync(`set the clipboard to POSIX file ${tempPath}`)
-                } else if (os.platform() === "linux") {
-                  const childProcess = spawnSync(`set the clipboard to POSIX file ${tempPath}`);
+          } else {
+            // copy image
+            copySerializedBlobToClipboard(data.serializedBlob)
+              .then(tempPath => {
+                if (os.platform() === "win32") {
+                  ps.addCommand(`Set-Clipboard -LiteralPath ${tempPath}`);
+                  // TODO:Complete
+                } else if (os.platform() === "darwin" || "linux") {
+                  const {
+                    spawnSync
+                  } = require('child_process');
+
+                  if (os.platform() === "darwin") {
+                    const childProcess = spawnSync(`set the clipboard to POSIX file ${tempPath}`)
+                  } else if (os.platform() === "linux") {
+                    const childProcess = spawnSync(`set the clipboard to POSIX file ${tempPath}`);
+                  }
+
+                  childProcess.stdout.on("data", (data) => {
+                    vscode.window.showInformationMessage("Snippet copied! 📋 cmd + V to paste")
+
+                  });
+
+                  childProcess.stderr.on("error", (err) => {
+                    vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
+                  });
+                  spawnSync.kill();
                 }
-
-                childProcess.stdout.on("data", function (data) {
-                  vscode.window.showInformationMessage("Snippet copied! 📋 cmd + V to paste")
-
-                });
-
-                childProcess.stderr.on("error", function (err) {
-                  vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
-                });
-                spawnSync.kill();
-              }
-              ps.invoke()
-                .then(res => {
-                  vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste")
-                })
-            })
-            .catch(err => {
-              ps.dispose()
-              vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
-            })
+                ps.invoke()
+                  .then(res => {
+                    vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste")
+                  })
+              })
+              .catch(err => {
+                ps.dispose()
+                vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
+              })
+          }
           break
 
         case 'getAndUpdateCacheAndSettings':
@@ -232,8 +237,46 @@ function getHtmlContent(htmlPath) {
   })
 }
 
+cloudinary.config({
+  cloud_name: "du4wwde3u",
+  api_key: "311596162754573",
+  api_secret: "hPq0pncqyavOiKv2jmkThOajZp0"
+});
+/**
+ * @function upload
+ * @param {Buffer} image 
+ * @return {Promise} 
+ */
+function upload(image) {
+  return new Promise((resolve, reject) => {
+    let content = image.toString('base64');
+
+    try {
+      cloudinary.v2.uploader.upload(`data:image/png;base64,${content}`, {
+        folder: '/screenfiy/uploads',
+        fetch_format: 'auto',
+        quality: 'auto'
+      }, (error, result) => {
+        if (error) {
+          vscode.window.showWarningMessage(error.message);
+          reject(error);
+        } else {
+          console.log(result);
+          resolve(result.secure_url);
+        }
+      });
+    } catch (e) {
+      vscode.window.showWarningMessage(e);
+    }
+  });
+}
+
 function deactivate() {
-  return null;
+  // TODO:complete
+  // #1 Clear cache
+  // #2 Garbage collecting
+  // #3 kill shell process
+  ps.stop();
 }
 
 exports.activate = activate
