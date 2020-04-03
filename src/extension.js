@@ -236,11 +236,12 @@ function getHtmlContent(htmlPath) {
     return `script src="${realSource}"`
   })
 }
-
+let configuration = vscode.workspace.getConfiguration('screenfiy');
+console.log(configuration.get(""))
 cloudinary.config({
-  cloud_name: "",
-  api_key: "",
-  api_secret: ""
+  cloud_name: "du4wwde3u",
+  api_key: "311596162754573",
+  api_secret: "hPq0pncqyavOiKv2jmkThOajZp0"
 });
 /**
  * @function upload
