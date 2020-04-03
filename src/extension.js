@@ -74,12 +74,12 @@ function activate(context) {
    * @param {Blob} serializeBlob 
    * @return {Promise} 
    */
-  const copySerializedBlobToClipboard = (serializeBlob, opetation = "copy") => {
+  const copySerializedBlobToClipboard = (serializeBlob, upload) => {
     const bytes = new Uint8Array(serializeBlob.split(','))
     if (!serializeBlob) return;
-    if (operation == "paste") {
+    if (upload) {
       // TODO: complete
-
+      // implement image uploading...
     } else {
       return tempFile(Buffer.from(bytes))
     }
@@ -135,7 +135,15 @@ function activate(context) {
           break
 
         case 'copy':
-          copySerializedBlobToClipboard(data.serializedBlob, data.operation="copy")
+          if (data.uplaod) {
+            copySerializedBlobToClipboard(data.serializedBlob, data.upload)
+              .then(url => {
+                vscode.window.showInformationMessage("Snippet uploaded! ✅:", url)
+              }).catch(e => {
+                vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
+              })
+          }
+          copySerializedBlobToClipboard(data.serializedBlob)
             .then(tempPath => {
               if (os.platform() === "win32") {
                 ps.addCommand(`Set-Clipboard -LiteralPath ${tempPath}`);
@@ -151,22 +159,23 @@ function activate(context) {
                 }
 
                 childProcess.stdout.on("data", function (data) {
-                  vscode.window.showInformationMessage("Snippet copied! 📋")
+                  vscode.window.showInformationMessage("Snippet copied! 📋 cmd + V to paste")
+
                 });
 
-                childProcess.stderr.on("data", function (data) {
-                  vscode.window.showInformationMessage("Ops! Something went wrong! ❌")
+                childProcess.stderr.on("error", function (err) {
+                  vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
                 });
                 spawnSync.kill();
               }
               ps.invoke()
                 .then(res => {
-                  vscode.window.showInformationMessage("Snippet copied! 📋")
+                  vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste")
                 })
             })
             .catch(err => {
               ps.dispose()
-              vscode.window.showInformationMessage("Ops! Something went wrong! ❌")
+              vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
             })
           break
 
