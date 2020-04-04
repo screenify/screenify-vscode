@@ -25,6 +25,24 @@
   ],
   "main": "./src/extension",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [{
+        "id": "screenfiy",
+        "title": "Screenfiy",
+        "icon": "resources/icon.png"
+      }]
+    },
+    "views": {
+      "screenfiy": [{
+          "id": "package-dependencies",
+          "name": "Dependencies"
+        },
+        {
+          "id": "package-outline",
+          "name": "Outline"
+        }
+      ]
+    },
     "commands": [{
       "command": "screenify.activate",
       "title": "Screenify 📸"

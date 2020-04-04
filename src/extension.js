@@ -17,6 +17,9 @@ const ps = new Shell({
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+  vscode.window.setStatusBarMessage(
+    `$(device-camera)`
+  )
   const htmlPath = path.resolve(context.extensionPath, 'webview/index.html')
 
   let lastUsedImageUri = vscode.Uri.file(path.resolve(os.homedir(), 'Desktop/code.png'))
