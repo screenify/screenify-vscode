@@ -1,7 +1,7 @@
 {
   "name": "screenify",
-  "displayName": "screenify",
-  "description": "code capturer",
+  "displayName": "Screenify",
+  "description": "screenify your code snippet capturer",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.42.0"
@@ -25,19 +25,15 @@
   ],
   "main": "./src/extension",
   "contributes": {
-    "commands": [
-      {
-        "command": "screenify.activate",
-        "title": "Screenify 📸"
-      }
-    ],
-    "keybindings": [
-      {
-        "command": "screenify.activate",
-        "key": "ctrl+shift+s",
-        "mac": "cmd+shift+s"
-      }
-    ]
+    "commands": [{
+      "command": "screenify.activate",
+      "title": "Screenify 📸"
+    }],
+    "keybindings": [{
+      "command": "screenify.activate",
+      "key": "ctrl+shift+s",
+      "mac": "cmd+shift+s"
+    }]
   },
   "configuration": {
     "title": "Screenify",
@@ -70,6 +66,21 @@
           "Shoot with the container.",
           "Shoot with the snippet alone. If you want transparent padding, use `container` with `\"screenify.transparentBackground\": true`"
         ]
+      },
+      "screenify.cloudinayName": {
+        "type": "string",
+        "description": "cloud name of cloudinary",
+        "default": "du4wwde3u"
+      },
+      "screenify.cloudinayKey": {
+        "type": "string",
+        "description": "cloud key of cloudinary",
+        "default": "311596162754573"
+      },
+      "screenify.cloudinaySecret": {
+        "type": "string",
+        "description": "cloud secret of cloudinary",
+        "default": "hPq0pncqyavOiKv2jmkThOajZp0"
       }
     }
   },
