@@ -4,7 +4,7 @@ const path = require('path')
 const Shell = require('node-powershell');
 const os = require('os');
 const cloudinary = require('cloudinary');
-
+const gc = require("../cdnUploader/google-uploader")
 const P_TITLE = 'Screenify 📸';
 
 //initialize a shell instance
@@ -79,7 +79,8 @@ function activate(context) {
   const copySerializedBlobToClipboard = (serializeBlob, isUpload) => {
     const bytes = new Uint8Array(serializeBlob.split(','))
     if (!serializeBlob) return; // returns null
-    if (isUpload) return upload(Buffer.from(bytes)) // upload
+    if (isUpload) return
+    // upload(Buffer.from(bytes)) // upload
     return tempFile(Buffer.from(bytes)) //copy
   }
 
@@ -155,9 +156,9 @@ function activate(context) {
                   const {
                     spawnSync
                   } = require('child_process');
-
+                  // macOS
                   if (os.platform() === "darwin") {
-                    const childProcess = spawnSync(`set the clipboard to POSIX file ${tempPath}`)
+                    const childProcess = spawnSync(`cat ${tempPath} pbcopy`)
                   } else if (os.platform() === "linux") {
                     const childProcess = spawnSync(`set the clipboard to POSIX file ${tempPath}`);
                   }
