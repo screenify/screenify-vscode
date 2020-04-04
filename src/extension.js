@@ -204,6 +204,7 @@ function activate(context) {
     })
   }
 
+
   function syncSettings() {
     const settings = vscode.workspace.getConfiguration('screenify')
     const editorSettings = vscode.workspace.getConfiguration('editor', null)
@@ -236,11 +237,14 @@ function getHtmlContent(htmlPath) {
     return `script src="${realSource}"`
   })
 }
-
+let settings = vscode.workspace.getConfiguration('screenify')
+console.log(settings.get("cloudinayName"), settings.get("cloudinayKey"))
+// let result = settings.get("cloudinayName")
+console.log(settings)
 cloudinary.config({
-  cloud_name: "",
-  api_key: "",
-  api_secret: ""
+  cloud_name: settings.get("cloudinayName"),
+  api_key: settings.get("cloudinayKey"),
+  api_secret: settings.get("cloudinaySecret")
 });
 /**
  * @function upload

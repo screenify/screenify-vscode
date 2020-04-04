@@ -1,7 +1,7 @@
 {
   "name": "screenify",
-  "displayName": "screenify",
-  "description": "code capturer",
+  "displayName": "Screenify",
+  "description": "screenify your code snippet capturer",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.42.0"
@@ -25,51 +25,62 @@
   ],
   "main": "./src/extension",
   "contributes": {
-    "commands": [
-      {
-        "command": "screenify.activate",
-        "title": "Screenify 📸"
-      }
-    ],
-    "keybindings": [
-      {
-        "command": "screenify.activate",
-        "key": "ctrl+shift+s",
-        "mac": "cmd+shift+s"
-      }
-    ]
-  },
-  "configuration": {
-    "title": "Screenify",
-    "properties": {
-      "screenify.shadow": {
-        "type": "string",
-        "description": "Shadow of the snippet node. Use any value for CSS `box-shadow`",
-        "default": "rgba(0, 0, 0, 0.55) 0px 20px 68px"
-      },
-      "screenify.transparentBackground": {
-        "type": "boolean",
-        "description": "Transparent background for containers",
-        "default": false
-      },
-      "screenify.backgroundColor": {
-        "type": "string",
-        "description": "Background color of snippet container. Use any value for CSS `background-color`",
-        "format": "color-hex",
-        "default": "#f2f2f2"
-      },
-      "screenify.target": {
-        "type": "string",
-        "description": "Shoot with or without container",
-        "default": "container",
-        "enum": [
-          "container",
-          "snippet"
-        ],
-        "enumDescriptions": [
-          "Shoot with the container.",
-          "Shoot with the snippet alone. If you want transparent padding, use `container` with `\"screenify.transparentBackground\": true`"
-        ]
+    "commands": [{
+      "command": "screenify.activate",
+      "title": "Screenify 📸"
+    }],
+    "keybindings": [{
+      "command": "screenify.activate",
+      "key": "ctrl+shift+s",
+      "mac": "cmd+shift+s"
+    }],
+    "configuration": {
+      "title": "Screenify",
+      "properties": {
+        "screenify.shadow": {
+          "type": "string",
+          "description": "Shadow of the snippet node. Use any value for CSS `box-shadow`",
+          "default": "rgba(0, 0, 0, 0.55) 0px 20px 68px"
+        },
+        "screenify.transparentBackground": {
+          "type": "boolean",
+          "description": "Transparent background for containers",
+          "default": false
+        },
+        "screenify.backgroundColor": {
+          "type": "string",
+          "description": "Background color of snippet container. Use any value for CSS `background-color`",
+          "format": "color-hex",
+          "default": "#f2f2f2"
+        },
+        "screenify.target": {
+          "type": "string",
+          "description": "Shoot with or without container",
+          "default": "container",
+          "enum": [
+            "container",
+            "snippet"
+          ],
+          "enumDescriptions": [
+            "Shoot with the container.",
+            "Shoot with the snippet alone. If you want transparent padding, use `container` with `\"screenify.transparentBackground\": true`"
+          ]
+        },
+        "screenify.cloudinayName": {
+          "type": "string",
+          "description": "cloud name of cloudinary",
+          "default": ""
+        },
+        "screenify.cloudinayKey": {
+          "type": "string",
+          "description": "cloud key of cloudinary",
+          "default": ""
+        },
+        "screenify.cloudinaySecret": {
+          "type": "string",
+          "description": "cloud secret of cloudinary",
+          "default": ""
+        }
       }
     }
   },
