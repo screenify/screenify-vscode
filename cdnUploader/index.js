@@ -5,7 +5,7 @@ const {
     GoogleUploader
 } = require("./google-uploader")
 
-export function createCdnUploader(type, config) {
+function createCdnUploader(config, type) {
     switch (type) {
         case 'google':
             return new GoogleUploader(config);
@@ -16,4 +16,7 @@ export function createCdnUploader(type, config) {
         default:
             return null;
     }
+}
+module.exports = {
+    createCdnUploader
 }

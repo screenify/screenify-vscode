@@ -83,8 +83,7 @@ function activate(context) {
   const copySerializedBlobToClipboard = (serializeBlob, isUpload) => {
     const bytes = new Uint8Array(serializeBlob.split(','))
     if (!serializeBlob) return; // returns null
-    if (isUpload) return
-    // upload(Buffer.from(bytes)) // upload
+    if (isUpload) return //upload(Buffer.from(bytes)) // upload
     return tempFile(Buffer.from(bytes)) //copy
   }
 
@@ -141,14 +140,14 @@ function activate(context) {
           // upload image
           if (data.upload) {
             copySerializedBlobToClipboard(data.serializedBlob, data.upload)
-              .then(url => {
-                vscode.env.clipboard.writeText(url).then((text) => {
-                  clipboard_content = url;
-                  vscode.window.showInformationMessage("Snippet uploaded! ✅    Url is copied to the clipboard 📋:", url)
-                });
-              }).catch(e => {
-                vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
-              })
+            // .then(url => {
+            //   vscode.env.clipboard.writeText(url).then((text) => {
+            //     clipboard_content = url;
+            //     vscode.window.showInformationMessage("Snippet uploaded! ✅    Url is copied to the clipboard 📋:", url)
+            //   });
+            // }).catch(e => {
+            //   vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
+            // })
           } else {
             // copy image
             copySerializedBlobToClipboard(data.serializedBlob)
@@ -242,32 +241,43 @@ function getHtmlContent(htmlPath) {
     return `script src="${realSource}"`
   })
 }
-let settings = vscode.workspace.getConfiguration('screenify')
+const settings = vscode.workspace.getConfiguration('screenify')
 
 /**
  * @function upload
  * @param {Buffer} image 
  * @return {Promise} 
  */
-function upload(image) {
-  // TODO: comlete
-  let uploader = new createCdnUploader('google', settings)
-
-  if (uploader) {
-    uploader
-      .upload(buffer)
-      .then(url => {
-        // Todo
-      })
-      .catch(e => {
-        // cdn upload fail
-        vscode.window.showInformationMessage('upload to cdn fail');
-      });
-  } else {
-    // no cdn
-    copyAssetToCurrentFolder(buffer, currentFilePath);
-  }
-}
+// function upload(image, cdnType = "google") {
+//   // TODO: complete
+//   const uploader = new createCdnUploader(settings, cdnType)
+//   if (uploader) {
+//     uploader
+//       .upload(image)
+//       .then(url => {
+//         // Todo
+//         vscode.env.clipboard.writeText(url).then((text) => {
+//           clipboard_content = url;
+//           vscode.window.showInformationMessage("Snippet uploaded! ✅    Url is copied to the clipboard 📋:", url)
+//         })
+//       })
+//       .catch(e => {
+//         // cdn upload fail
+//         try {
+//           upload(image, "cloudinary")
+//         } catch (err) {
+//           vscode.window.showErrorMessage('upload to cdn fail:', err);
+//         }
+//       });
+//   } else {
+//     // no cdn or the cdn fails try another one.
+//     try {
+//       upload(image, "cloudinary")
+//     } catch (err) {
+//       vscode.window.showErrorMessage('upload to cdn fail:', err);
+//     }
+//   }
+// }
 
 function deactivate() {
   // TODO:complete

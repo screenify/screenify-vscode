@@ -22,10 +22,13 @@ class GoogleUploader {
         })
         this.bucket = config.get("googleBucketName")
     }
-    uploadImage(originalname, buffer) {
+    upload(buffer) {
         return new Promise((resolve, reject) => {
             const blob = this.bucket.file(randomstring.generate().replace(/ /g, "_"))
             const blobStream = blob.createWriteStream({
+                metadata: {
+                    contentType: buffer
+                },
                 resumable: false
             })
             blobStream.on('finish', () => {

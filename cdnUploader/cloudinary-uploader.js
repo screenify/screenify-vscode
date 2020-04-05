@@ -9,7 +9,7 @@ const cloudinary = require("cloudinary")
             api_secret: config.get("cloudinaySecret")
         });
     }
-    upload(buffer, originalName) {
+    upload(buffer) {
         return new Promise((resolve, reject) => {
             let content = buffer.toString('base64');
 
