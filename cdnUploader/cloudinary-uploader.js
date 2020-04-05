@@ -1,12 +1,17 @@
 const cloudinary = require("cloudinary")
 
 
-= class CloudinaryUploader {
+class CloudinaryUploader {
     constructor(config) {
+        let cloudName = config.get('cloudinaryName') || '';
+        let key = config.get('cloudinaryApiKey') || '';
+        let secret = config.get('cloudinarySecret') || '';
+        // this.folder = config.get('cloudinaryFolder') || '';
+
         cloudinary.config({
-            cloud_name: config.get("cloudinayName"),
-            api_key: config.get("cloudinayKey"),
-            api_secret: config.get("cloudinaySecret")
+            cloud_name: cloudName,
+            api_key: key,
+            api_secret: secret
         });
     }
     upload(buffer) {

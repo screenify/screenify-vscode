@@ -2,9 +2,6 @@
 const path = require('path')
 const serviceKey = path.join(__dirname, './keys.json')
 const randomstring = require("randomstring");
-
-
-
 const {
     Storage
 } = require('@google-cloud/storage')
@@ -14,7 +11,8 @@ const {
 // const bucket = storage.bucket('screenify_bucket')
 class GoogleUploader {
     constructor(config) {
-        this.storage = new Storage({
+
+        storage = new Storage({
             keyFilename: serviceKey,
             // config("googleServiceKey"),
             projectId: config.get("googleProjectId")
@@ -23,22 +21,30 @@ class GoogleUploader {
         this.bucket = config.get("googleBucketName")
     }
     upload(buffer) {
+        let bucket = this.storage.bucket('screenify_bucket')
+        bucket.acl.default.add({
+            entity: "allUsers",
+            role: "READER",
+        }, function (res, err) {
+            if (err) console.log(err)
+            else conosle.log(res)
+        })
         return new Promise((resolve, reject) => {
-            const blob = this.bucket.file(randomstring.generate().replace(/ /g, "_"))
+            const blob = bucket.file(`${randomstring.generate(6)}.png`.replace(/ /g, "_"))
             const blobStream = blob.createWriteStream({
                 metadata: {
-                    contentType: buffer
+                    cacheControl: "public, max-age=300"
                 },
+                public: true,
                 resumable: false
             })
             blobStream.on('finish', () => {
-                    const publicUrl = format(
-                        `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-                    )
+                    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+
                     resolve(publicUrl)
                 })
                 .on('error', (error) => {
-                    reject(`Unable to upload image, something went wrong: ${error.message}${resumable}`, )
+                    reject(`Unable to upload image, something went wrong: ${error}`)
                 })
                 .end(buffer)
         })
@@ -47,23 +53,3 @@ class GoogleUploader {
 module.exports = {
     GoogleUploader
 }
-// export const uploadImage = (file = {}) => new Promise((resolve, reject) => {
-//     const {
-//         originalname,
-//         buffer
-//     } = file
-//     const blob = bucket.file(originalname.replace(/ /g, "_"))
-//     const blobStream = blob.createWriteStream({
-//         resumable: false
-//     })
-//     blobStream.on('finish', () => {
-//             const publicUrl = format(
-//                 `https://storage.googleapis.com/${bucket.name}/${blob.name}`
-//             )
-//             resolve(publicUrl)
-//         })
-//         .on('error', () => {
-//             reject(`Unable to upload image, something went wrong`)
-//         })
-//         .end(buffer)
-// })
