@@ -26,17 +26,14 @@
   "main": "./src/extension",
   "contributes": {
     "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "screenfiy",
-          "title": "Screenfiy",
-          "icon": "resources/icon.png"
-        }
-      ]
+      "activitybar": [{
+        "id": "screenfiy",
+        "title": "Screenfiy",
+        "icon": "resources/icon.png"
+      }]
     },
     "views": {
-      "screenfiy": [
-        {
+      "screenfiy": [{
           "id": "package-dependencies",
           "name": "Dependencies"
         },
@@ -46,19 +43,15 @@
         }
       ]
     },
-    "commands": [
-      {
-        "command": "screenify.activate",
-        "title": "Screenify 📸"
-      }
-    ],
-    "keybindings": [
-      {
-        "command": "screenify.activate",
-        "key": "ctrl+shift+s",
-        "mac": "cmd+shift+s"
-      }
-    ],
+    "commands": [{
+      "command": "screenify.activate",
+      "title": "Screenify 📸"
+    }],
+    "keybindings": [{
+      "command": "screenify.activate",
+      "key": "ctrl+shift+s",
+      "mac": "cmd+shift+s"
+    }],
     "configuration": {
       "title": "Screenify",
       "properties": {
@@ -94,17 +87,17 @@
         "screenify.cloudinayName": {
           "type": "string",
           "description": "cloud name of cloudinary",
-          "default": ""
+          "default": "du4wwde3u"
         },
         "screenify.cloudinayKey": {
           "type": "string",
           "description": "cloud key of cloudinary",
-          "default": ""
+          "default": "311596162754573"
         },
         "screenify.cloudinaySecret": {
           "type": "string",
           "description": "cloud secret of cloudinary",
-          "default": ""
+          "default": "hPq0pncqyavOiKv2jmkThOajZp0"
         }
       }
     }
