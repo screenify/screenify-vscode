@@ -26,17 +26,14 @@
   "main": "./src/extension",
   "contributes": {
     "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "screenfiy",
-          "title": "Screenfiy",
-          "icon": "resources/icon.png"
-        }
-      ]
+      "activitybar": [{
+        "id": "screenfiy",
+        "title": "Screenfiy",
+        "icon": "resources/icon.png"
+      }]
     },
     "views": {
-      "screenfiy": [
-        {
+      "screenfiy": [{
           "id": "package-dependencies",
           "name": "Dependencies"
         },
@@ -46,19 +43,15 @@
         }
       ]
     },
-    "commands": [
-      {
-        "command": "screenify.activate",
-        "title": "Screenify 📸"
-      }
-    ],
-    "keybindings": [
-      {
-        "command": "screenify.activate",
-        "key": "ctrl+shift+s",
-        "mac": "cmd+shift+s"
-      }
-    ],
+    "commands": [{
+      "command": "screenify.activate",
+      "title": "Screenify 📸"
+    }],
+    "keybindings": [{
+      "command": "screenify.activate",
+      "key": "ctrl+shift+s",
+      "mac": "cmd+shift+s"
+    }],
     "configuration": {
       "title": "Screenify",
       "properties": {
@@ -105,6 +98,16 @@
           "type": "string",
           "description": "cloud secret of cloudinary",
           "default": "hPq0pncqyavOiKv2jmkThOajZp0"
+        },
+        "screenify.googleProjectId": {
+          "type": "string",
+          "description": "cloud project ID of goolge",
+          "default": "careful-voyage-273218"
+        },
+        "screenify.googleBucketName": {
+          "type": "string",
+          "description": "cloud bucket name of goolge",
+          "default": "screenfiy_bucket"
         }
       }
     }
@@ -131,6 +134,7 @@
     "fs": "0.0.1-security",
     "node-powershell": "^4.0.0",
     "os": "^0.1.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "randomstring": "^1.1.5"
   }
 }

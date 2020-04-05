@@ -9,9 +9,9 @@ const cloudinary = require("cloudinary")
             api_secret: config.get("cloudinaySecret")
         });
     }
-    upload() {
+    upload(buffer, originalName) {
         return new Promise((resolve, reject) => {
-            let content = image.toString('base64');
+            let content = buffer.toString('base64');
 
             try {
                 cloudinary.v2.uploader.upload(`data:image/png;base64,${content}`, {
