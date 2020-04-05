@@ -42,7 +42,9 @@ class GoogleUploader {
         })
     }
 }
-
+module.exports = {
+    GoogleUploader
+}
 // export const uploadImage = (file = {}) => new Promise((resolve, reject) => {
 //     const {
 //         originalname,
