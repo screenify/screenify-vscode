@@ -25,6 +25,24 @@
   ],
   "main": "./src/extension",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [{
+        "id": "screenfiy",
+        "title": "Screenfiy",
+        "icon": "resources/icon.png"
+      }]
+    },
+    "views": {
+      "screenfiy": [{
+          "id": "package-dependencies",
+          "name": "Dependencies"
+        },
+        {
+          "id": "package-outline",
+          "name": "Outline"
+        }
+      ]
+    },
     "commands": [{
       "command": "screenify.activate",
       "title": "Screenify 📸"
@@ -102,6 +120,7 @@
   },
   "dependencies": {
     "@google-cloud/storage": "^4.7.0",
+    "cloudinary": "^1.21.0",
     "fs": "0.0.1-security",
     "node-powershell": "^4.0.0",
     "os": "^0.1.1",

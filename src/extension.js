@@ -3,8 +3,9 @@ const fs = require('fs')
 const path = require('path')
 const Shell = require('node-powershell');
 const os = require('os');
-const cloudinary = require('cloudinary');
-const gc = require("../cdnUploader/google-uploader")
+const {
+  createCdnUploader
+} = require('../CdnUploader/index.js');
 const P_TITLE = 'Screenify 📸';
 
 //initialize a shell instance
@@ -17,6 +18,9 @@ const ps = new Shell({
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+  // vscode.window.setStatusBarMessage(
+  //   `$(device-camera)`
+  // )
   const htmlPath = path.resolve(context.extensionPath, 'webview/index.html')
 
   let lastUsedImageUri = vscode.Uri.file(path.resolve(os.homedir(), 'Desktop/code.png'))
@@ -239,41 +243,30 @@ function getHtmlContent(htmlPath) {
   })
 }
 let settings = vscode.workspace.getConfiguration('screenify')
-console.log(settings.get("cloudinayName"), settings.get("cloudinayKey"))
-// let result = settings.get("cloudinayName")
-console.log(settings)
-cloudinary.config({
-  cloud_name: settings.get("cloudinayName"),
-  api_key: settings.get("cloudinayKey"),
-  api_secret: settings.get("cloudinaySecret")
-});
+
 /**
  * @function upload
  * @param {Buffer} image 
  * @return {Promise} 
  */
 function upload(image) {
-  return new Promise((resolve, reject) => {
-    let content = image.toString('base64');
+  // TODO: comlete
+  let uploader = new createCdnUploader('google', settings)
 
-    try {
-      cloudinary.v2.uploader.upload(`data:image/png;base64,${content}`, {
-        folder: '/screenfiy/uploads',
-        fetch_format: 'auto',
-        quality: 'auto'
-      }, (error, result) => {
-        if (error) {
-          vscode.window.showWarningMessage(error.message);
-          reject(error);
-        } else {
-          console.log(result);
-          resolve(result.secure_url);
-        }
+  if (uploader) {
+    uploader
+      .upload(buffer)
+      .then(url => {
+        // Todo
+      })
+      .catch(e => {
+        // cdn upload fail
+        vscode.window.showInformationMessage('upload to cdn fail');
       });
-    } catch (e) {
-      vscode.window.showWarningMessage(e);
-    }
-  });
+  } else {
+    // no cdn
+    copyAssetToCurrentFolder(buffer, currentFilePath);
+  }
 }
 
 function deactivate() {

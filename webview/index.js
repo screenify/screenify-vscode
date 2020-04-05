@@ -688,7 +688,9 @@
           RedrawCanvasImage()
 
         }
-
+        /**
+         * undo funciont
+         */
         function undoChanges() {
           restoreState()
         }
@@ -704,10 +706,10 @@
         function uploadImage() {
           copyImage(true)
         }
-
-        // function redoChanges() {
-        //   restoreState(undo_Stack, redo_queue)
-        // }
+        /**
+         * Redo feature
+         */
+        // function redoChanges() {restoreState(undo_array, redo_array)}
       })
       ();
     }
