@@ -1,27 +1,24 @@
-// const Cloud = require('@google-cloud/storage')
+const Cloud = require('@google-cloud/storage')
+const {
+    Storage
+} = Cloud
 const path = require('path')
 const serviceKey = path.join(__dirname, './keys.json')
 const randomstring = require("randomstring");
-const {
-    Storage
-} = require('@google-cloud/storage')
 
 
-
-// const bucket = storage.bucket('screenify_bucket')
-class GoogleUploader {
+// // const bucket = storage.bucket('screenify_bucket')
+module.exports = class GoogleUploader {
     constructor(config) {
-
         storage = new Storage({
             keyFilename: serviceKey,
             // config("googleServiceKey"),
             projectId: config.get("googleProjectId")
             // 'careful-voyage-273218',
         })
-        this.bucket = config.get("googleBucketName")
     }
     upload(buffer) {
-        let bucket = this.storage.bucket('screenify_bucket')
+        let bucket = this.storage.bucket(config.get("googleBucketName"))
         bucket.acl.default.add({
             entity: "allUsers",
             role: "READER",
@@ -33,7 +30,7 @@ class GoogleUploader {
             const blob = bucket.file(`${randomstring.generate(6)}.png`.replace(/ /g, "_"))
             const blobStream = blob.createWriteStream({
                 metadata: {
-                    cacheControl: "public, max-age=300"
+                    cacheControl: "public, max-age=6000"
                 },
                 public: true,
                 resumable: false
@@ -49,7 +46,4 @@ class GoogleUploader {
                 .end(buffer)
         })
     }
-}
-module.exports = {
-    GoogleUploader
 }

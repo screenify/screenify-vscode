@@ -1,11 +1,7 @@
-const {
-    CloudinaryUploader
-} = require('./cloudinary-uploader');
-const {
-    GoogleUploader
-} = require("./google-uploader")
+const CloudinaryUploader = require('./cloudinary-uploader');
+const GoogleUploader = require("./google-uploader")
 
-function createCdnUploader(config, type) {
+module.exports = function createCdnUploader(config, type) {
     switch (type) {
         case 'google':
             return new GoogleUploader(config);
@@ -16,7 +12,4 @@ function createCdnUploader(config, type) {
         default:
             return null;
     }
-}
-module.exports = {
-    createCdnUploader
 }

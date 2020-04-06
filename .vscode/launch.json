@@ -8,7 +8,7 @@
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
-			"stopOnEntry": false,
+			// "stopOnEntry": false,
 		},
 		{
 			"name": "Extension Tests",

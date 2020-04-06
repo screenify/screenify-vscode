@@ -1,7 +1,7 @@
 const cloudinary = require("cloudinary")
+const vscode = require("vscode")
 
-
-class CloudinaryUploader {
+module.exports = class CloudinaryUploader {
     constructor(config) {
         let cloudName = config.get('cloudinaryName') || '';
         let key = config.get('cloudinaryApiKey') || '';
@@ -37,7 +37,4 @@ class CloudinaryUploader {
             }
         });
     }
-}
-module.exports = {
-    CloudinaryUploader
 }

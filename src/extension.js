@@ -3,9 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const Shell = require('node-powershell');
 const os = require('os');
-const {
-  createCdnUploader
-} = require('../CdnUploader/index.js');
+const createCdnUploader = require('../CdnUploader/index.js');
 const P_TITLE = 'Screenify 📸';
 
 //initialize a shell instance
@@ -83,7 +81,7 @@ function activate(context) {
   const copySerializedBlobToClipboard = (serializeBlob, isUpload) => {
     const bytes = new Uint8Array(serializeBlob.split(','))
     if (!serializeBlob) return; // returns null
-    if (isUpload) return upload(Buffer.from(bytes)) // upload
+    if (isUpload) return upload(Buffer.from(bytes), "google") // upload
     return tempFile(Buffer.from(bytes)) //copy
   }
 
@@ -248,37 +246,39 @@ const settings = vscode.workspace.getConfiguration('screenify')
  * @param {Buffer} image 
  * @return {Promise} 
  */
-function upload(image, cdnType = "cloudinary") {
+console.log(settings.get("googleProjectId"), settings.get("googleProjectId"), settings.get("googleBucketName"))
+
+function upload(image, cdnType) {
   // TODO: complete
   const uploader = createCdnUploader(settings, cdnType)
-  conosle.log(uploader)
-  if (uploader) {
-    uploader
-      .upload(image)
-    //     .then(url => {
-    //       // Todo
-    //       vscode.env.clipboard.writeText(url).then((text) => {
-    //         clipboard_content = url;
-    //         vscode.window.showInformationMessage("Snippet uploaded! ✅    Url is copied to the clipboard 📋:", url)
-    //       })
-    //     })
-    //     .catch(e => {
-    //       // cdn upload fail
-    //       try {
-    //         upload(image, cdnType = "cloudinary")
-    //       } catch (err) {
-    //         vscode.window.showErrorMessage('upload to cdn fail:', err);
-    //       }
-    //     });
-    // } else {
-    //   // no cdn or the cdn fails try another one.
-    //   try {
-    //     upload(image, "cloudinary")
-    //   } 
-    // catch (err) {
-    //   vscode.window.showErrorMessage('upload to cdn fail:', err);
-    // }
-  }
+  // if (uploader) {
+  uploader
+    .upload(image)
+    .then(url => {
+      // Todo
+      vscode.env.clipboard.writeText(url).then((text) => {
+        clipboard_content = url;
+        vscode.window.showInformationMessage("Snippet uploaded! ✅    Url is copied to the clipboard 📋:", url)
+      })
+    })
+    .catch(e => {
+      vscode.window.showErrorMessage('upload to cdn fail:', e);
+
+      // cdn upload fail
+      // try {
+      //   upload(image, cdnType = "cloudinary")
+      // } catch (err) {
+      //   vscode.window.showErrorMessage('upload to cdn fail:', err);
+      // }
+    });
+  // } else {
+  //   // no cdn or the cdn fails try another one.
+  //   try {
+  //     upload(image, "cloudinary")
+  //   } catch (err) {
+  //     vscode.window.showErrorMessage('upload to cdn fail:', err);
+  //   }
+  // }
 }
 
 function deactivate() {
