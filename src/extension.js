@@ -136,6 +136,7 @@ function activate(context) {
 
         case 'copy':
           // upload image
+          // TODO: Clean this code + refactor
           if (data.upload) {
             copySerializedBlobToClipboard(data.serializedBlob, data.upload)
             // .then(url => {
@@ -262,7 +263,7 @@ function upload(image, cdnType) {
       })
     })
     .catch(e => {
-      vscode.window.showErrorMessage('upload to cdn fail:', e);
+      vscode.window.showErrorMessage('Error uplaodin during uploading ' + e);
 
       // cdn upload fail
       // try {
