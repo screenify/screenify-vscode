@@ -4,7 +4,9 @@ const path = require('path')
 const Shell = require('node-powershell');
 const os = require('os');
 const P_TITLE = 'Screenify 📸';
-const
+const fetch = require("node-fetch")
+const Bluebird = require("bluebird")
+fetch.Promise = Bluebird
 //initialize a shell instance
 const ps = new Shell({
   executionPolicy: 'Bypass',
@@ -80,7 +82,7 @@ function activate(context) {
   const copySerializedBlobToClipboard = (serializeBlob, isUpload) => {
     const bytes = new Uint8Array(serializeBlob.split(','))
     if (!serializeBlob) return; // returns null
-    if (isUpload) return upload(Buffer.from(bytes), "google") // upload
+    if (isUpload) return upload(serializeBlob) // upload
     return tempFile(Buffer.from(bytes)) //copy
   }
 
@@ -153,23 +155,25 @@ function activate(context) {
                 }
 
                 childProcess.stdout.on("data", (data) => {
-                  vscode.window.showInformationMessage("Snippet copied! 📋 cmd + V to paste")
+                  vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste", "Close")
+
 
                 });
 
                 childProcess.stderr.on("error", (err) => {
-                  vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
+                  vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
+
                 });
                 spawnSync.kill();
               }
               ps.invoke()
                 .then(res => {
-                  vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste")
+                  vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste", "Close")
                 })
             })
             .catch(err => {
               ps.dispose()
-              vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
+              vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
             })
           break
 
@@ -234,34 +238,30 @@ const settings = vscode.workspace.getConfiguration('screenify')
  * @return {Promise} 
  */
 
-function upload(image, cdnType) {
-  // TODO: complete
-  // if (uploader) {
-  .then(url => {
-      // Todo
+function upload(buffer) {
+  let serverUrl = `http://${settings.get("serverUrl")}/api/upload`
+  fetch(serverUrl, {
+      method: 'post',
+      body: JSON.stringify({
+        buffer
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(res => res.json())
+    .then(response => {
+      const {
+        url
+      } = response
       vscode.env.clipboard.writeText(url).then((text) => {
         clipboard_content = url;
-        vscode.window.showInformationMessage("Snippet uploaded! ✅    Url is copied to the clipboard 📋:", url)
+        vscode.window.showInformationMessage(`Snippet uploaded! ✅    Url is copied to the clipboard 📋: `, url, "Copy")
       })
     })
     .catch(e => {
-      vscode.window.showErrorMessage('Error uplaodin during uploading ' + e);
-
-      // cdn upload fail
-      // try {
-      //   upload(image, cdnType = "cloudinary")
-      // } catch (err) {
-      //   vscode.window.showErrorMessage('upload to cdn fail:', err);
-      // }
+      vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
     });
-  // } else {
-  //   // no cdn or the cdn fails try another one.
-  //   try {
-  //     upload(image, "cloudinary")
-  //   } catch (err) {
-  //     vscode.window.showErrorMessage('upload to cdn fail:', err);
-  //   }
-  // }
 }
 
 function deactivate() {

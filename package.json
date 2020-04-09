@@ -83,6 +83,11 @@
                         "Shoot with the container.",
                         "Shoot with the snippet alone. If you want transparent padding, use `container` with `\"screenify.transparentBackground\": true`"
                     ]
+                },
+                "screenify.serverUrl": {
+                    "type": "string",
+                    "description": "`",
+                    "default": "localhost:5000"
                 }
             }
         }
@@ -105,8 +110,10 @@
     },
     "dependencies": {
         "@google-cloud/storage": "^4.7.0",
+        "bluebird": "^3.7.2",
         "cloudinary": "^1.21.0",
         "fs": "0.0.1-security",
+        "node-fetch": "^2.6.0",
         "node-powershell": "^4.0.0",
         "os": "^0.1.1",
         "path": "^0.12.7",
