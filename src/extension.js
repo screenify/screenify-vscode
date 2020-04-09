@@ -3,9 +3,8 @@ const fs = require('fs')
 const path = require('path')
 const Shell = require('node-powershell');
 const os = require('os');
-const createCdnUploader = require('../CdnUploader/index.js');
 const P_TITLE = 'Screenify 📸';
-
+const
 //initialize a shell instance
 const ps = new Shell({
   executionPolicy: 'Bypass',
@@ -137,54 +136,41 @@ function activate(context) {
         case 'copy':
           // upload image
           // TODO: Clean this code + refactor
-          if (data.upload) {
-            copySerializedBlobToClipboard(data.serializedBlob, data.upload)
-            // .then(url => {
-            //   vscode.env.clipboard.writeText(url).then((text) => {
-            //     clipboard_content = url;
-            //     vscode.window.showInformationMessage("Snippet uploaded! ✅    Url is copied to the clipboard 📋:", url)
-            //   });
-            // }).catch(e => {
-            //   vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
-            // })
-          } else {
-            // copy image
-            copySerializedBlobToClipboard(data.serializedBlob)
-              .then(tempPath => {
-                if (os.platform() === "win32") {
-                  ps.addCommand(`Set-Clipboard -LiteralPath ${tempPath}`);
-                  // TODO:Complete
-                } else if (os.platform() === "darwin" || "linux") {
-                  const {
-                    spawnSync
-                  } = require('child_process');
-                  // macOS
-                  if (os.platform() === "darwin") {
-                    const childProcess = spawnSync(`cat ${tempPath} pbcopy`)
-                  } else if (os.platform() === "linux") {
-                    const childProcess = spawnSync(`set the clipboard to POSIX file ${tempPath}`);
-                  }
-
-                  childProcess.stdout.on("data", (data) => {
-                    vscode.window.showInformationMessage("Snippet copied! 📋 cmd + V to paste")
-
-                  });
-
-                  childProcess.stderr.on("error", (err) => {
-                    vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
-                  });
-                  spawnSync.kill();
+          copySerializedBlobToClipboard(data.serializedBlob, data.upload)
+            .then(tempPath => {
+              if (os.platform() === "win32") {
+                ps.addCommand(`Set-Clipboard -LiteralPath ${tempPath}`);
+                // TODO:Complete
+              } else if (os.platform() === "darwin" || "linux") {
+                const {
+                  spawnSync
+                } = require('child_process');
+                // macOS
+                if (os.platform() === "darwin") {
+                  const childProcess = spawnSync(`cat ${tempPath} pbcopy`)
+                } else if (os.platform() === "linux") {
+                  const childProcess = spawnSync(`set the clipboard to POSIX file ${tempPath}`);
                 }
-                ps.invoke()
-                  .then(res => {
-                    vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste")
-                  })
-              })
-              .catch(err => {
-                ps.dispose()
-                vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
-              })
-          }
+
+                childProcess.stdout.on("data", (data) => {
+                  vscode.window.showInformationMessage("Snippet copied! 📋 cmd + V to paste")
+
+                });
+
+                childProcess.stderr.on("error", (err) => {
+                  vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
+                });
+                spawnSync.kill();
+              }
+              ps.invoke()
+                .then(res => {
+                  vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste")
+                })
+            })
+            .catch(err => {
+              ps.dispose()
+              vscode.window.showErrorMessage("Ops! Something went wrong! ❌", err)
+            })
           break
 
         case 'getAndUpdateCacheAndSettings':
@@ -247,15 +233,11 @@ const settings = vscode.workspace.getConfiguration('screenify')
  * @param {Buffer} image 
  * @return {Promise} 
  */
-console.log(settings.get("googleProjectId"), settings.get("googleProjectId"), settings.get("googleBucketName"))
 
 function upload(image, cdnType) {
   // TODO: complete
-  const uploader = createCdnUploader(settings, cdnType)
   // if (uploader) {
-  uploader
-    .upload(image)
-    .then(url => {
+  .then(url => {
       // Todo
       vscode.env.clipboard.writeText(url).then((text) => {
         clipboard_content = url;
