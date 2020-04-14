@@ -11,27 +11,3 @@
 		"node_modules"
 	]
 }
-// {
-// 	"compilerOptions": {
-// 		"module": "commonjs",
-// 		"target": "es6",
-// 		"checkJs": false,
-// 		"allowSyntheticDefaultImports": true,
-// 		"lib": ["es6", "dom"]
-// 	},
-// 	"exclude": ["node_modules"]
-// }
-/*
-Config of previous of init 
-*/
-// {
-// 	"compilerOptions": {
-// 		"module": "commonjs",
-// 		"target": "es2015",
-// 		"moduleResolution": "node"
-// 		/* Typecheck .js files. */
-// 	},
-// 	"exclude": [
-// 		"node_modules"
-// 	]
-// }

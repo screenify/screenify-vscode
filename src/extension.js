@@ -17,9 +17,9 @@ const ps = new Shell({
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-  // vscode.window.setStatusBarMessage(
-  //   `$(device-camera)`
-  // )
+  vscode.window.setStatusBarMessage(
+    `$(device-camera)`
+  )
   const htmlPath = path.resolve(context.extensionPath, 'webview/index.html')
 
   let lastUsedImageUri = vscode.Uri.file(path.resolve(os.homedir(), 'Desktop/code.png'))
@@ -134,10 +134,10 @@ function activate(context) {
               }
             })
           break
-
+          /**
+           * Copy image to the clipboard
+           */
         case 'copy':
-          // upload image
-          // TODO: Clean this code + refactor
           copySerializedBlobToClipboard(data.serializedBlob, data.upload)
             .then(tempPath => {
               if (os.platform() === "win32") {
@@ -239,9 +239,9 @@ const settings = vscode.workspace.getConfiguration('screenify')
  */
 
 function upload(buffer) {
-  let serverUrl = `http://${settings.get("serverUrl")}/api/upload`
+  let serverUrl = `https://${settings.get("serverUrl")}/api/upload`
   fetch(serverUrl, {
-      method: 'post',
+      method: 'POST',
       body: JSON.stringify({
         buffer
       }),
@@ -254,10 +254,10 @@ function upload(buffer) {
       const {
         url
       } = response
-      vscode.env.clipboard.writeText(url).then((text) => {
-        clipboard_content = url;
-        vscode.window.showInformationMessage(`Snippet uploaded! ✅    Url is copied to the clipboard 📋: `, url, "Copy")
-      })
+      vscode.env.clipboard.writeText(url)
+        .then(() => {
+          vscode.window.showInformationMessage(`Snippet uploaded! ✅    Url is copied to the clipboard 📋: `, url, "Copy")
+        })
     })
     .catch(e => {
       vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")

@@ -87,7 +87,7 @@
                 "screenify.serverUrl": {
                     "type": "string",
                     "description": "`",
-                    "default": "localhost:5000"
+                    "default": "screenify-njy7ok457q-ez.a.run.app"
                 }
             }
         }
