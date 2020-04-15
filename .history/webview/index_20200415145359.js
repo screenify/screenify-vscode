@@ -189,6 +189,7 @@
         //   fillColor = color.value;
         // })
 
+
         shootContainer(obturateurLogo)
         shootContainer(obturateur)
 
@@ -398,25 +399,25 @@
          * JavaScript Paint App JavaScript Canvas API
          */
 
-        let savedImageData;
-        // Stores whether I'm currently dragging the mouse or not
-        let dragging = false;
-        let strokeColor = 'black';
-        let fillColor = 'black';
-        let line_Width = 1;
-        // Tool currently using
-        let currentTool = 'brush';
-        /** Changed canvas 's height and width to the innerheight of snippetnode. */
-        let canvasWidth = snippetNode.clientWidth + 20;
-        let canvasHeight = snippetNode.clientHeight + 20;
+        let savedImageData,
+          // Stores whether I'm currently dragging the mouse or not
+          dragging = false,
+          strokeColor = 'red',
+          fillColor = 'red',
+          line_Width = 1,
+          // Tool currently using
+          currentTool = 'brush',
+          /** Changed canvas 's height and width to the innerheight of snippetnode. */
+          canvasWidth = snippetNode.clientWidth + 20,
+          canvasHeight = snippetNode.clientHeight + 20,
 
-        // Stores whether I'm currently using brush
-        let usingBrush = false;
-        // Stores line x & ys used to make brush lines
-        // Stores whether mouse is down
-        let brushPoints = new Array();
-        // Stores the history of canvas data
-        let undo_array = new Array();
+          // Stores whether I'm currently using brush
+          usingBrush = false,
+          // Stores line x & ys used to make brush lines
+          // Stores whether mouse is down
+          brushPoints = new Array(),
+          // Stores the history of canvas data
+          undo_array = new Array();
         // Stores size data used to create rubber band shapes
         // that will redraw as the user moves the mouse
         class ShapeBoundingBox {
@@ -587,11 +588,10 @@
               ctx.lineWidth = pt.size;
               begin = true;
             }
-            // HERE CLEAN CODE
-            // if (ctx.strokeStyle != pt.color) {
-            //   ctx.strokeStyle = pt.color;
-            //   begin = true;
-            // }
+            if (ctx.strokeStyle != pt.color) {
+              ctx.strokeStyle = pt.color;
+              begin = true;
+            }
             if (pt.mode == "begin" || begin) {
               ctx.beginPath();
               ctx.moveTo(pt.x, pt.y);
@@ -708,47 +708,6 @@
         function uploadImage() {
           copyImage(true)
         }
-        const pickr = Pickr.create({
-          el: '.pickr',
-          theme: 'monolith', // or 'classic', or 'nano'
-
-          swatches: [
-            'rgba(244, 67, 54, 1)',
-            'rgba(233, 30, 99, 0.95)',
-            'rgba(156, 39, 176, 0.9)',
-            'rgba(103, 58, 183, 0.85)',
-            'rgba(63, 81, 181, 0.8)',
-            'rgba(33, 150, 243, 0.75)',
-            'rgba(3, 169, 244, 0.7)',
-            'rgba(0, 188, 212, 0.7)',
-            'rgba(0, 150, 136, 0.75)',
-            'rgba(76, 175, 80, 0.8)',
-            'rgba(139, 195, 74, 0.85)',
-            'rgba(205, 220, 57, 0.9)',
-            'rgba(255, 235, 59, 0.95)',
-            'rgba(255, 193, 7, 1)'
-          ],
-
-          components: {
-
-            // Main components
-            preview: true,
-            opacity: true,
-            hue: true,
-
-            // Input / output Options
-            interaction: {
-              hex: true,
-              rgba: true,
-              hsla: true,
-              hsva: true,
-              cmyk: true,
-              input: true,
-              clear: true,
-              save: true
-            }
-          }
-        });
         /**
          * Redo feature
          */

@@ -1,6 +1,7 @@
 <html>
 
 <head>
+
   <meta http-equiv="Content-Security-Policy"
     content="img-src vscode-resource: data: https:; script-src vscode-resource:; style-src 'unsafe-inline' vscode-resource:;" />
   <style>
@@ -167,13 +168,14 @@
       filter: opacity(50%);
     }
   </style>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/monolith.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css" />
+
 </head>
 
 <body>
   <!--START Toolbar -->
   <div class="toolbar">
-    <a href="Save (Ctrl + S or Cmd + S)" id="save"><img class="invert"
+    <a href="Save (ctrl + S or cmd + S)" id="save"><img class="invert"
         src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
     <a href="Brush" class="selected" id="brush"><img alt="brush" class="invert"
         src="https://img.icons8.com/wired/24/000000/paint-brush.png" /></a>
@@ -184,9 +186,9 @@
       <!-- <input type="color" id="color" placeholder="red" value="#FF0000"> -->
       <div class="pickr"></div>
     </a>
-    <a href="Undo (Ctrl + z | Cmd + z)" id="undo"> <img class="invert"
+    <a href="Undo (ctrl + z | cmd + z)" id="undo"> <img class="invert"
         src="https://img.icons8.com/android/24/000000/undo.png"></a>
-    <a href="Copy (Ctrl + c | Cmd + c)" id="copy"><img class="invert"
+    <a href="Copy (ctrl + c | cmd + c)" id="copy"><img class="invert"
         src="https://img.icons8.com/metro/24/000000/copy.png" /></a>
     <a href="Upload" id="upload"> <img class="invert"
         src="https://img.icons8.com/windows/24/000000/upload-to-cloud.png" /></a>
@@ -257,12 +259,20 @@
     </svg>
     <span style="user-select: none;">SNAP !</span>
   </div>
-
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.es5.min.js"></script>
+  <script>
+    const vscode = acquireVsCodeApi();
+    window.onload = function () {
+      vscode.postMessage({
+        command: "get-data"
+      });
+      console.log("Ready to accept data.");
+    };
+  </script>
   <script src="./dom2image.js"></script>
   <script src="./vivus.js"></script>
   <script src="./index.js"></script>
+  <script src="./picklr.js"></script>
+
 </body>
 
 </html>

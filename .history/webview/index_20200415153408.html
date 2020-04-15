@@ -257,7 +257,15 @@
     </svg>
     <span style="user-select: none;">SNAP !</span>
   </div>
-
+  <script>
+    const vscode = acquireVsCodeApi();
+    window.onload = function () {
+      vscode.postMessage({
+        command: "get-data"
+      });
+      console.log("Ready to accept data.");
+    };
+  </script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.es5.min.js"></script>
   <script src="./dom2image.js"></script>

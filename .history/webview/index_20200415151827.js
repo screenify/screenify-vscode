@@ -709,7 +709,7 @@
           copyImage(true)
         }
         const pickr = Pickr.create({
-          el: '.pickr',
+          el: 'picker',
           theme: 'monolith', // or 'classic', or 'nano'
 
           swatches: [

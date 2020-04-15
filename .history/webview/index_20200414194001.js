@@ -17,14 +17,16 @@
           brush = document.getElementById("brush"),
           line = document.getElementById("line"),
           rectangle = document.getElementById("rectangle"),
-          // color = document.getElementById("color"),
+          color = document.getElementById("color"),
           snippetHeight = document.getElementById("snippetHeight"),
           snippetWidth = document.getElementById("snippetWidth"),
           undo = document.getElementById("undo"),
           copyBtn = document.getElementById("copy"),
-          upload = document.getElementById("upload");
+          upload = document.getElementById("upload"),
+          toolbar = document.getElementsByClassName("toolbar")[0];
+        toolbar.style.backgroundColor = "#362b1b";
 
-        document.getElementsByClassName("toolbar")[0].style.backgroundColor = "#362b1b";
+
         vscode.postMessage({
           type: "getAndUpdateCacheAndSettings"
         });
@@ -184,10 +186,10 @@
           uploadImage()
         })
 
-        // color.addEventListener("input", () => {
-        //   strokeColor = color.value;
-        //   fillColor = color.value;
-        // })
+        color.addEventListener("input", () => {
+          strokeColor = color.value;
+          fillColor = color.value;
+        })
 
         shootContainer(obturateurLogo)
         shootContainer(obturateur)
@@ -220,6 +222,7 @@
 
           // change this latter
           //  save the image
+          // Here
           SaveCanvasImage()
 
           canvasWidth = width + 20;
@@ -401,8 +404,8 @@
         let savedImageData;
         // Stores whether I'm currently dragging the mouse or not
         let dragging = false;
-        let strokeColor = 'black';
-        let fillColor = 'black';
+        let strokeColor = color.value;
+        let fillColor = color.value;;
         let line_Width = 1;
         // Tool currently using
         let currentTool = 'brush';
@@ -486,6 +489,10 @@
         function SaveCanvasImage() {
           // Save image
           savedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          // TODO: 
+          /*
+            Set a limit for the use to push
+          */
           undo_array.push({
             currentTool: currentTool,
             savedImageData: savedImageData
@@ -587,11 +594,10 @@
               ctx.lineWidth = pt.size;
               begin = true;
             }
-            // HERE CLEAN CODE
-            // if (ctx.strokeStyle != pt.color) {
-            //   ctx.strokeStyle = pt.color;
-            //   begin = true;
-            // }
+            if (ctx.strokeStyle != pt.color) {
+              ctx.strokeStyle = pt.color;
+              begin = true;
+            }
             if (pt.mode == "begin" || begin) {
               ctx.beginPath();
               ctx.moveTo(pt.x, pt.y);
@@ -708,47 +714,6 @@
         function uploadImage() {
           copyImage(true)
         }
-        const pickr = Pickr.create({
-          el: '.pickr',
-          theme: 'monolith', // or 'classic', or 'nano'
-
-          swatches: [
-            'rgba(244, 67, 54, 1)',
-            'rgba(233, 30, 99, 0.95)',
-            'rgba(156, 39, 176, 0.9)',
-            'rgba(103, 58, 183, 0.85)',
-            'rgba(63, 81, 181, 0.8)',
-            'rgba(33, 150, 243, 0.75)',
-            'rgba(3, 169, 244, 0.7)',
-            'rgba(0, 188, 212, 0.7)',
-            'rgba(0, 150, 136, 0.75)',
-            'rgba(76, 175, 80, 0.8)',
-            'rgba(139, 195, 74, 0.85)',
-            'rgba(205, 220, 57, 0.9)',
-            'rgba(255, 235, 59, 0.95)',
-            'rgba(255, 193, 7, 1)'
-          ],
-
-          components: {
-
-            // Main components
-            preview: true,
-            opacity: true,
-            hue: true,
-
-            // Input / output Options
-            interaction: {
-              hex: true,
-              rgba: true,
-              hsla: true,
-              hsva: true,
-              cmyk: true,
-              input: true,
-              clear: true,
-              save: true
-            }
-          }
-        });
         /**
          * Redo feature
          */

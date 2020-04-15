@@ -85,7 +85,6 @@
       height: 10%;
       background-color: transparent;
       overflow: auto;
-      border-radius: 25px;
     }
 
     .toolbar a {
@@ -116,7 +115,9 @@
     .toolbar a img {
       max-width: 80%;
       height: auto;
-      opacity: 50%;
+      /* opacity: 60%; */
+      color: white;
+      opacity: 60%;
     }
 
     #my-canvas {
@@ -167,7 +168,6 @@
       filter: opacity(50%);
     }
   </style>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/monolith.min.css" />
 </head>
 
 <body>
@@ -177,18 +177,13 @@
         src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
     <a href="Brush" class="selected" id="brush"><img alt="brush" class="invert"
         src="https://img.icons8.com/wired/24/000000/paint-brush.png" /></a>
-    <a href="Line" id="line"><img class="invert" alt="line" src="https://img.icons8.com/office/24/000000/line.png"></a>
-    <a href="Rectangle" id="rectangle"><img alt=" rectangle" class="invert"
+    <a href="Line" id="line"><img alt="line" src="https://img.icons8.com/office/24/000000/line.png"></a>
+    <a href="Rectangle" id="rectangle"><img alt=" rectangle"
         src="https://img.icons8.com/material-sharp/24/000000/rounded-rectangle-stroked.png"></a>
-    <a href="Color Picker">
-      <!-- <input type="color" id="color" placeholder="red" value="#FF0000"> -->
-      <div class="pickr"></div>
-    </a>
-    <a href="Undo (Ctrl + z | Cmd + z)" id="undo"> <img class="invert"
-        src="https://img.icons8.com/android/24/000000/undo.png"></a>
-    <a href="Copy (Ctrl + c | Cmd + c)" id="copy"><img class="invert"
-        src="https://img.icons8.com/metro/24/000000/copy.png" /></a>
-    <a href="Upload" id="upload"> <img class="invert"
+    <a href="Color Picker"><input type="color" id="color" placeholder="red" value="#FF0000"></a>
+    <a href="Undo (ctrl + z | cmd + z)" id="undo"> <img src="https://img.icons8.com/android/24/000000/undo.png"></a>
+    <a href="Copy (Ctrl + c | CMD + c)" id="copy"><img src="https://img.icons8.com/metro/24/000000/copy.png" /></a>
+    <a href="Upload" id="upload"> <img class="opacity"
         src="https://img.icons8.com/windows/24/000000/upload-to-cloud.png" /></a>
   </div>
   <hr>
@@ -257,12 +252,19 @@
     </svg>
     <span style="user-select: none;">SNAP !</span>
   </div>
-
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.es5.min.js"></script>
+  <script>
+    const vscode = acquireVsCodeApi();
+    window.onload = function () {
+      vscode.postMessage({
+        command: "get-data"
+      });
+      console.log("Ready to accept data.");
+    };
+  </script>
   <script src="./dom2image.js"></script>
   <script src="./vivus.js"></script>
   <script src="./index.js"></script>
+
 </body>
 
 </html>

@@ -17,14 +17,16 @@
           brush = document.getElementById("brush"),
           line = document.getElementById("line"),
           rectangle = document.getElementById("rectangle"),
-          // color = document.getElementById("color"),
+          color = document.getElementById("color"),
           snippetHeight = document.getElementById("snippetHeight"),
           snippetWidth = document.getElementById("snippetWidth"),
           undo = document.getElementById("undo"),
           copyBtn = document.getElementById("copy"),
-          upload = document.getElementById("upload");
+          upload = document.getElementById("upload"),
+          toolbar = document.getElementsByClassName("toolbar")[0];
+        toolbar.style.backgroundColor = "#362b1b";
 
-        document.getElementsByClassName("toolbar")[0].style.backgroundColor = "#362b1b";
+
         vscode.postMessage({
           type: "getAndUpdateCacheAndSettings"
         });
@@ -184,10 +186,10 @@
           uploadImage()
         })
 
-        // color.addEventListener("input", () => {
-        //   strokeColor = color.value;
-        //   fillColor = color.value;
-        // })
+        color.addEventListener("input", () => {
+          strokeColor = color.value;
+          fillColor = color.value;
+        })
 
         shootContainer(obturateurLogo)
         shootContainer(obturateur)
@@ -220,7 +222,8 @@
 
           // change this latter
           //  save the image
-          SaveCanvasImage()
+          // Here
+          // SaveCanvasImage()
 
           canvasWidth = width + 20;
           canvasHeight = height + 20;
@@ -401,8 +404,8 @@
         let savedImageData;
         // Stores whether I'm currently dragging the mouse or not
         let dragging = false;
-        let strokeColor = 'black';
-        let fillColor = 'black';
+        let strokeColor = color.value;
+        let fillColor = color.value;;
         let line_Width = 1;
         // Tool currently using
         let currentTool = 'brush';
@@ -486,6 +489,10 @@
         function SaveCanvasImage() {
           // Save image
           savedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          // TODO: 
+          /*
+            Set a limit for the use to push
+          */
           undo_array.push({
             currentTool: currentTool,
             savedImageData: savedImageData
@@ -587,11 +594,10 @@
               ctx.lineWidth = pt.size;
               begin = true;
             }
-            // HERE CLEAN CODE
-            // if (ctx.strokeStyle != pt.color) {
-            //   ctx.strokeStyle = pt.color;
-            //   begin = true;
-            // }
+            if (ctx.strokeStyle != pt.color) {
+              ctx.strokeStyle = pt.color;
+              begin = true;
+            }
             if (pt.mode == "begin" || begin) {
               ctx.beginPath();
               ctx.moveTo(pt.x, pt.y);
@@ -605,6 +611,7 @@
         }
 
         function ReactToMouseDown(e) {
+          SaveCanvasImage()
           // Change the mouse pointer to a crosshair
           canvas.style.cursor = "crosshair";
 
@@ -676,22 +683,25 @@
           const a = transparentBackground ? 0 : 1;
           return `rgba(${r}, ${g}, ${b}, ${a})`;
         }
-        // This is for the undo feature.
 
+        // This is for the undo feature.
         function restoreState() {
           if (!undo_array.length) return;
           restore_state = undo_array.pop()
           if (restore_state.currentTool === "brush") {
+            // SaveCanvasImage()
             brushPoints.pop()
           }
           // make pop the last update you have done  
           savedImageData = restore_state.savedImageData
+          // SaveCanvasImage()
+
           // redraw the canvas
           RedrawCanvasImage()
 
         }
         /**
-         * undo funciont
+         * undo funcion
          */
         function undoChanges() {
           restoreState()
@@ -710,7 +720,7 @@
         }
         const pickr = Pickr.create({
           el: '.pickr',
-          theme: 'monolith', // or 'classic', or 'nano'
+          theme: 'classic', // or 'monolith', or 'nano'
 
           swatches: [
             'rgba(244, 67, 54, 1)',

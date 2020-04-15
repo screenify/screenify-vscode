@@ -710,7 +710,7 @@
         }
         const pickr = Pickr.create({
           el: '.pickr',
-          theme: 'monolith', // or 'classic', or 'nano'
+          theme: 'classic', // or 'classic', or 'nano'
 
           swatches: [
             'rgba(244, 67, 54, 1)',
