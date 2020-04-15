@@ -184,7 +184,9 @@
         upload.addEventListener("click", () => {
           uploadImage()
         })
-
+        clicker.addEventListener("click", () => {
+          uploadedImageContainer.childNodes[0].innerText += Math.random(0, 100)
+        })
         // color.addEventListener("input", () => {
         //   strokeColor = color.value;
         //   fillColor = color.value;
@@ -350,15 +352,6 @@
               } else {
                 snippetContainerNode.style.background = "none";
               }
-            } else if (e.data.type === "successfulUplaod") {
-              uploadedImageContainer.innerHTML =
-                `<br>
-               <div class="card">
-                <div class="card-body">
-                 ${e.data.url}
-                </div>
-              </div>   
-              `
             } else if (e.data.type === "update") {
               document.execCommand("paste");
             } else if (e.data.type === "restore") {
@@ -377,8 +370,10 @@
               } else {
                 snippetNode.style.fontVariantLigatures = "none";
               }
-
+            } else if (e.data.type === "successfulUplaod") {
+              uploadedImageContainer.childNodes[0].innerText += e.data.url
             }
+
           }
         });
         window.addEventListener("keypress", ReactToKeyup)

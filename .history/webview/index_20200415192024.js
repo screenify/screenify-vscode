@@ -23,7 +23,8 @@
           undo = document.getElementById("undo"),
           copyBtn = document.getElementById("copy"),
           upload = document.getElementById("upload"),
-          uploadedImageContainer = document.getElementById("upload-container");
+          uploadedImageContainer = document.getElementById("upload-container"),
+          clicker = document.getElementById("clicker");
 
         document.getElementsByClassName("toolbar")[0].style.backgroundColor = "#362b1b";
         vscode.postMessage({
@@ -184,7 +185,9 @@
         upload.addEventListener("click", () => {
           uploadImage()
         })
-
+        clicker.addEventListener("click", () => {
+          uploadedImageContainer.childNodes[0].childNodes[0].innerText = Math.random(0, 100)
+        })
         // color.addEventListener("input", () => {
         //   strokeColor = color.value;
         //   fillColor = color.value;

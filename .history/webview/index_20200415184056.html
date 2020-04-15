@@ -169,23 +169,6 @@
       filter: opacity(50%);
     }
 
-    .card {
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-      /* this adds the "card" effect */
-      padding: 16px;
-      text-align: center;
-      background-color: green;
-      border-radius: 10px;
-    }
-
-    .card-body {
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-      /* this adds the "card" effect */
-      padding: 14px;
-      text-align: center;
-      background-color: grey;
-    }
-
     /* Starts from here */
   </style>
 
@@ -212,7 +195,7 @@
         src="https://img.icons8.com/metro/24/000000/copy.png" /></a>
     <a href="Upload" id="upload"> <img class="invert"
         src="https://img.icons8.com/windows/24/000000/upload-to-cloud.png" /></a>
-    <a id="clicker"><button>Click Me!</button></a>
+    <a id="clicker"><button></button></a>
   </div>
   <hr>
   <!-- End Toolbar -->
@@ -280,7 +263,8 @@
     </svg>
     <span style="user-select: none;">SNAP !</span>
 
-    <div id="upload-container" style="width:100%">
+    <div id="upload-container" style="user-select: none;width:100%">
+      <p class="card-text"></p>
     </div>
   </div>
   </div>

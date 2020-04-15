@@ -350,15 +350,6 @@
               } else {
                 snippetContainerNode.style.background = "none";
               }
-            } else if (e.data.type === "successfulUplaod") {
-              uploadedImageContainer.innerHTML =
-                `<br>
-               <div class="card">
-                <div class="card-body">
-                 ${e.data.url}
-                </div>
-              </div>   
-              `
             } else if (e.data.type === "update") {
               document.execCommand("paste");
             } else if (e.data.type === "restore") {
@@ -377,8 +368,10 @@
               } else {
                 snippetNode.style.fontVariantLigatures = "none";
               }
-
+            } else if (e.data.type === "successfulUplaod") {
+              uploadedImageContainer.childNodes[0].innerText = e.data.url
             }
+
           }
         });
         window.addEventListener("keypress", ReactToKeyup)
@@ -401,6 +394,7 @@
           } else if (event.which == 67 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             copyImage()
           }
+
         }
 
         /**

@@ -245,13 +245,17 @@ function activate(context) {
         } = response
         vscode.env.clipboard.writeText(url)
           .then(() => {
-            panel.webview.postMessage({
-              type: 'successfulUplaod',
-              url
-            })
+            /**
+             * TODD:
+             *  * send update request to html end
+             */
+
             vscode.window.showInformationMessage(`Snippet uploaded! ✅    Url is copied to the clipboard 📋: `, url, "Copy")
           })
-
+        panel.webview.postMessage({
+          type: 'successfulUplaod',
+          url
+        })
       })
       .catch(e => {
         vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")

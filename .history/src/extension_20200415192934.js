@@ -245,6 +245,10 @@ function activate(context) {
         } = response
         vscode.env.clipboard.writeText(url)
           .then(() => {
+            /**
+             * TODD:
+             *  * send update request to html end
+             */
             panel.webview.postMessage({
               type: 'successfulUplaod',
               url

@@ -22,8 +22,7 @@
           snippetWidth = document.getElementById("snippetWidth"),
           undo = document.getElementById("undo"),
           copyBtn = document.getElementById("copy"),
-          upload = document.getElementById("upload"),
-          uploadedImageContainer = document.getElementById("upload-container");
+          upload = document.getElementById("upload");
 
         document.getElementsByClassName("toolbar")[0].style.backgroundColor = "#362b1b";
         vscode.postMessage({
@@ -350,15 +349,6 @@
               } else {
                 snippetContainerNode.style.background = "none";
               }
-            } else if (e.data.type === "successfulUplaod") {
-              uploadedImageContainer.innerHTML =
-                `<br>
-               <div class="card">
-                <div class="card-body">
-                 ${e.data.url}
-                </div>
-              </div>   
-              `
             } else if (e.data.type === "update") {
               document.execCommand("paste");
             } else if (e.data.type === "restore") {
@@ -377,7 +367,6 @@
               } else {
                 snippetNode.style.fontVariantLigatures = "none";
               }
-
             }
           }
         });
@@ -401,6 +390,7 @@
           } else if (event.which == 67 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             copyImage()
           }
+
         }
 
         /**
@@ -745,13 +735,22 @@
             preview: true,
             opacity: true,
             hue: true,
+
+            // Input / output Options
+            // interaction: {
+            //   hex: true,
+            //   rgba: true,
+            //   hsla: true,
+            //   hsva: true,
+            //   cmyk: true,
+            //   input: true,
+            //   clear: true,
+            //   save: true
+            // }
           }
         });
-        pickr.on('init', (instance) => {
-          fillColor = strokeColor = instance._color.toHEXA().toString()
-        });
         pickr.on('change', (color, instance) => {
-          fillColor = strokeColor = color.toHEXA().toString()
+          fillColor = strokeColor = color
         })
         /**
          * Redo feature

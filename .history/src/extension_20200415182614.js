@@ -221,42 +221,6 @@ function activate(context) {
       }
     })
   }
-  /**
-   * @function upload
-   * @param {Buffer} image 
-   * @return {Promise} 
-   */
-
-  function upload(buffer) {
-    let serverUrl = `https://${settings.get("serverUrl")}/api/upload`
-    fetch(serverUrl, {
-        method: 'POST',
-        body: JSON.stringify({
-          buffer
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
-      .then(res => res.json())
-      .then(response => {
-        const {
-          url
-        } = response
-        vscode.env.clipboard.writeText(url)
-          .then(() => {
-            panel.webview.postMessage({
-              type: 'successfulUplaod',
-              url
-            })
-            vscode.window.showInformationMessage(`Snippet uploaded! ✅    Url is copied to the clipboard 📋: `, url, "Copy")
-          })
-
-      })
-      .catch(e => {
-        vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
-      });
-  }
 }
 
 function getHtmlContent(htmlPath) {
@@ -268,6 +232,46 @@ function getHtmlContent(htmlPath) {
 }
 const settings = vscode.workspace.getConfiguration('screenify')
 
+/**
+ * @function upload
+ * @param {Buffer} image 
+ * @return {Promise} 
+ */
+
+function upload(buffer) {
+  let serverUrl = `https://${settings.get("serverUrl")}/api/upload`
+  fetch(serverUrl, {
+      method: 'POST',
+      body: JSON.stringify({
+        buffer
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+    .then(res => res.json())
+    .then(response => {
+      const {
+        url
+      } = response
+      vscode.env.clipboard.writeText(url)
+        .then(() => {
+          /**
+           * TODD:
+           *  * send update request to html end
+           */
+          panel.webview.postMessage({
+            "type": "successfulUplaod",
+            url
+          })
+
+          vscode.window.showInformationMessage(`Snippet uploaded! ✅    Url is copied to the clipboard 📋: `, url, "Copy")
+        })
+    })
+    .catch(e => {
+      vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
+    });
+}
 
 function deactivate() {
   // TODO:complete
