@@ -26,14 +26,17 @@
     "main": "./src/extension",
     "contributes": {
         "viewsContainers": {
-            "activitybar": [{
-                "id": "screenfiy",
-                "title": "Screenfiy",
-                "icon": "resources/icon.png"
-            }]
+            "activitybar": [
+                {
+                    "id": "screenfiy",
+                    "title": "Screenfiy",
+                    "icon": "resources/icon.png"
+                }
+            ]
         },
         "views": {
-            "screenfiy": [{
+            "screenfiy": [
+                {
                     "id": "package-dependencies",
                     "name": "Dependencies"
                 },
@@ -43,15 +46,19 @@
                 }
             ]
         },
-        "commands": [{
-            "command": "screenify.activate",
-            "title": "Screenify 📸"
-        }],
-        "keybindings": [{
-            "command": "screenify.activate",
-            "key": "ctrl+shift+s",
-            "mac": "cmd+shift+s"
-        }],
+        "commands": [
+            {
+                "command": "screenify.activate",
+                "title": "Screenify 📸"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "screenify.activate",
+                "key": "ctrl+shift+s",
+                "mac": "cmd+shift+s"
+            }
+        ],
         "configuration": {
             "title": "Screenify",
             "properties": {
@@ -110,6 +117,7 @@
     },
     "dependencies": {
         "@google-cloud/storage": "^4.7.0",
+        "@simonwep/pickr": "^1.5.1",
         "bluebird": "^3.7.2",
         "cloudinary": "^1.21.0",
         "fs": "0.0.1-security",
