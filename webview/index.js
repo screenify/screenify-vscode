@@ -735,20 +735,14 @@
             preview: true,
             opacity: true,
             hue: true,
-
-            // Input / output Options
-            interaction: {
-              hex: true,
-              rgba: true,
-              hsla: true,
-              hsva: true,
-              cmyk: true,
-              input: true,
-              clear: true,
-              save: true
-            }
           }
         });
+        pickr.on('init', (instance) => {
+          fillColor = strokeColor = instance._color.toHEXA().toString()
+        });
+        pickr.on('change', (color, instance) => {
+          fillColor = strokeColor = color.toHEXA().toString()
+        })
         /**
          * Redo feature
          */
