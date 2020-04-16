@@ -1,3 +1,8 @@
+    /*---------------------------------------------------------------------------------------------
+     *  Copyright (c) Screenify.
+     *  Licensed under the MIT License. See License.txt in the project root for license information.
+     *--------------------------------------------------------------------------------------------*/
+
     window.onload = function () {
       (function () {
         let target = "container";

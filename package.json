@@ -21,44 +21,47 @@
     "icon": "icon.png",
     "activationEvents": [
         "onCommand:screenify.activate",
-        "onWebviewPanel:screenify"
+        "onWebviewPanel:screenify",
+        "onView:getting-started"
     ],
     "main": "./src/extension",
     "contributes": {
         "viewsContainers": {
-            "activitybar": [
-                {
-                    "id": "screenfiy",
-                    "title": "Screenfiy",
-                    "icon": "resources/icon.png"
-                }
-            ]
+            "activitybar": [{
+                "id": "screenfiy",
+                "title": "Screenfiy",
+                "icon": "resources/icon.png"
+            }]
         },
         "views": {
-            "screenfiy": [
-                {
-                    "id": "package-dependencies",
-                    "name": "Dependencies"
-                },
-                {
-                    "id": "package-outline",
-                    "name": "Outline"
-                }
-            ]
+            "screenfiy": [{
+                "id": "getting-started",
+                "name": "Getting Started"
+            }, {
+                "id": "Help",
+                "name": "help"
+            }]
         },
-        "commands": [
-            {
+        "menu": {
+            "view/item/context": [{
                 "command": "screenify.activate",
-                "title": "Screenify 📸"
+                "when": "view == getting-started",
+                "group": "inline"
+            }]
+        },
+        "commands": [{
+            "command": "screenify.activate",
+            "title": "Screenify 📸",
+            "icon": {
+                "light": "resources/icon.png",
+                "dark": "resources/icon.png"
             }
-        ],
-        "keybindings": [
-            {
-                "command": "screenify.activate",
-                "key": "ctrl+shift+s",
-                "mac": "cmd+shift+s"
-            }
-        ],
+        }],
+        "keybindings": [{
+            "command": "screenify.activate",
+            "key": "ctrl+shift+s",
+            "mac": "cmd+shift+s"
+        }],
         "configuration": {
             "title": "Screenify",
             "properties": {
