@@ -351,10 +351,10 @@
               }
             } else if (e.data.type === "successfulUplaod") {
               uploadedImageContainer.innerHTML =
-                `
+                `<br>
                <div class="card">
                 <div class="card-body">
-                 <input style="align-self:center;" type = "text"
+                 <input type = "text"
                 value = "${e.data.url}" >
                  <button class="btn" data-clipboard-target="#foo">
                      <img src="https://img.icons8.com/pastel-glyph/24/000000/clipboard--v1.png" alt="Copy to clipboard">

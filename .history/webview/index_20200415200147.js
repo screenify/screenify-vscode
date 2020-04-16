@@ -127,6 +127,7 @@
             initialSpans[i].textContent = initialSpans[i].textContent.slice(indent);
           }
           return doc.body.innerHTML;
+          s
         }
 
         document.addEventListener("paste", e => {
@@ -351,14 +352,14 @@
               }
             } else if (e.data.type === "successfulUplaod") {
               uploadedImageContainer.innerHTML =
-                `
+                `<br>
                <div class="card">
                 <div class="card-body">
-                 <input style="align-self:center;" type = "text"
-                value = "${e.data.url}" >
-                 <button class="btn" data-clipboard-target="#foo">
-                     <img src="https://img.icons8.com/pastel-glyph/24/000000/clipboard--v1.png" alt="Copy to clipboard">
-                    </button>
+                 <div>
+                 ${e.data.url}
+                 <hr>
+                 <img src="https://img.icons8.com/pastel-glyph/24/000000/clipboard--v1.png" alt="Copy to clipboard">
+                 </div>
                 </div>
               </div>   
               `

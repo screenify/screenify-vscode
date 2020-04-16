@@ -2,8 +2,7 @@
 
 <head>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
   <meta http-equiv="Content-Security-Policy"
     content="img-src vscode-resource: data: https:; script-src vscode-resource:; style-src 'unsafe-inline' vscode-resource:;" />
   <style>
@@ -16,7 +15,7 @@
       display: flex;
       flex-flow: column;
       align-items: center;
-      background-color: transparent;
+      user-select: none;
     }
 
     #snippet-container {
@@ -170,7 +169,24 @@
       filter: opacity(50%);
     }
 
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      /* this adds the "card" effect */
+      padding: 16px;
+      text-align: center;
+      background-color: green;
+      border-radius: 10px;
+    }
 
+    .card-body {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      /* this adds the "card" effect */
+      padding: 14px;
+      text-align: center;
+      background-color: grey;
+      border-radius: 10px;
+
+    }
 
     /* Starts from here */
   </style>
@@ -266,7 +282,7 @@
     <span style="user-select: none;">SNAP !</span>
 
   </div>
-  <div id="upload-container" style="align-items:center; align-self: center;width:80%">
+  <div id="upload-container" style="width:100%">
   </div>
   </div>
   </div>
