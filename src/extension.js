@@ -262,6 +262,9 @@
             vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
           });
       }
+      vscode.window.createTreeView('ftpExplorer', {
+        treeDataProvider // new FtpTreeDataProvider()
+      });
     }
 
     function getHtmlContent(htmlPath) {
