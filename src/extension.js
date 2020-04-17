@@ -25,12 +25,16 @@
       vscode.window.setStatusBarMessage(
         `$(device-camera)`
       )
-      vscode.commands.registerCommand('screenify.moreInfo', () => {
-        vscode.commands.executeCommand('vscode.open', vscode.Uri.parse('https://github.com/microsoft/vscode/issues/9651'))
+      vscode.commands.registerCommand('screenify.openUri', (node) => {
+        node.openUri()
       });
       class TreeDataProvider {
         constructor() {
-          this.data = [new TreeItem("Give me your feedback!"), new TreeItem("More Info"), new TreeItem("GitHub")];
+          this.data = [
+            new TreeItem("Give me your feedback!", "twitter.svg", "https://twitter.com/adammuman81"),
+            new TreeItem("More Info", "question.png", "https://github.com/AdamMomen/screenify-vscode/pulls"),
+            new TreeItem("GitHub", "github.png", "https://github.com/AdamMomen/")
+          ];
         }
         getTreeItem(element) {
           return element;
@@ -45,20 +49,15 @@
       }
       class TreeItem extends vscode.TreeItem {
 
-        constructor(label, children = undefined) {
+        constructor(label, icon, uri, cmd = "screenify.openUri") {
           super(label, vscode.TreeItemCollapsibleState.None);
-          this.children = children;
-
+          this.iconPath = path.join(context.extensionPath, 'resources', icon);
+          this.command = cmd
+          this._uri = uri
         }
-        iconPath = {
-          light: path.join(context.extensionPath, 'resources',
-            this.label == "More Info" ?
-            'question.png' : this.label === "GitHub" ? "github.png" : "twitter.svg"
-          ),
-          dark: path.join(context.extensionPath, 'resources', this.label == "More Info" ?
-            'question.png' : this.label === "GitHub" ? "github.png" : "twitter.svg"
-          )
-        };
+        openUri() {
+          openExternal(this._uri)
+        }
       }
       // vscode.window.registerTreeDataProvider('gettingStarted', new TreeDataProvider());
       vscode.window.createTreeView('Help', {
@@ -305,6 +304,23 @@
       }
 
 
+    }
+    /**
+     * Generic function to open uri
+     * @param {String} path 
+     * @param {Boolean} throwErrorOnFailure 
+     */
+    async function openExternal(path, throwErrorOnFailure = false) {
+      const {
+        Uri,
+        commands
+      } = vscode
+      let uri = Uri.parse(path);
+      let successful = await commands.executeCommand('vscode.open', uri);
+      if (!successful && throwErrorOnFailure) {
+        throw new Error('vscode-docker.utils.openExternal.error', 'Opening {0} was unsuccessful', path);
+      }
+      return;
     }
 
     function getHtmlContent(htmlPath) {
