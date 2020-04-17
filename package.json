@@ -22,46 +22,64 @@
     "activationEvents": [
         "onCommand:screenify.activate",
         "onWebviewPanel:screenify",
-        "onView:getting-started"
+        "onView:moreInfo",
+        "onCommand:screenify.moreInfo"
     ],
     "main": "./src/extension",
     "contributes": {
         "viewsContainers": {
-            "activitybar": [{
-                "id": "screenfiy",
-                "title": "Screenfiy",
-                "icon": "resources/icon.png"
-            }]
+            "activitybar": [
+                {
+                    "id": "screenfiy",
+                    "title": "Screenfiy",
+                    "icon": "resources/icon.png"
+                }
+            ]
         },
         "views": {
-            "screenfiy": [{
-                "id": "getting-started",
-                "name": "Getting Started"
-            }, {
-                "id": "Help",
-                "name": "help"
-            }]
+            "screenfiy": [
+                {
+                    "id": "gettingStarted",
+                    "name": "Getting Started"
+                },
+                {
+                    "id": "Help",
+                    "name": "Help"
+                }
+            ]
         },
         "menu": {
-            "view/item/context": [{
-                "command": "screenify.activate",
-                "when": "view == getting-started",
-                "group": "inline"
-            }]
+            "view/item/context": [
+                {
+                    "command": "screenify.moreInfo",
+                    "when": "view == moreInfo && viewItem == Help",
+                    "group": "inline"
+                }
+            ]
         },
-        "commands": [{
-            "command": "screenify.activate",
-            "title": "Screenify 📸",
-            "icon": {
-                "light": "resources/icon.png",
-                "dark": "resources/icon.png"
+        "viewsWelcome": [
+            {
+                "view": "gettingStarted",
+                "contents": "Click on Start to start using screenify:\n[Start](command:screenify.activate)"
             }
-        }],
-        "keybindings": [{
-            "command": "screenify.activate",
-            "key": "ctrl+shift+s",
-            "mac": "cmd+shift+s"
-        }],
+        ],
+        "commands": [
+            {
+                "command": "screenify.activate",
+                "title": "Screenify 📸"
+            },
+            {
+                "command": "screenify.moreInfo",
+                "title": "More Info"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "screenify.activate",
+                "key": "ctrl+shift+s",
+                "mac": "cmd+shift+s"
+            }
+        ],
         "configuration": {
             "title": "Screenify",
             "properties": {
@@ -122,7 +140,6 @@
         "@google-cloud/storage": "^4.7.0",
         "@simonwep/pickr": "^1.5.1",
         "bluebird": "^3.7.2",
-        "cloudinary": "^1.21.0",
         "fs": "0.0.1-security",
         "node-fetch": "^2.6.0",
         "node-powershell": "^4.0.0",
