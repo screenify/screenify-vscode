@@ -25,13 +25,15 @@
       // vscode.window.setStatusBarMessage(
       //   `$(device-camera)`
       // )
-
-      const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000)
+      const {
+        subscriptions
+      } = context
+      statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
       statusBarItem.command = "screenify.activate"
-      statusBarItem.title = `$(device-camera) Screenify`
-      statusBarItem.priority = 100
+      statusBarItem.text = `$(device-camera) Screenify`
       statusBarItem.tooltip = "Capture Code Snippet"
       statusBarItem.show()
+      subscriptions.push(statusBarItem);
       class TreeDataProvider {
         constructor() {
           this.data = [
@@ -322,8 +324,6 @@
           .catch(e => {
             vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
           });
-
-        context.subscriptions.push(statusBarItem);
       }
     }
 
