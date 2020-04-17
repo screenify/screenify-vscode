@@ -1,12 +1,30 @@
-version: 2.1
-orbs:
-  node: circleci/node@1.1.6
+# version: 2.1
+# orbs:
+#   node: circleci/node@1.1.6
+# jobs:
+#   build-and-test:
+#     executor:
+#       name: node/default
+#     steps:
+#       - checkout
+#       - node/with-cache:
+#           steps:
+#             - run: npm install
+version: 2
 jobs:
-  build-and-test:
-    executor:
-      name: node/default
+  build:
+    docker:
+      - image: circleci/node:10.15
+      - image: circleci/mongo:latest
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
+      - run:
+          name: install-npm
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: test
+          command: npm test
