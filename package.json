@@ -28,13 +28,13 @@
     "contributes": {
         "viewsContainers": {
             "activitybar": [{
-                "id": "screenfiy",
-                "title": "Screenfiy",
+                "id": "screenify",
+                "title": "Screenify",
                 "icon": "resources/icon.png"
             }]
         },
         "views": {
-            "screenfiy": [{
+            "screenify": [{
                     "id": "gettingStarted",
                     "name": "Getting Started"
                 },
@@ -47,34 +47,26 @@
         "menu": {
             "view/item/context": [{
                 "command": "help.openUri",
-                "when": "view == help",
+                "when": "view == help && viewItem == openUrl",
                 "group": "inline"
             }],
             "view/title": [{
-                "command": "help.supportScreenify",
+                "command": "screenify.supportScreenify",
                 "when": "view == help",
                 "group": "navigation"
             }]
         },
         "viewsWelcome": [{
             "view": "gettingStarted",
-            "contents": "Click on Start to start using screenify:\n[Start](command:screenify.activate)"
+            "contents": "Click on 📸 to start using screenify:\n[📸](command:screenify.activate)"
         }],
         "commands": [{
-                "command": "help.supportScreenify",
-                "title": "Support Screenify ❤ ",
-                "icon": {
-                    "dark": "resources/icon-heart.svg",
-                    "light": "resources/icon-heart.svg"
-                }
-            },
-            {
                 "command": "screenify.activate",
                 "title": "Screenify 📸"
             },
             {
                 "command": "help.openUri",
-                "title": "Open Uri"
+                "title": "Open Uri ❤"
             }
         ],
         "keybindings": [{

@@ -22,10 +22,16 @@
      * @param {vscode.ExtensionContext} context
      */
     function activate(context) {
-      vscode.window.setStatusBarMessage(
-        `$(device-camera)`
-      )
+      // vscode.window.setStatusBarMessage(
+      //   `$(device-camera)`
+      // )
 
+      const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000);
+      statusBarItem.command = "screenify.activate"
+      statusBarItem.title = `$(device-camera) Screenify`
+      statusBarItem.priority = 100
+      statusBarItem.tooltip = "Capture Code Snippet"
+      statusBarItem.show()
       class TreeDataProvider {
         constructor() {
           this.data = [
@@ -51,19 +57,20 @@
         constructor(label, icon, uri) {
           super(label, vscode.TreeItemCollapsibleState.None);
           this.iconPath = path.join(context.extensionPath, 'resources', icon);
-          this.command = "screenify.openUri"
+          this.command = {
+            title: "Open Uri",
+            command: "help.openUri",
+            arguments: [uri]
+          }
           this._uri = uri;
           this.contextValue = "openUrl";
         }
-        async openUri() {
-          await openExternal(this._uri)
-        }
       }
       vscode.window.registerTreeDataProvider('help', new TreeDataProvider());
-      // vscode.window.createTreeView('help', {
-      //   treeDataProvider: new TreeDataProvider()
-      // });
 
+      vscode.commands.registerCommand('help.openUri', node => {
+        vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(node));
+      });
 
       const htmlPath = path.resolve(context.extensionPath, 'webview/index.html')
 
@@ -87,9 +94,7 @@
         }
       })
 
-      vscode.commands.registerCommand('help.openUri', node => {
-        node.openUri()
-      });
+
       vscode.commands.registerCommand('screenify.activate', () => {
         vscode.window.showInformationMessage("Screenify is enabled and running, happy shooting 📸 😊 ")
         panel = vscode.window.createWebviewPanel('screenify', P_TITLE, 2, {
@@ -308,23 +313,7 @@
 
 
     }
-    /**
-     * Generic function to open uri
-     * @param {String} path 
-     * @param {Boolean} throwErrorOnFailure 
-     */
-    async function openExternal(path, throwErrorOnFailure = false) {
-      const {
-        Uri,
-        commands
-      } = vscode
-      let uri = Uri.parse(path);
-      let successful = await commands.executeCommand('vscode.open', uri);
-      if (!successful && throwErrorOnFailure) {
-        throw new Error('vscode-docker.utils.openExternal.error', 'Opening {0} was unsuccessful', path);
-      }
-      return;
-    }
+
 
     function getHtmlContent(htmlPath) {
       const htmlContent = fs.readFileSync(htmlPath, 'utf-8')
