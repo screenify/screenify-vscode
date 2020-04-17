@@ -25,15 +25,14 @@
       vscode.window.setStatusBarMessage(
         `$(device-camera)`
       )
-      vscode.commands.registerCommand('screenify.openUri', (node) => {
-        node.openUri()
-      });
+
       class TreeDataProvider {
         constructor() {
           this.data = [
-            new TreeItem("Give me your feedback!", "twitter.svg", "https://twitter.com/adammuman81"),
-            new TreeItem("More Info", "question.png", "https://github.com/AdamMomen/screenify-vscode/pulls"),
-            new TreeItem("GitHub", "github.png", "https://github.com/AdamMomen/")
+            new TreeItem("Give me your feedback", "twitter.svg", "https://twitter.com/adammuman81"),
+            new TreeItem("GitHub", "github.png", "https://github.com/AdamMomen/screenify-vscode"),
+            new TreeItem("More Info", "question.png", "https://github.com/AdamMomen/screenify-vscode/issues"),
+            new TreeItem("Support", "icon-heart.svg", "")
           ];
         }
         getTreeItem(element) {
@@ -49,20 +48,21 @@
       }
       class TreeItem extends vscode.TreeItem {
 
-        constructor(label, icon, uri, cmd = "screenify.openUri") {
+        constructor(label, icon, uri) {
           super(label, vscode.TreeItemCollapsibleState.None);
           this.iconPath = path.join(context.extensionPath, 'resources', icon);
-          this.command = cmd
-          this._uri = uri
+          this.command = "screenify.openUri"
+          this._uri = uri;
+          this.contextValue = "openUrl";
         }
-        openUri() {
-          openExternal(this._uri)
+        async openUri() {
+          await openExternal(this._uri)
         }
       }
-      // vscode.window.registerTreeDataProvider('gettingStarted', new TreeDataProvider());
-      vscode.window.createTreeView('Help', {
-        treeDataProvider: new TreeDataProvider()
-      });
+      vscode.window.registerTreeDataProvider('help', new TreeDataProvider());
+      // vscode.window.createTreeView('help', {
+      //   treeDataProvider: new TreeDataProvider()
+      // });
 
 
       const htmlPath = path.resolve(context.extensionPath, 'webview/index.html')
@@ -87,6 +87,9 @@
         }
       })
 
+      vscode.commands.registerCommand('help.openUri', node => {
+        node.openUri()
+      });
       vscode.commands.registerCommand('screenify.activate', () => {
         vscode.window.showInformationMessage("Screenify is enabled and running, happy shooting 📸 😊 ")
         panel = vscode.window.createWebviewPanel('screenify', P_TITLE, 2, {
