@@ -26,7 +26,7 @@
       //   `$(device-camera)`
       // )
 
-      const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000);
+      const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1000)
       statusBarItem.command = "screenify.activate"
       statusBarItem.title = `$(device-camera) Screenify`
       statusBarItem.priority = 100
@@ -282,15 +282,29 @@
 
       function upload(buffer) {
         let serverUrl = `https://${settings.get("serverUrl")}/api/upload`
-        fetch(serverUrl, {
-            method: 'POST',
-            body: JSON.stringify({
-              buffer
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-            }
+
+        vscode.window.withProgress({
+            location: 15,
+            title: "Uploading Image...",
+
+          }, (progress, token) => {
+            token.onCancellationRequested(() => {
+              return;
+            });
+            progress.report({
+              message: "uploading iamge.............."
+            });
+            return fetch(serverUrl, {
+              method: 'POST',
+              body: JSON.stringify({
+                buffer
+              }),
+              headers: {
+                'Content-Type': 'application/json',
+              }
+            })
           })
+
           .then(res => res.json())
           .then(response => {
             const {
@@ -304,14 +318,13 @@
                 })
                 vscode.window.showInformationMessage(`Snippet uploaded! ✅    Url is copied to the clipboard 📋: `, url, "Copy")
               })
-
           })
           .catch(e => {
             vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
           });
+
+        context.subscriptions.push(statusBarItem);
       }
-
-
     }
 
 
