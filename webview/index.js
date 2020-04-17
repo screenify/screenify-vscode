@@ -1,16 +1,18 @@
+    /*---------------------------------------------------------------------------------------------
+     *  Copyright (c) Screenify.
+     *  Licensed under the MIT License. See License.txt in the project root for license information.
+     *--------------------------------------------------------------------------------------------*/
+
     window.onload = function () {
       (function () {
         let target = "container";
         /**  vscode-api*/
-        const vscode = acquireVsCodeApi()
         let transparentBackground = false;
         let backgroundColor = "#f2f2f2";
 
-        vscode.postMessage({
-          type: "getAndUpdateCacheAndSettings"
-        });
 
-        const oldState = vscode.getState(),
+        const vscode = acquireVsCodeApi(),
+          oldState = vscode.getState(),
           snippetNode = document.getElementById("snippet"),
           snippetContainerNode = document.getElementById("snippet-container"),
           obturateur = document.getElementById("save"),
@@ -19,14 +21,19 @@
           ctx = canvas.getContext('2d'),
           brush = document.getElementById("brush"),
           line = document.getElementById("line"),
-          circle = document.getElementById("circle"),
           rectangle = document.getElementById("rectangle"),
-          color = document.getElementById("color"),
+          // color = document.getElementById("color"),
           snippetHeight = document.getElementById("snippetHeight"),
           snippetWidth = document.getElementById("snippetWidth"),
-          snippeInputHeight = document.getElementById("snippeInputHeight"),
-          snippeInputWidth = document.getElementById("snippeInputWidth"),
-          undo = document.getElementById("undo");
+          undo = document.getElementById("undo"),
+          copyBtn = document.getElementById("copy"),
+          upload = document.getElementById("upload"),
+          uploadedImageContainer = document.getElementById("upload-container");
+
+        document.getElementsByClassName("toolbar")[0].style.backgroundColor = "#362b1b";
+        vscode.postMessage({
+          type: "getAndUpdateCacheAndSettings"
+        });
 
         snippetContainerNode.style.opacity = "1";
         if (oldState && oldState.innerHTML) {
@@ -59,6 +66,16 @@
             type: "shoot",
             data: {
               serializedBlob
+            }
+          });
+        }
+
+        function copy(serializedBlob, upload = false) {
+          vscode.postMessage({
+            type: "copy",
+            data: {
+              "serializedBlob": serializedBlob,
+              "upload": upload
             }
           });
         }
@@ -115,7 +132,6 @@
             initialSpans[i].textContent = initialSpans[i].textContent.slice(indent);
           }
           return doc.body.innerHTML;
-          s
         }
 
         document.addEventListener("paste", e => {
@@ -165,16 +181,19 @@
           undoChanges()
         })
 
-        color.addEventListener("input", () => {
-          strokeColor = color.value;
-          fillColor = color.value;
+        copyBtn.addEventListener("click", () => {
+          copyImage()
         })
-        snippeInputWidth.addEventListener("input", () => {
-          snippetNode.style.width = `${snippeInputWidth.value}px`
+
+        upload.addEventListener("click", () => {
+          uploadImage()
         })
-        snippeInputHeight.addEventListener("input", () => {
-          snippetNode.style.height = `${snippeInputHeight.value}px`;
-        })
+
+        // color.addEventListener("input", () => {
+        //   strokeColor = color.value;
+        //   fillColor = color.value;
+        // })
+
         shootContainer(obturateurLogo)
         shootContainer(obturateur)
 
@@ -203,6 +222,8 @@
         function reactToContainerResize(width, height) {
           snippetHeight.innerText = Math.floor(new Number(height))
           snippetWidth.innerText = Math.floor(new Number(width))
+
+          // change this latter
           //  save the image
           SaveCanvasImage()
 
@@ -211,14 +232,14 @@
           canvas.height = height + 20;
           canvas.width = width + 20;
           // redraw the image
-          RedrawCanvasImage()
+          // RedrawCanvasImage()
           SaveCanvasImage();
           RedrawCanvasImage()
 
 
         }
         //
-        function shootAll() {
+        function shootAll(copyFlag = false, paste = false) {
           const width = snippetContainerNode.offsetWidth * 2;
           const height = snippetContainerNode.offsetHeight * 2;
 
@@ -248,12 +269,13 @@
             snippetNode.style.resize = "";
             snippetContainerNode.style.resize = "";
             serializeBlob(blob, serializedBlob => {
-              shoot(serializedBlob);
+              if (copyFlag) copy(serializedBlob, paste)
+              else shoot(serializedBlob);
             });
           });
         }
 
-        function shootSnippet() {
+        function shootSnippet(copyFlag = false, paste = false) {
           const width = snippetContainerNode.offsetWidth * 2;
           const height = snippetContainerNode.offsetHeight * 2;
           const config = {
@@ -282,13 +304,14 @@
             snippetNode.style.resize = "";
             snippetContainerNode.style.resize = "";
             serializeBlob(blob, serializedBlob => {
-              shoot(serializedBlob);
+              if (copyFlag) copy(serializedBlob, paste)
+              else shoot(serializedBlob);
             });
           });
         }
 
         let isInAnimation = false;
-
+        // mouse hover event
         obturateurLogo.addEventListener("mouseover", () => {
           if (!isInAnimation) {
             isInAnimation = true;
@@ -331,6 +354,19 @@
               } else {
                 snippetContainerNode.style.background = "none";
               }
+            } else if (e.data.type === "successfulUplaod") {
+              uploadedImageContainer.innerHTML =
+                `
+               <div class="card">
+                <div class="card-body">
+                 <input style="align-self:center;" type = "text"
+                value = "${e.data.url}" >
+                 <button class="btn" data-clipboard-target="#foo">
+                     <img src="https://img.icons8.com/pastel-glyph/24/000000/clipboard--v1.png" alt="Copy to clipboard">
+                    </button>
+                </div>
+              </div>   
+              `
             } else if (e.data.type === "update") {
               document.execCommand("paste");
             } else if (e.data.type === "restore") {
@@ -349,54 +385,43 @@
               } else {
                 snippetNode.style.fontVariantLigatures = "none";
               }
+
             }
           }
         });
+        window.addEventListener("keypress", ReactToKeyup)
+        window.addEventListener("keyup", ReactToKeyup)
+
+        function ReactToKeyup(event) {
+          // CTRL + S || cmd + S keypress
+          if (event.which == 115 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
+            event.preventDefault();
+            if (target === "container") {
+              shootAll();
+            } else {
+              shootSnippet();
+            }
+
+            // CTRL + Z || cmd + Z keyboard keypress
+          } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
+            // event.preventDefault();
+            undoChanges()
+          } else if (event.which == 67 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
+            copyImage()
+          }
+        }
 
         /**
          *                   PaintJS
          * JavaScript Paint App JavaScript Canvas API
          */
-        class Stack {
-          constructor() {
-            this.storage = [];
-          }
-
-          push(element) {
-            this.storage.push(element)
-          }
-          pop() {
-            return this.storage.pop()
-          }
-          size() {
-            return this.storage.length
-          }
-        }
-        class Queue {
-          constructor() {
-            this.storage = [];
-          }
-
-          push(element) {
-            this.storage.push(element)
-          }
-          pop() {
-            return this.storage.shift()
-          }
-          size() {
-            return this.storage.length
-          }
-        }
-        let undo_stack = new Stack()
-        let redo_queue = new Queue()
 
         let savedImageData;
         // Stores whether I'm currently dragging the mouse or not
         let dragging = false;
-        let strokeColor = color.value;
-        let fillColor = color.value;;
+        let strokeColor = 'black';
+        let fillColor = 'black';
         let line_Width = 1;
-        let polygonSides = 6;
         // Tool currently using
         let currentTool = 'brush';
         /** Changed canvas 's height and width to the innerheight of snippetnode. */
@@ -406,11 +431,10 @@
         // Stores whether I'm currently using brush
         let usingBrush = false;
         // Stores line x & ys used to make brush lines
-        let brushXPoints = new Array();
-        let brushYPoints = new Array();
         // Stores whether mouse is down
-        let brushDownPos = new Array();
-
+        let brushPoints = new Array();
+        // Stores the history of canvas data
+        let undo_array = new Array();
         // Stores size data used to create rubber band shapes
         // that will redraw as the user moves the mouse
         class ShapeBoundingBox {
@@ -479,14 +503,16 @@
 
         function SaveCanvasImage() {
           // Save image
-          savedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          savedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+          undo_array.push({
+            currentTool: currentTool,
+            savedImageData: savedImageData
+          })
         }
 
         function RedrawCanvasImage() {
           // Restore image
           ctx.putImageData(savedImageData, 0, 0);
-          // ctx.putImageData(savedImageData, canvas.width, canvas.height);
-
         }
 
         function UpdateRubberbandBoxSizeData(loc) {
@@ -523,7 +549,6 @@
         // Called to draw the line
         function drawRubberbandShape(loc) {
 
-          // canvasStack.push(loc)
           ctx.strokeStyle = strokeColor;
           ctx.fillStyle = fillColor;
           if (currentTool === "brush") {
@@ -552,38 +577,55 @@
 
         // Store each point as the mouse moves and whether the mouse
         // button is currently being dragged
-        function AddBrushPoint(x, y, mouseDown) {
-          brushXPoints.push(x);
-          brushYPoints.push(y);
-          // Store true that mouse is down
-          brushDownPos.push(mouseDown);
+        function AddBrushPoint(x, y, mouseDown, brushColor, brushSize, mode = none, tool) {
+          let lastX = x;
+          let lastY = y;
+          let point = {
+            tool: tool,
+            "x": x,
+            "y": y,
+            "isDrawing": mouseDown,
+            size: brushSize,
+            color: brushColor,
+            mode: mode
+          }
+          brushPoints.push(point)
         }
 
         // Cycle through all brush points and connect them with lines
         function DrawBrush() {
-          for (let i = 1; i < brushXPoints.length; i++) {
-            ctx.beginPath();
-
-            // Check if the mouse button was down at this point
-            // and if so continue drawing
-            if (brushDownPos[i]) {
-              ctx.moveTo(brushXPoints[i - 1], brushYPoints[i - 1]);
-            } else {
-              ctx.moveTo(brushXPoints[i] - 1, brushYPoints[i]);
-            }
-            ctx.lineTo(brushXPoints[i], brushYPoints[i]);
-            ctx.closePath();
-            ctx.stroke();
-            // TODO: return
-
-            // add to stack HERE
+          if (brushPoints.length == 0) {
+            return;
           }
+
+          for (var i = 0; i < brushPoints.length; i++) {
+            let pt = brushPoints[i];
+            let begin = false;
+            if (ctx.lineWidth != pt.size) {
+              ctx.lineWidth = pt.size;
+              begin = true;
+            }
+            // HERE CLEAN CODE
+            // if (ctx.strokeStyle != pt.color) {
+            //   ctx.strokeStyle = pt.color;
+            //   begin = true;
+            // }
+            if (pt.mode == "begin" || begin) {
+              ctx.beginPath();
+              ctx.moveTo(pt.x, pt.y);
+            }
+            ctx.lineTo(pt.x, pt.y);
+            if (pt.mode == "end" || (i == brushPoints.length - 1)) {
+              ctx.stroke();
+            }
+          }
+          ctx.stroke();
         }
 
         function ReactToMouseDown(e) {
-          saveState()
           // Change the mouse pointer to a crosshair
           canvas.style.cursor = "crosshair";
+
           // Store location 
           loc = GetMousePosition(e.clientX, e.clientY);
           // Save the current canvas image
@@ -597,19 +639,30 @@
           // Brush will store points in an array
           if (currentTool === 'brush') {
             usingBrush = true;
-            AddBrushPoint(loc.x, loc.y);
+            // AddBrushPoint(loc.x, loc.y, mouseDown = false, mode = "begin");
+            AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = fillColor, brushSize = line_Width, mode = "begin");
+
           }
         };
 
         function ReactToMouseMove(e) {
-          canvas.style.cursor = "crosshair";
+          canvas.style.cursor = "crosshair"
+          //  currentTool != "eraser" ? "crosshair" : "not-allowed"
           loc = GetMousePosition(e.clientX, e.clientY);
 
           // If using brush tool and dragging store each point
           if (currentTool === 'brush' && dragging && usingBrush) {
+            // SaveCanvasImage()
             // Throw away brush drawings that occur outside of the canvas
             if (loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
-              AddBrushPoint(loc.x, loc.y, true);
+              ctx.lineTo(loc.x, loc.y);
+              ctx.stroke();
+              // command pattern stuff
+              // AddBrushPoint(loc.x, loc.y, true);
+              // AddBrushPoint(loc.x, loc.y, mouseDown = true, mode = "draw");
+              AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = fillColor, brushSize = line_Width, mode = "draw");
+
+
             }
             RedrawCanvasImage();
             DrawBrush();
@@ -622,12 +675,14 @@
         };
 
         function ReactToMouseUp(e) {
-          canvas.style.cursor = "default";
+          canvas.style.cursor = "defualt";
           loc = GetMousePosition(e.clientX, e.clientY);
+          dragging = false;
           RedrawCanvasImage();
           UpdateRubberbandBoxOnMove(loc);
-          dragging = false;
+          AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = fillColor, brushSize = line_Width, mode = "end");
           usingBrush = false;
+
         }
 
         function getRgba(hex, transparentBackground) {
@@ -639,34 +694,76 @@
           return `rgba(${r}, ${g}, ${b}, ${a})`;
         }
         // This is for the undo feature.
-        function restoreState(pop, push) {
-          saveState(push);
-          let restore_state = pop.pop();
-          let img = new Element('img', {
-            'src': restore_state
-          });
-          img.onload = function () {
-            savedImageData = img
-            // canvas.ctx.drawImage(img, 0, 0, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
-            RedrawCanvasImage()
+
+        function restoreState() {
+          if (!undo_array.length) return;
+          restore_state = undo_array.pop()
+          if (restore_state.currentTool === "brush") {
+            brushPoints.pop()
+          }
+          // make pop the last update you have done  
+          savedImageData = restore_state.savedImageData
+          // redraw the canvas
+          RedrawCanvasImage()
+
+        }
+        /**
+         * undo funciont
+         */
+        function undoChanges() {
+          restoreState()
+        }
+
+        function copyImage(upload = false) {
+          if (target === "container") {
+            shootAll(copyFlag = true, upload);
+          } else {
+            shootSnippet(copyFlag = true, upload);
           }
         }
-        // let undo_history = []
-        // This is for the undo feature.
-        function saveState(history) {
-          if (history) history.push(canvas.toDataURL("image/png"));
-          else undo_stack.push(canvas.toDataURL("image/png"));
 
+        function uploadImage() {
+          copyImage(true)
         }
+        const pickr = Pickr.create({
+          el: '#pickr',
+          theme: 'nano', // or 'classic', or 'nano'
 
-        function undoChanges() {
-          restoreState(undo_Stack, null)
-        }
+          swatches: [
+            'rgba(244, 67, 54, 1)',
+            'rgba(233, 30, 99, 0.95)',
+            'rgba(156, 39, 176, 0.9)',
+            'rgba(103, 58, 183, 0.85)',
+            'rgba(63, 81, 181, 0.8)',
+            'rgba(33, 150, 243, 0.75)',
+            'rgba(3, 169, 244, 0.7)',
+            'rgba(0, 188, 212, 0.7)',
+            'rgba(0, 150, 136, 0.75)',
+            'rgba(76, 175, 80, 0.8)',
+            'rgba(139, 195, 74, 0.85)',
+            'rgba(205, 220, 57, 0.9)',
+            'rgba(255, 235, 59, 0.95)',
+            'rgba(255, 193, 7, 1)'
+          ],
 
-        function redoChanges() {
-          restoreState(undo_Stack, redo_queue)
-        }
+          components: {
 
+            // Main components
+            preview: true,
+            opacity: true,
+            hue: true,
+          }
+        });
+        pickr.on('init', (instance) => {
+          fillColor = strokeColor = instance._color.toHEXA().toString()
+        });
+        pickr.on('change', (color, instance) => {
+          fillColor = strokeColor = color.toHEXA().toString()
+        })
+        /**
+         * Redo feature
+         */
+        // function redoChanges() {restoreState(undo_array, redo_array)}
       })
       ();
     }
