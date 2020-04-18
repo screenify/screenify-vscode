@@ -435,6 +435,9 @@
         let brushPoints = new Array();
         // Stores the history of canvas data
         let undo_array = new Array();
+        //  pointer to keep track of undo steps in canvas
+        let currentState = 0;
+
         // Stores size data used to create rubber band shapes
         // that will redraw as the user moves the mouse
         class ShapeBoundingBox {
@@ -500,7 +503,7 @@
             y: (y - canvasSizeData.top) * (canvas.height / canvasSizeData.height)
           };
         }
-        let currentState = 0;
+
 
         function SaveCanvasImage() {
           if (currentState != undo_array.length - 1) {
