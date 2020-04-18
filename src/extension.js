@@ -1,5 +1,5 @@
     /*---------------------------------------------------------------------------------------------
-     *  Copyright (c) Screenify.
+     * Copyright(c) Screenify📸.
      *  Licensed under the MIT License. See License.txt in the project root for license information.
      *--------------------------------------------------------------------------------------------*/
 
@@ -22,9 +22,8 @@
      * @param {vscode.ExtensionContext} context
      */
     function activate(context) {
-      // vscode.window.setStatusBarMessage(
-      //   `$(device-camera)`
-      // )
+
+
       const {
         subscriptions
       } = context
@@ -68,8 +67,8 @@
           this.contextValue = "openUrl";
         }
       }
-      vscode.window.registerTreeDataProvider('help', new TreeDataProvider());
 
+      vscode.window.registerTreeDataProvider('help', new TreeDataProvider());
       vscode.commands.registerCommand('help.openUri', node => {
         vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(node));
       });
