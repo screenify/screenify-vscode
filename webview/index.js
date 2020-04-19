@@ -28,7 +28,8 @@
           undo = document.getElementById("undo"),
           copyBtn = document.getElementById("copy"),
           upload = document.getElementById("upload"),
-          uploadedImageContainer = document.getElementById("upload-container");
+          uploadedImageContainer = document.getElementById("upload-container"),
+          clear = document.getElementById("clear");
 
         document.getElementsByClassName("toolbar")[0].style.backgroundColor = "#362b1b";
         vscode.postMessage({
@@ -187,6 +188,15 @@
 
         upload.addEventListener("click", () => {
           uploadImage()
+        })
+        clear.addEventListener("click", () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          // clear the undo array 
+          undo_array = []
+          brushPoints = []
+          currentState = 0;
+          SaveCanvasImage()
+          RedrawCanvasImage()
         })
 
         // color.addEventListener("input", () => {
@@ -432,8 +442,7 @@
 
         // Stores whether I'm currently using brush
         let usingBrush = false;
-        // Stores line x & ys used to make brush lines
-        // Stores whether mouse is down
+        // Stores whether mouse coordinat
         let brushPoints = new Array();
         // Stores the history of canvas data
         let undo_array = new Array();
@@ -521,6 +530,11 @@
 
         function RedrawCanvasImage() {
           if (savedImageData) ctx.putImageData(savedImageData, 0, 0);
+          // added this to cancel the bug of intial state
+          else {
+            SaveCanvasImage()
+            RedrawCanvasImage()
+          }
 
         }
 
@@ -688,7 +702,7 @@
         // This is for the undo feature.
 
         function restoreState() {
-          if (!undo_array.length || currentState < 0) return;
+          if (!undo_array.length || currentState <= 0) return;
 
           restore_state = undo_array[--currentState]
           if (restore_state.currentTool === "brush") {
