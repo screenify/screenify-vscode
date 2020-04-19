@@ -430,8 +430,7 @@
 
         // Stores whether I'm currently using brush
         let usingBrush = false;
-        // Stores line x & ys used to make brush lines
-        // Stores whether mouse is down
+        // Stores whether mouse coordinat
         let brushPoints = new Array();
         // Stores the history of canvas data
         let undo_array = new Array();
@@ -516,6 +515,11 @@
 
         function RedrawCanvasImage() {
           if (savedImageData) ctx.putImageData(savedImageData, 0, 0);
+          // added this to cancel the bug of intial state
+          else {
+            SaveCanvasImage()
+            RedrawCanvasImage()
+          }
 
         }
 
@@ -683,7 +687,7 @@
         // This is for the undo feature.
 
         function restoreState() {
-          if (!undo_array.length || currentState < 0) return;
+          if (!undo_array.length || currentState <= 0) return;
 
           restore_state = undo_array[--currentState]
           if (restore_state.currentTool === "brush") {
