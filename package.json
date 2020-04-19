@@ -30,7 +30,7 @@
             "activitybar": [{
                 "id": "screenify",
                 "title": "Screenify",
-                "icon": "resources/icon.png"
+                "icon": "resources/icon-big.png"
             }]
         },
         "views": {
