@@ -28,7 +28,8 @@
           undo = document.getElementById("undo"),
           copyBtn = document.getElementById("copy"),
           upload = document.getElementById("upload"),
-          uploadedImageContainer = document.getElementById("upload-container");
+          uploadedImageContainer = document.getElementById("upload-container"),
+          clear = document.getElementById("clear");
 
         document.getElementsByClassName("toolbar")[0].style.backgroundColor = "#362b1b";
         vscode.postMessage({
@@ -187,6 +188,15 @@
 
         upload.addEventListener("click", () => {
           uploadImage()
+        })
+        clear.addEventListener("click", () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          // clear the undo array 
+          undo_array = []
+          brushPoints = []
+          currentState = 0;
+          SaveCanvasImage()
+          RedrawCanvasImage()
         })
 
         // color.addEventListener("input", () => {
