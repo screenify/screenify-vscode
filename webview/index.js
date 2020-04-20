@@ -72,11 +72,12 @@
         }
 
         function copy(serializedBlob, upload = false) {
+          // HERE IMPORTANT TO REFACTOR
           vscode.postMessage({
             type: "copy",
             data: {
               "serializedBlob": serializedBlob,
-              "upload": upload
+              "upload": upload,
             }
           });
         }
@@ -184,6 +185,9 @@
 
         copyBtn.addEventListener("click", () => {
           copyImage()
+          // let copyText = document.querySelector("#snippet-container");
+          // copyText.select();
+          // document.execCommand("copy");
         })
 
         upload.addEventListener("click", () => {
@@ -198,11 +202,6 @@
           SaveCanvasImage()
           RedrawCanvasImage()
         })
-
-        // color.addEventListener("input", () => {
-        //   strokeColor = color.value;
-        //   fillColor = color.value;
-        // })
 
         shootContainer(obturateurLogo)
         shootContainer(obturateur)
@@ -727,7 +726,10 @@
         function undoChanges() {
           restoreState()
         }
-
+        /**
+         * 
+         * @param {Boolean} upload 
+         */
         function copyImage(upload = false) {
           if (target === "container") {
             shootAll(copyFlag = true, upload);
@@ -775,10 +777,11 @@
         pickr.on('change', (color, instance) => {
           fillColor = strokeColor = color.toHEXA().toString()
         })
+
         /**
          * Redo feature
          */
-        // function redoChanges() {restoreState(undo_array, redo_array)}
+        // 
       })
       ();
     }

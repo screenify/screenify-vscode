@@ -3,36 +3,39 @@
      *  Licensed under the MIT License. See License.txt in the project root for license information.
      *--------------------------------------------------------------------------------------------*/
 
-    const vscode = require('vscode')
-    const fs = require('fs')
-    const path = require('path')
-    const Shell = require('node-powershell');
-    const os = require('os');
-    const P_TITLE = 'Screenify 📸';
-    const fetch = require("node-fetch")
-    const Bluebird = require("bluebird")
+    const vscode = require('vscode'),
+      fs = require('fs'),
+      path = require('path'),
+      Shell = require('node-powershell'),
+      os = require('os'),
+      P_TITLE = 'Screenify 📸',
+      fetch = require("node-fetch"),
+      Bluebird = require("bluebird"),
+      {
+        copyImg
+      } = require('img-clipboard');
     fetch.Promise = Bluebird
-    //initialize a shell instance
-    const ps = new Shell({
-      executionPolicy: 'Bypass',
-      noProfile: true
-    });
+
+
+
+
+
 
     /**
      * @param {vscode.ExtensionContext} context
      */
     function activate(context) {
-
-
       const {
         subscriptions
       } = context
+      /** Status Bar configuration **/
       statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
       statusBarItem.command = "screenify.activate"
       statusBarItem.text = `$(device-camera) Screenify`
       statusBarItem.tooltip = "Capture Code Snippet"
       statusBarItem.show()
       subscriptions.push(statusBarItem);
+
       class TreeDataProvider {
         constructor() {
           this.data = [
@@ -128,42 +131,28 @@
           syncSettings()
         }
       })
-      /**
-       * 
-       * @param {Blob} serializeBlob 
-       * @return {Promise} 
-       */
-      const copySerializedBlobToClipboard = (serializeBlob, isUpload) => {
-        const bytes = new Uint8Array(serializeBlob.split(','))
-        if (!serializeBlob) return; // returns null
-        if (isUpload) return upload(serializeBlob) // upload
-        return tempFile(Buffer.from(bytes)) //copy
-      }
 
       /**
+       * Copyies serial blob to the clipboard or uploads the blob to CDN uploaders
+       * @param {Blob} serializedBlobHandler 
+       * @return {Promise} 
+       */
+      function serializedBlobHandler(serializeBlob, isUpload) {
+        if (!serializeBlob) return; // returns null
+        const bytes = new Uint8Array(serializeBlob.split(','))
+        if (isUpload) return upload(serializeBlob) // upload
+        return copyImg(Buffer.from(bytes));
+      }
+
+
+      /**
+       * Saves blob to into file
        * @param {Blob} serializeBlob 
        * @return {Promise} 
        */
-      const writeSerializedBlobToFile = (serializeBlob, fileName) => {
+      function writeSerializedBlobToFile(serializeBlob, fileName) {
         const bytes = new Uint8Array(serializeBlob.split(','))
         fs.writeFileSync(fileName, Buffer.from(bytes))
-      }
-      /**
-       * @function tempFile
-       * @param {String} name 
-       * @param {Buffer} data 
-       * @return {Promise} 
-       */
-
-      function tempFile(data = '') {
-        return new Promise((resolve, reject) => {
-          const tempPath = path.join(os.tmpdir(), '%temp-screenify', "test_image.png");
-          copiedImageUrl = tempPath;
-          fs.writeFile(tempPath, data, error_file => {
-            if (error_file) return reject(error_file);
-            resolve(copiedImageUrl)
-          })
-        })
       }
 
       function setupMessageListeners() {
@@ -192,41 +181,12 @@
                * Copy image to the clipboard
                */
             case 'copy':
-              copySerializedBlobToClipboard(data.serializedBlob, data.upload)
-                .then(tempPath => {
-                  if (os.platform() === "win32") {
-                    ps.addCommand(`Set-Clipboard -LiteralPath ${tempPath}`);
-                    // TODO:Complete
-                  } else if (os.platform() === "darwin" || "linux") {
-                    const {
-                      spawnSync
-                    } = require('child_process');
-                    // macOS
-                    if (os.platform() === "darwin") {
-                      const childProcess = spawnSync(`cat ${tempPath} pbcopy`)
-                    } else if (os.platform() === "linux") {
-                      const childProcess = spawnSync(`set the clipboard to POSIX file ${tempPath}`);
-                    }
-
-                    childProcess.stdout.on("data", (data) => {
-                      vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste", "Close")
-
-
-                    });
-
-                    childProcess.stderr.on("error", (err) => {
-                      vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
-
-                    });
-                    spawnSync.kill();
-                  }
-                  ps.invoke()
-                    .then(res => {
-                      vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste", "Close")
-                    })
+              serializedBlobHandler(data.serializedBlob, data.upload)
+                .then(res => {
+                  vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste", "Close")
                 })
+                // })
                 .catch(err => {
-                  ps.dispose()
                   vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
                 })
               break
@@ -275,12 +235,12 @@
           }
         })
       }
+
       /**
        * @function upload
        * @param {Buffer} image 
        * @return {Promise} 
        */
-
       function upload(buffer) {
         let serverUrl = `https://${settings.get("serverUrl")}/api/upload`
 
@@ -293,7 +253,7 @@
               return;
             });
             progress.report({
-              message: "uploading iamge.............."
+              message: ".............."
             });
             return fetch(serverUrl, {
               method: 'POST',
@@ -342,7 +302,6 @@
       // #1 Clear cache
       // #2 Garbage collecting
       // #3 kill shell process
-      ps.stop();
     }
 
     exports.activate = activate
