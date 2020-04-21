@@ -203,19 +203,12 @@
           RedrawCanvasImage()
         })
 
-        shootContainer(obturateurLogo)
-        shootContainer(obturateur)
 
         /* Abstraction of click event listener */
-        function shootContainer(event) {
-          event.addEventListener("click", () => {
-            if (target === "container") {
-              shootAll();
-            } else {
-              shootSnippet();
-            }
-          });
-        }
+        obturateurLogo.addEventListener("click", () => {
+          shootSnippet();
+        })
+
         //  redsise event listener
         const ro = new ResizeObserver(entries => {
           for (let entry of entries) {
@@ -244,81 +237,11 @@
           // RedrawCanvasImage()
           SaveCanvasImage();
           RedrawCanvasImage()
-
-
         }
-        //
-        function shootAll(copyFlag = false, paste = false) {
-          const width = snippetContainerNode.offsetWidth * 2;
-          const height = snippetContainerNode.offsetHeight * 2;
 
-          const config = {
-            width,
-            height,
-            style: {
-              transform: "scale(2)",
-              "transform-origin": "center",
-              background: getRgba(backgroundColor, transparentBackground)
-            }
-          };
-          // Hacky adjust of the canvas postion befrore capturing in order to align correctly. the values are got by a linear transformaion formula (y = ax+b)
-          // Note: the susbstracted value 20 is the value to remove the added margin of the canvas to exacly match the dimentions of snippet
-          // canvas.style.transform = `translate(${0.517*(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
-          // canvas.style.transform = `translate(${ 0.517 *(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46}px)`
-          canvas.style.transform = `translate(${ 0.517 *(canvas.width - 20) + 20}px, ${(0.5038 * (canvas.height-20)) - 46}px)`
-
-
-
-
-          // Hide resizer before capture
-          snippetNode.style.resize = "none";
-          snippetContainerNode.style.resize = "none";
-
-          domtoimage.toBlob(snippetContainerNode, config).then(blob => {
-            canvas.style.transform = "none"
-            snippetNode.style.resize = "";
-            snippetContainerNode.style.resize = "";
-            serializeBlob(blob, serializedBlob => {
-              if (copyFlag) copy(serializedBlob, paste)
-              else shoot(serializedBlob);
-            });
-          });
-        }
 
         function shootSnippet(copyFlag = false, paste = false) {
-          const width = snippetContainerNode.offsetWidth * 2;
-          const height = snippetContainerNode.offsetHeight * 2;
-          const config = {
-            width,
-            height,
-            style: {
-              transform: "scale(2)",
-              "transform-origin": "center",
-              background: "none"
-            }
-          };
-          // Hacky adjust of the canvas postion befrore capturing in order to align correctly. the values are got by a linear transformaion formula (y = ax+b)
-          // Note: the susbstracted value 20 is the value to remove the added margin of the canvas to exacly match the dimentions of snippet
-          // canvas.style.transform = `translate(${ 0.517 * (canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46}px)`
-          canvas.style.transform = `translate(${ 0.517 * (canvas.width - 20) + 20}px, ${(0.5038 * (canvas.height-20)) - 46}px)`
-          // canvas.style.transform = `translate(${465}px, ${55}px)`
 
-
-
-
-          // Hide resizer before capture
-          snippetNode.style.resize = "none";
-          snippetContainerNode.style.resize = "none";
-
-          domtoimage.toBlob(snippetContainerNode, config).then(blob => {
-            canvas.style.transform = "none"
-            snippetNode.style.resize = "";
-            snippetContainerNode.style.resize = "";
-            serializeBlob(blob, serializedBlob => {
-              if (copyFlag) copy(serializedBlob, paste)
-              else shoot(serializedBlob);
-            });
-          });
         }
 
         let isInAnimation = false;
@@ -407,12 +330,7 @@
           // CTRL + S || cmd + S keypress
           if (event.which == 115 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             event.preventDefault();
-            if (target === "container") {
-              shootAll();
-            } else {
-              shootSnippet();
-            }
-
+            shootSnippet();
             // CTRL + Z || cmd + Z keyboard keypress
           } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             // event.preventDefault();
@@ -731,11 +649,7 @@
          * @param {Boolean} upload 
          */
         function copyImage(upload = false) {
-          if (target === "container") {
-            shootAll(copyFlag = true, upload);
-          } else {
-            shootSnippet(copyFlag = true, upload);
-          }
+          shootSnippet(copyFlag = true, upload);
         }
 
         function uploadImage() {
