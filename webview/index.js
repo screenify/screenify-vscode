@@ -15,7 +15,6 @@
           oldState = vscode.getState(),
           snippetNode = document.getElementById("snippet"),
           snippetContainerNode = document.getElementById("snippet-container"),
-          obturateur = document.getElementById("save"),
           obturateurLogo = document.getElementById("save_logo"),
           canvas = document.getElementById('my-canvas'),
           ctx = canvas.getContext('2d'),
