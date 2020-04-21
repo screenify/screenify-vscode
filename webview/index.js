@@ -5,13 +5,13 @@
 
     window.onload = function () {
       (function () {
+        /**  Pointer-js **/
         init_pointer({})
-        let target = "container";
-        /**  vscode-api*/
-        let transparentBackground = false;
+
         let backgroundColor = "#f2f2f2";
 
 
+        /**  vscode-api **/
         const vscode = acquireVsCodeApi(),
           oldState = vscode.getState(),
           snippetNode = document.getElementById("snippet"),
@@ -22,7 +22,6 @@
           brush = document.getElementById("brush"),
           line = document.getElementById("line"),
           rectangle = document.getElementById("rectangle"),
-          // color = document.getElementById("color"),
           snippetHeight = document.getElementById("snippetHeight"),
           snippetWidth = document.getElementById("snippetWidth"),
           undo = document.getElementById("undo"),
@@ -640,15 +639,8 @@
 
         }
 
-        function getRgba(hex, transparentBackground) {
-          const bigint = parseInt(hex.slice(1), 16);
-          const r = (bigint >> 16) & 255;
-          const g = (bigint >> 8) & 255;
-          const b = bigint & 255;
-          const a = transparentBackground ? 0 : 1;
-          return `rgba(${r}, ${g}, ${b}, ${a})`;
-        }
-        // This is for the undo feature.
+
+        // restores the previos state of canvas.
 
         function restoreState() {
           if (!undo_array.length || currentState <= 0) return;
@@ -670,14 +662,12 @@
           })
         }
 
-        /**
-         * undo function
-         */
+        /** undo function **/
         function undoChanges() {
           restoreState()
         }
         /**
-         * 
+         * Copy image command
          * @param {Boolean} upload 
          */
         function copyImage(upload = false) {
