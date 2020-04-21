@@ -184,9 +184,6 @@
 
         copyBtn.addEventListener("click", () => {
           copyImage()
-          // let copyText = document.querySelector("#snippet-container");
-          // copyText.select();
-          // document.execCommand("copy");
         })
 
         upload.addEventListener("click", () => {
@@ -245,6 +242,7 @@
           snippetNode.style.resize = "none";
           snippetContainerNode.style.resize = "none";
           const options = {
+            removeContainer: true,
             width,
             height,
           }
@@ -267,11 +265,12 @@
           })
         }
 
-        function shootSnippet() {
+        function shootSnippet(copyFlag = false, upload) {
           html2blob()
             .then(blob => {
               serializeBlob(blob, serializedBlob => {
-                shoot(serializedBlob);
+                if (copyFlag) copy(serializedBlob, upload);
+                else shoot(serializedBlob);
               });
             })
         }
