@@ -8,4 +8,6 @@ test/**
 vsc-extension-quickstart.md
 **/jsconfig.json
 **/*.map
-**/.eslintrc.json
+**/.eslintrc.json*
+*.history
+*.circleci
