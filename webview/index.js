@@ -5,30 +5,30 @@
 
     window.onload = function () {
       (function () {
-        let target = "container";
-        /**  vscode-api*/
-        let transparentBackground = false;
+        /**  Pointer-js **/
+        init_pointer({})
+
         let backgroundColor = "#f2f2f2";
 
 
+        /**  vscode-api **/
         const vscode = acquireVsCodeApi(),
           oldState = vscode.getState(),
           snippetNode = document.getElementById("snippet"),
           snippetContainerNode = document.getElementById("snippet-container"),
-          obturateur = document.getElementById("save"),
           obturateurLogo = document.getElementById("save_logo"),
           canvas = document.getElementById('my-canvas'),
           ctx = canvas.getContext('2d'),
           brush = document.getElementById("brush"),
           line = document.getElementById("line"),
           rectangle = document.getElementById("rectangle"),
-          // color = document.getElementById("color"),
           snippetHeight = document.getElementById("snippetHeight"),
           snippetWidth = document.getElementById("snippetWidth"),
           undo = document.getElementById("undo"),
           copyBtn = document.getElementById("copy"),
           upload = document.getElementById("upload"),
-          uploadedImageContainer = document.getElementById("upload-container");
+          uploadedImageContainer = document.getElementById("upload-container"),
+          clear = document.getElementById("clear");
 
         document.getElementsByClassName("toolbar")[0].style.backgroundColor = "#362b1b";
         vscode.postMessage({
@@ -71,11 +71,12 @@
         }
 
         function copy(serializedBlob, upload = false) {
+          // HERE IMPORTANT TO REFACTOR
           vscode.postMessage({
             type: "copy",
             data: {
               "serializedBlob": serializedBlob,
-              "upload": upload
+              "upload": upload,
             }
           });
         }
@@ -188,25 +189,22 @@
         upload.addEventListener("click", () => {
           uploadImage()
         })
+        clear.addEventListener("click", () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          // clear the undo array 
+          undo_array = []
+          brushPoints = []
+          currentState = 0;
+          SaveCanvasImage()
+          RedrawCanvasImage()
+        })
 
-        // color.addEventListener("input", () => {
-        //   strokeColor = color.value;
-        //   fillColor = color.value;
-        // })
-
-        shootContainer(obturateurLogo)
-        shootContainer(obturateur)
 
         /* Abstraction of click event listener */
-        function shootContainer(event) {
-          event.addEventListener("click", () => {
-            if (target === "container") {
-              shootAll();
-            } else {
-              shootSnippet();
-            }
-          });
-        }
+        obturateurLogo.addEventListener("click", () => {
+          shootSnippet();
+        })
+
         //  redsise event listener
         const ro = new ResizeObserver(entries => {
           for (let entry of entries) {
@@ -235,79 +233,46 @@
           // RedrawCanvasImage()
           SaveCanvasImage();
           RedrawCanvasImage()
-
-
-        }
-        //
-        function shootAll(copyFlag = false, paste = false) {
-          const width = snippetContainerNode.offsetWidth * 2;
-          const height = snippetContainerNode.offsetHeight * 2;
-
-          const config = {
-            width,
-            height,
-            style: {
-              transform: "scale(2)",
-              "transform-origin": "center",
-              background: getRgba(backgroundColor, transparentBackground)
-            }
-          };
-          // Hacky adjust of the canvas postion befrore capturing in order to align correctly. the values are got by a linear transformaion formula (y = ax+b)
-          // Note: the susbstracted value 20 is the value to remove the added margin of the canvas to exacly match the dimentions of snippet
-          // canvas.style.transform = `translate(${0.517*(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46.667}px)`
-          canvas.style.transform = `translate(${ 0.517 *(canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46}px)`
-
-
-
-
-          // Hide resizer before capture
-          snippetNode.style.resize = "none";
-          snippetContainerNode.style.resize = "none";
-
-          domtoimage.toBlob(snippetContainerNode, config).then(blob => {
-            canvas.style.transform = "none"
-            snippetNode.style.resize = "";
-            snippetContainerNode.style.resize = "";
-            serializeBlob(blob, serializedBlob => {
-              if (copyFlag) copy(serializedBlob, paste)
-              else shoot(serializedBlob);
-            });
-          });
         }
 
-        function shootSnippet(copyFlag = false, paste = false) {
+
+        function html2blob() {
           const width = snippetContainerNode.offsetWidth * 2;
           const height = snippetContainerNode.offsetHeight * 2;
-          const config = {
-            width,
-            height,
-            style: {
-              transform: "scale(2)",
-              "transform-origin": "center",
-              background: "none"
-            }
-          };
-          // Hacky adjust of the canvas postion befrore capturing in order to align correctly. the values are got by a linear transformaion formula (y = ax+b)
-          // Note: the susbstracted value 20 is the value to remove the added margin of the canvas to exacly match the dimentions of snippet
-          canvas.style.transform = `translate(${ 0.517 * (canvas.width - 20)}px, ${(0.5038 * (canvas.height-20)) - 46}px)`
-          // canvas.style.transform = `translate(${465}px, ${55}px)`
-
-
-
-
-          // Hide resizer before capture
           snippetNode.style.resize = "none";
           snippetContainerNode.style.resize = "none";
+          const options = {
+            removeContainer: true,
+            width,
+            height,
+          }
+          snippetContainerNode.style.background = "none";
+          snippetContainerNode.style.transform = "scale(2)";
 
-          domtoimage.toBlob(snippetContainerNode, config).then(blob => {
-            canvas.style.transform = "none"
-            snippetNode.style.resize = "";
-            snippetContainerNode.style.resize = "";
-            serializeBlob(blob, serializedBlob => {
-              if (copyFlag) copy(serializedBlob, paste)
-              else shoot(serializedBlob);
-            });
-          });
+
+          return new Promise((resolve, reject) => {
+            html2canvas(snippetContainerNode, options).then((canvas) => {
+              canvas.toBlob((blob) => {
+                if (blob) {
+                  snippetContainerNode.style.backgroundColor = "#f2f2f2"
+                  snippetContainerNode.style.transform = "none"
+                  snippetNode.style.resize = "";
+                  snippetContainerNode.style.resize = "";
+                  resolve(blob)
+                } else reject(new Error("something bad happend"))
+              })
+            })
+          })
+        }
+
+        function shootSnippet(copyFlag = false, upload) {
+          html2blob()
+            .then(blob => {
+              serializeBlob(blob, serializedBlob => {
+                if (copyFlag) copy(serializedBlob, upload);
+                else shoot(serializedBlob);
+              });
+            })
         }
 
         let isInAnimation = false;
@@ -396,12 +361,7 @@
           // CTRL + S || cmd + S keypress
           if (event.which == 115 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             event.preventDefault();
-            if (target === "container") {
-              shootAll();
-            } else {
-              shootSnippet();
-            }
-
+            shootSnippet();
             // CTRL + Z || cmd + Z keyboard keypress
           } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             // event.preventDefault();
@@ -430,8 +390,7 @@
 
         // Stores whether I'm currently using brush
         let usingBrush = false;
-        // Stores line x & ys used to make brush lines
-        // Stores whether mouse is down
+        // Stores whether mouse coordinat
         let brushPoints = new Array();
         // Stores the history of canvas data
         let undo_array = new Array();
@@ -519,6 +478,11 @@
 
         function RedrawCanvasImage() {
           if (savedImageData) ctx.putImageData(savedImageData, 0, 0);
+          // added this to cancel the bug of intial state
+          else {
+            SaveCanvasImage()
+            RedrawCanvasImage()
+          }
 
         }
 
@@ -674,18 +638,11 @@
 
         }
 
-        function getRgba(hex, transparentBackground) {
-          const bigint = parseInt(hex.slice(1), 16);
-          const r = (bigint >> 16) & 255;
-          const g = (bigint >> 8) & 255;
-          const b = bigint & 255;
-          const a = transparentBackground ? 0 : 1;
-          return `rgba(${r}, ${g}, ${b}, ${a})`;
-        }
-        // This is for the undo feature.
+
+        // restores the previos state of canvas.
 
         function restoreState() {
-          if (!undo_array.length || currentState < 0) return;
+          if (!undo_array.length || currentState <= 0) return;
 
           restore_state = undo_array[--currentState]
           if (restore_state.currentTool === "brush") {
@@ -704,19 +661,16 @@
           })
         }
 
-        /**
-         * undo function
-         */
+        /** undo function **/
         function undoChanges() {
           restoreState()
         }
-
+        /**
+         * Copy image command
+         * @param {Boolean} upload 
+         */
         function copyImage(upload = false) {
-          if (target === "container") {
-            shootAll(copyFlag = true, upload);
-          } else {
-            shootSnippet(copyFlag = true, upload);
-          }
+          shootSnippet(copyFlag = true, upload);
         }
 
         function uploadImage() {
@@ -758,10 +712,11 @@
         pickr.on('change', (color, instance) => {
           fillColor = strokeColor = color.toHEXA().toString()
         })
+
         /**
          * Redo feature
          */
-        // function redoChanges() {restoreState(undo_array, redo_array)}
+        // 
       })
       ();
     }

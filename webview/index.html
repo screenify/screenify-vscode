@@ -20,12 +20,12 @@
     }
 
     #snippet-container {
+      cursor: none !important;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
-      /* canceled the resize because it leads to instablity of capturing the */
-      /* resize: both; */
+      resize: both;
       background-color: #f2f2f2;
       border-radius: 4px;
       opacity: 0;
@@ -35,11 +35,11 @@
     }
 
     #snippet {
+      cursor: none !important;
       overflow: hidden;
-      /* resize: both; */
+      resize: both;
       display: flex;
       padding: 18px;
-      /* padding: 0px; */
       margin-top: 64px;
       margin-bottom: 64px;
       border-radius: 5px;
@@ -89,11 +89,13 @@
       background-color: transparent;
       overflow: auto;
       border-radius: 25px;
+      justify-content: center;
     }
 
     .toolbar a {
       float: left;
       width: 11%;
+      /* left: 10%; */
       text-align: center;
       vertical-align: middle;
       margin-top: 0%;
@@ -170,9 +172,31 @@
       filter: opacity(50%);
     }
 
+    #pointer-dot {
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      border: 2.5px solid white;
+      position: absolute;
+      border-radius: 4px;
+      z-index: 1;
+      pointer-events: none;
+      transition: border-color 0.5s;
+    }
 
-
-    /* Starts from here */
+    #pointer-ring {
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      padding: 15px;
+      border: 2px solid #750c7e;
+      position: absolute;
+      border-radius: 100px;
+      z-index: 2;
+      pointer-events: none;
+    }
   </style>
 
 </head>
@@ -182,22 +206,23 @@
 
   <!--START Toolbar -->
   <div class="toolbar">
-    <a href="Save (Ctrl + S or Cmd + S)" id="save"><img class="invert"
-        src="https://img.icons8.com/material-outlined/24/000000/save.png"></a>
     <a href="Brush" class="selected" id="brush"><img alt="brush" class="invert"
         src="https://img.icons8.com/wired/24/000000/paint-brush.png" /></a>
     <a href="Line" id="line"><img class="invert" alt="line" src="https://img.icons8.com/office/24/000000/line.png"></a>
     <a href="Rectangle" id="rectangle"><img alt=" rectangle" class="invert"
         src="https://img.icons8.com/material-sharp/24/000000/rounded-rectangle-stroked.png"></a>
+
+    <a href="Undo (Ctrl + Z | Cmd + Z)" id="undo"> <img class="invert"
+        src="https://img.icons8.com/android/24/000000/undo.png"></a>
     <a href="Color Picker">
       <div id="pickr"></div>
     </a>
-    <a href="Undo (Ctrl + Z | Cmd + Z)" id="undo"> <img class="invert"
-        src="https://img.icons8.com/android/24/000000/undo.png"></a>
     <a href="Copy (Ctrl + C | Cmd + C)" id="copy"><img class="invert"
         src="https://img.icons8.com/metro/24/000000/copy.png" /></a>
     <a href="Upload" id="upload"> <img class="invert"
         src="https://img.icons8.com/windows/24/000000/upload-to-cloud.png" /></a>
+    <a href="Clear Drawing" id="clear"><img class="invert"
+        src="https://img.icons8.com/ios-filled/24/000000/clear-symbol.png" /></a>
   </div>
   <hr>
   <!-- End Toolbar -->
@@ -263,15 +288,16 @@
         </g>
       </g>
     </svg>
-    <span style="user-select: none;">SNAP !</span>
+    <span style="user-select: none; color: white;">SNAP !</span>
 
   </div>
-  <div id="upload-container" style="align-items:center; align-self: center;width:80%">
+  <div id="upload-container" style="align-items:center; justify-content: center; align-self: center;width:80%">
   </div>
   </div>
   </div>
   <script src="./pickr.js"></script>
-  <script src="./dom2image.js"></script>
+  <script src="./html2canvas.js"></script>
+  <script src="./pointer.js"></script>
   <script src="./vivus.js"></script>
   <script src="./index.js"></script>
 </body>
