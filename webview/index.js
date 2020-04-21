@@ -5,6 +5,7 @@
 
     window.onload = function () {
       (function () {
+        init_pointer({})
         let target = "container";
         /**  vscode-api*/
         let transparentBackground = false;
