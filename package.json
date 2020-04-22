@@ -18,7 +18,7 @@
         "color": "#fbfbfb",
         "theme": "light"
     },
-    "icon": "resources/new-icon.png",
+    "icon": "resources/icon-big.png",
     "activationEvents": [
         "onCommand:screenify.activate",
         "onWebviewPanel:screenify",

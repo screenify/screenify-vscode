@@ -42,7 +42,7 @@
             new TreeItem("Give me your feedback", "twitter.svg", "https://twitter.com/adammuman81"),
             new TreeItem("GitHub", "github.png", "https://github.com/AdamMomen/screenify-vscode"),
             new TreeItem("More Info", "question.png", "https://github.com/AdamMomen/screenify-vscode/issues"),
-            new TreeItem("Support", "icon-heart.svg", "")
+            new TreeItem("Support", "icon-heart.svg", "https://www.patreon.com/adammomen")
           ];
         }
         getTreeItem(element) {
@@ -252,9 +252,6 @@
             token.onCancellationRequested(() => {
               return;
             });
-            progress.report({
-              message: ".............."
-            });
             return fetch(serverUrl, {
               method: 'POST',
               body: JSON.stringify({
@@ -300,8 +297,7 @@
     function deactivate() {
       // TODO:complete
       // #1 Clear cache
-      // #2 Garbage collecting
-      // #3 kill shell process
+      // #2 Garbage collection
     }
 
     exports.activate = activate

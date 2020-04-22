@@ -200,64 +200,80 @@
         })
 
 
-        /* Abstraction of click event listener */
         obturateurLogo.addEventListener("click", () => {
-          shootSnippet();
+          nippetHandler();
         })
 
-        //  redsise event listener
-        const ro = new ResizeObserver(entries => {
+        //  redsize event listener
+        const ro = new ResizeObserver((entries, containerName) => {
           for (let entry of entries) {
             const cr = entry.contentRect;
             //Element size: ${cr.width}px x ${cr.height}px`);
-            reactToContainerResize(cr.width, cr.height)
+            reactToContainerResize(cr.width, cr.height, containerName)
           }
         });
 
         // // Observe one or multiple elements
-        ro.observe(snippetNode);
+        // ro.observe(snippetNode);
+        ro.observe(snippetContainerNode)
 
         function reactToContainerResize(width, height) {
+
+          /** HeightX Width conrdinates Update of the continer **/
           snippetHeight.innerText = Math.floor(new Number(height))
           snippetWidth.innerText = Math.floor(new Number(width))
 
-          // change this latter
-          //  save the image
+          /** @NOTE Saving and redrawing canvas is memory hungry I have to design a better solution **/
+
+          /** save the image **/
           SaveCanvasImage()
 
-          canvasWidth = width + 20;
-          canvasHeight = height + 20;
-          canvas.height = height + 20;
-          canvas.width = width + 20;
-          // redraw the image
-          // RedrawCanvasImage()
+          /** Update canvas height and width with continer with 20 as margin **/
+          canvasHeight = canvas.height = height - 20;
+          canvasWidth = canvas.width = width - 20;
+          /**  redraw the image **/
+          RedrawCanvasImage()
           SaveCanvasImage();
           RedrawCanvasImage()
         }
 
 
         function html2blob() {
+
+          /** Multiping the container height and width by 2 make room for scaling for the new canvas **/
           const width = snippetContainerNode.offsetWidth * 2;
           const height = snippetContainerNode.offsetHeight * 2;
-          snippetNode.style.resize = "none";
+
+          /** Hiding the resizable handle on capture **/
           snippetContainerNode.style.resize = "none";
+
+          /** Changing the snippet container background to transparenet temporary on capture **/
+          snippetContainerNode.style.backgroundColor = "transparent";
+
+          /** Scale snippetContainer by 2  temporary on capture **/
+          snippetContainerNode.style.transform = "scale(2)";
+
+          /** Canvas Options **/
           const options = {
             removeContainer: true,
             width,
             height,
           }
-          snippetContainerNode.style.background = "none";
-          snippetContainerNode.style.transform = "scale(2)";
-
 
           return new Promise((resolve, reject) => {
             html2canvas(snippetContainerNode, options).then((canvas) => {
               canvas.toBlob((blob) => {
                 if (blob) {
+
+                  /** Reset color **/
                   snippetContainerNode.style.backgroundColor = "#f2f2f2"
+
+                  /** Reset scaling  to previous **/
                   snippetContainerNode.style.transform = "none"
-                  snippetNode.style.resize = "";
+
+                  /** show resize handle **/
                   snippetContainerNode.style.resize = "";
+
                   resolve(blob)
                 } else reject(new Error("something bad happend"))
               })
@@ -265,10 +281,17 @@
           })
         }
 
-        function shootSnippet(copyFlag = false, upload) {
+        /**
+         * Image Shooter function Than 
+         * @param {Boolean} copyFlag 
+         * @param {Boolean} upload 
+         */
+        function nippetHandler(copyFlag = false, upload) {
           html2blob()
             .then(blob => {
               serializeBlob(blob, serializedBlob => {
+
+                /** @parem {pa} */
                 if (copyFlag) copy(serializedBlob, upload);
                 else shoot(serializedBlob);
               });
@@ -361,7 +384,7 @@
           // CTRL + S || cmd + S keypress
           if (event.which == 115 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             event.preventDefault();
-            shootSnippet();
+            nippetHandler();
             // CTRL + Z || cmd + Z keyboard keypress
           } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             // event.preventDefault();
@@ -385,8 +408,9 @@
         // Tool currently using
         let currentTool = 'brush';
         /** Changed canvas 's height and width to the innerheight of snippetnode. */
-        let canvasWidth = snippetNode.clientWidth + 20;
-        let canvasHeight = snippetNode.clientHeight + 20;
+
+        let canvasWidth = snippetContainerNode.clientWidth - 20;
+        let canvasHeight = snippetContainerNode.clientHeight - 20;
 
         // Stores whether I'm currently using brush
         let usingBrush = false;
@@ -571,7 +595,7 @@
           for (var i = 0; i < brushPoints.length; i++) {
             let pt = brushPoints[i];
             let begin = false;
-
+            ctx.strokeStyle = pt.color
             if (pt.mode == "begin" || begin) {
               ctx.beginPath();
               ctx.moveTo(pt.x, pt.y);
@@ -600,7 +624,7 @@
           // Brush will store points in an array
           if (currentTool === 'brush') {
             usingBrush = true;
-            AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = fillColor, brushSize = line_Width, mode = "begin");
+            AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = strokeColor, brushSize = line_Width, mode = "begin");
           }
         };
 
@@ -613,7 +637,7 @@
             if (loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
               ctx.lineTo(loc.x, loc.y);
               ctx.stroke();
-              AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = fillColor, brushSize = line_Width, mode = "draw");
+              AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = strokeColor, brushSize = line_Width, mode = "draw");
             }
             RedrawCanvasImage();
             DrawBrush();
@@ -670,7 +694,7 @@
          * @param {Boolean} upload 
          */
         function copyImage(upload = false) {
-          shootSnippet(copyFlag = true, upload);
+          nippetHandler(copyFlag = true, upload);
         }
 
         function uploadImage() {
