@@ -42,7 +42,7 @@
             new TreeItem("Give me your feedback", "twitter.svg", "https://twitter.com/adammuman81"),
             new TreeItem("GitHub", "github.png", "https://github.com/AdamMomen/screenify-vscode"),
             new TreeItem("More Info", "question.png", "https://github.com/AdamMomen/screenify-vscode/issues"),
-            new TreeItem("Support", "icon-heart.svg", "")
+            new TreeItem("Support", "icon-heart.svg", "https://www.patreon.com/adammomen")
           ];
         }
         getTreeItem(element) {

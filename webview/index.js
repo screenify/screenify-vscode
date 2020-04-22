@@ -201,10 +201,10 @@
 
 
         obturateurLogo.addEventListener("click", () => {
-          shootSnippet();
+          nippetHandler();
         })
 
-        //  redsise event listener
+        //  redsize event listener
         const ro = new ResizeObserver((entries, containerName) => {
           for (let entry of entries) {
             const cr = entry.contentRect;
@@ -219,19 +219,19 @@
 
         function reactToContainerResize(width, height) {
 
+          /** HeightX Width conrdinates Update of the continer **/
           snippetHeight.innerText = Math.floor(new Number(height))
           snippetWidth.innerText = Math.floor(new Number(width))
 
+          /** @NOTE Saving and redrawing canvas is memory hungry I have to design a better solution **/
 
-          // change this latter
-          //  save the image
+          /** save the image **/
           SaveCanvasImage()
 
-          canvasWidth = width - 20;
-          canvasHeight = height - 20;
-          canvas.height = height - 20;
-          canvas.width = width - 20;
-          // redraw the image
+          /** Update canvas height and width with continer with 20 as margin **/
+          canvasHeight = canvas.height = height - 20;
+          canvasWidth = canvas.width = width - 20;
+          /**  redraw the image **/
           RedrawCanvasImage()
           SaveCanvasImage();
           RedrawCanvasImage()
@@ -239,27 +239,41 @@
 
 
         function html2blob() {
+
+          /** Multiping the container height and width by 2 make room for scaling for the new canvas **/
           const width = snippetContainerNode.offsetWidth * 2;
           const height = snippetContainerNode.offsetHeight * 2;
-          snippetNode.style.resize = "none";
+
+          /** Hiding the resizable handle on capture **/
           snippetContainerNode.style.resize = "none";
+
+          /** Changing the snippet container background to transparenet temporary on capture **/
+          snippetContainerNode.style.backgroundColor = "transparent";
+
+          /** Scale snippetContainer by 2  temporary on capture **/
+          snippetContainerNode.style.transform = "scale(2)";
+
+          /** Canvas Options **/
           const options = {
             removeContainer: true,
             width,
             height,
           }
-          snippetContainerNode.style.backgroundColor = "transparent";
-          snippetContainerNode.style.transform = "scale(2)";
-
 
           return new Promise((resolve, reject) => {
             html2canvas(snippetContainerNode, options).then((canvas) => {
               canvas.toBlob((blob) => {
                 if (blob) {
+
+                  /** Reset color **/
                   snippetContainerNode.style.backgroundColor = "#f2f2f2"
+
+                  /** Reset scaling  to previous **/
                   snippetContainerNode.style.transform = "none"
-                  snippetNode.style.resize = "";
+
+                  /** show resize handle **/
                   snippetContainerNode.style.resize = "";
+
                   resolve(blob)
                 } else reject(new Error("something bad happend"))
               })
@@ -267,10 +281,17 @@
           })
         }
 
-        function shootSnippet(copyFlag = false, upload) {
+        /**
+         * Image Shooter function Than 
+         * @param {Boolean} copyFlag 
+         * @param {Boolean} upload 
+         */
+        function nippetHandler(copyFlag = false, upload) {
           html2blob()
             .then(blob => {
               serializeBlob(blob, serializedBlob => {
+
+                /** @parem {pa} */
                 if (copyFlag) copy(serializedBlob, upload);
                 else shoot(serializedBlob);
               });
@@ -363,7 +384,7 @@
           // CTRL + S || cmd + S keypress
           if (event.which == 115 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             event.preventDefault();
-            shootSnippet();
+            nippetHandler();
             // CTRL + Z || cmd + Z keyboard keypress
           } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             // event.preventDefault();
@@ -674,7 +695,7 @@
          * @param {Boolean} upload 
          */
         function copyImage(upload = false) {
-          shootSnippet(copyFlag = true, upload);
+          nippetHandler(copyFlag = true, upload);
         }
 
         function uploadImage() {
