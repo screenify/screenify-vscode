@@ -200,7 +200,6 @@
         })
 
 
-        /* Abstraction of click event listener */
         obturateurLogo.addEventListener("click", () => {
           shootSnippet();
         })
