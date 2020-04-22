@@ -245,7 +245,7 @@
             width,
             height,
           }
-          snippetContainerNode.style.background = "none";
+          snippetContainerNode.style.backgroundColor = "transparent";
           snippetContainerNode.style.transform = "scale(2)";
 
 
