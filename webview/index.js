@@ -205,31 +205,34 @@
         })
 
         //  redsise event listener
-        const ro = new ResizeObserver(entries => {
+        const ro = new ResizeObserver((entries, containerName) => {
           for (let entry of entries) {
             const cr = entry.contentRect;
             //Element size: ${cr.width}px x ${cr.height}px`);
-            reactToContainerResize(cr.width, cr.height)
+            reactToContainerResize(cr.width, cr.height, containerName)
           }
         });
 
         // // Observe one or multiple elements
-        ro.observe(snippetNode);
+        // ro.observe(snippetNode);
+        ro.observe(snippetContainerNode)
 
         function reactToContainerResize(width, height) {
+
           snippetHeight.innerText = Math.floor(new Number(height))
           snippetWidth.innerText = Math.floor(new Number(width))
+
 
           // change this latter
           //  save the image
           SaveCanvasImage()
 
-          canvasWidth = width + 20;
-          canvasHeight = height + 20;
-          canvas.height = height + 20;
-          canvas.width = width + 20;
+          canvasWidth = width - 20;
+          canvasHeight = height - 20;
+          canvas.height = height - 20;
+          canvas.width = width - 20;
           // redraw the image
-          // RedrawCanvasImage()
+          RedrawCanvasImage()
           SaveCanvasImage();
           RedrawCanvasImage()
         }
@@ -384,8 +387,9 @@
         // Tool currently using
         let currentTool = 'brush';
         /** Changed canvas 's height and width to the innerheight of snippetnode. */
-        let canvasWidth = snippetNode.clientWidth + 20;
-        let canvasHeight = snippetNode.clientHeight + 20;
+
+        let canvasWidth = snippetContainerNode.clientWidth - 20;
+        let canvasHeight = snippetContainerNode.clientHeight - 20;
 
         // Stores whether I'm currently using brush
         let usingBrush = false;
