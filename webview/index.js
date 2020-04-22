@@ -571,7 +571,7 @@
           for (var i = 0; i < brushPoints.length; i++) {
             let pt = brushPoints[i];
             let begin = false;
-
+            ctx.strokeStyle = pt.color
             if (pt.mode == "begin" || begin) {
               ctx.beginPath();
               ctx.moveTo(pt.x, pt.y);
@@ -600,7 +600,7 @@
           // Brush will store points in an array
           if (currentTool === 'brush') {
             usingBrush = true;
-            AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = fillColor, brushSize = line_Width, mode = "begin");
+            AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = strokeColor, brushSize = line_Width, mode = "begin");
           }
         };
 
@@ -613,7 +613,7 @@
             if (loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
               ctx.lineTo(loc.x, loc.y);
               ctx.stroke();
-              AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = fillColor, brushSize = line_Width, mode = "draw");
+              AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = strokeColor, brushSize = line_Width, mode = "draw");
             }
             RedrawCanvasImage();
             DrawBrush();

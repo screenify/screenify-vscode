@@ -252,9 +252,6 @@
             token.onCancellationRequested(() => {
               return;
             });
-            progress.report({
-              message: ".............."
-            });
             return fetch(serverUrl, {
               method: 'POST',
               body: JSON.stringify({
@@ -300,8 +297,7 @@
     function deactivate() {
       // TODO:complete
       // #1 Clear cache
-      // #2 Garbage collecting
-      // #3 kill shell process
+      // #2 Garbage collection
     }
 
     exports.activate = activate
