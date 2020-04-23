@@ -1,12 +1,16 @@
     /*---------------------------------------------------------------------------------------------
      *  Copyright (c) Screenify.
-     *  Licensed under the MIT License. See License.txt in the project root for license information.
+     *  Licensed under the MIT License
      *--------------------------------------------------------------------------------------------*/
 
     window.onload = function () {
       (function () {
-        /**  Pointer-js **/
-        init_pointer({})
+
+
+        /**  PointerJs **/
+        init_pointer({
+          pointerColor: "#42445A"
+        })
 
         let backgroundColor = "#f2f2f2";
 
@@ -299,7 +303,8 @@
         }
 
         let isInAnimation = false;
-        // mouse hover event
+
+        /**  Snap btn onhover event listener **/
         obturateurLogo.addEventListener("mouseover", () => {
           if (!isInAnimation) {
             isInAnimation = true;
@@ -345,7 +350,7 @@
             } else if (e.data.type === "successfulUplaod") {
               uploadedImageContainer.innerHTML =
                 `
-               <div class="card">
+               <div class="card" style="align-items:center">
                 <div class="card-body">
                  <input style="align-self:center;" type = "text"
                 value = "${e.data.url}" >
@@ -732,10 +737,18 @@
           }
         });
         pickr.on('init', (instance) => {
-          fillColor = strokeColor = instance._color.toHEXA().toString()
+          const hexColor = color.toHEXA().toString();
+          fillColor = strokeColor = hexColor
+
         });
         pickr.on('change', (color, instance) => {
-          fillColor = strokeColor = color.toHEXA().toString()
+          const hexColor = color.toHEXA().toString();
+          fillColor = strokeColor = hexColor
+
+          /**  PointerJs **/
+          init_pointer({
+            pointerColor: hexColor,
+          })
         })
 
         /**
