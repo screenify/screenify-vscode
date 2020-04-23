@@ -214,8 +214,8 @@
         });
 
         // // Observe one or multiple elements
-        // ro.observe(snippetNode);
-        ro.observe(snippetContainerNode)
+        ro.observe(snippetNode);
+        // ro.observe(snippetContainerNode)
 
         function reactToContainerResize(width, height) {
 
@@ -229,8 +229,8 @@
           SaveCanvasImage()
 
           /** Update canvas height and width with continer with 20 as margin **/
-          canvasHeight = canvas.height = height - 20;
-          canvasWidth = canvas.width = width - 20;
+          canvasHeight = canvas.height = height + 20;
+          canvasWidth = canvas.width = width + 20;
           /**  redraw the image **/
           RedrawCanvasImage()
           SaveCanvasImage();
@@ -409,8 +409,8 @@
         let currentTool = 'brush';
         /** Changed canvas 's height and width to the innerheight of snippetnode. */
 
-        let canvasWidth = snippetContainerNode.clientWidth - 20;
-        let canvasHeight = snippetContainerNode.clientHeight - 20;
+        let canvasWidth = snippetContainerNode.clientWidth + 20;
+        let canvasHeight = snippetContainerNode.clientHeight + 20;
 
         // Stores whether I'm currently using brush
         let usingBrush = false;
