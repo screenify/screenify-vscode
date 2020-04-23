@@ -6,7 +6,7 @@
     window.onload = function () {
       (function () {
 
-        /**  PointerJs **/
+        /**  PointerJs initialization on page launch with init color of @Pickr color picker **/
         init_pointer({
           pointerColor: "#42445A"
         })
@@ -15,7 +15,7 @@
         let backgroundColor = "#f2f2f2";
 
 
-        /**  vscode-Api **/
+        /**  vscode-api **/
         const vscode = acquireVsCodeApi(),
           oldState = vscode.getState(),
 
@@ -177,6 +177,7 @@
 
           /** update backdrop color **/
           if (isDark(snippetBgColor)) {
+
             /** set background colorof snippet container to white #f2f2f2 **/
             snippetContainerNode.style.backgroundColor = "#f2f2f2";
           } else {
@@ -210,7 +211,7 @@
           }
           return doc.body.innerHTML;
         }
-
+        /** On paste event,  of user code captured in the snippet container **/
         document.addEventListener("paste", e => {
 
           /** clear the canvas on new incoming code snippet **/
@@ -374,6 +375,7 @@
                   /** show resize handle **/
                   snippetContainerNode.style.resize = "";
 
+                  /** resolve passing blob as an argument **/
                   resolve(blob)
                 } else reject(new Error("something bad happend"))
               })
@@ -398,7 +400,7 @@
             })
         }
 
-        /** Animation flag for the SNAP button to know if it's in animation or not **/
+        /** Animation flag for the SNAP button watcing and keep track of the animation state **/
         let isInAnimation = false;
 
         /**  Snap button onhover Event Listener **/
@@ -437,13 +439,13 @@
                 innerHTML: initialHtml
               });
 
-              /** update backdrop color, using bgColor from last pasted snippet **/
-              /** cannot deduce from initialHtml since it's always using Nord color **/
+              /** update backdrop color, using bgColor from last pasted snippet cannot deduce from initialHtml since it's always using Nord color **/
               if (isDark(bgColor)) {
                 snippetContainerNode.style.backgroundColor = "#f2f2f2";
               } else {
                 snippetContainerNode.style.background = "none";
               }
+
               /** Event for successful Uplaod of the image from vscode api **/
             } else if (e.data.type === "successfulUplaod") {
 
@@ -460,6 +462,7 @@
                 </div>
               </div>   
               `
+
               /** On update event from vscode api **/
             } else if (e.data.type === "update") {
               document.execCommand("paste");
@@ -511,8 +514,8 @@
         }
 
         /**
-         *                   PaintJS
-         * JavaScript Paint App JavaScript Canvas API
+         *        PaintJS
+         *  Paint Canvas API
          **/
 
         let savedImageData,
@@ -552,9 +555,8 @@
 
         /** 
          * @class ShapeBoundingBox
-         * Stores size data used to create rubber band shapes
-           that will redraw as the user moves the mouse.   
-        **/
+         * Stores size data used to create rubber band shapes that will redraw as the user moves the mouse.   
+         **/
         class ShapeBoundingBox {
           constructor(left, top, width, height) {
             this.left = left;
@@ -575,7 +577,10 @@
           }
         }
 
-        // Holds x & y location of the mouse
+        /**
+         * @class Location
+         * Holds x & y location of the mouse 
+         **/
         class Location {
           constructor(x, y) {
             this.x = x,
@@ -609,12 +614,16 @@
          * Changes the current tool to the tool selcted and applyies selected class on the currently used tool.
          **/
         function changeTool(toolClicked) {
+
+          /** remove class Selected from the unused tools **/
           document.getElementById("brush").className = "";
           document.getElementById("line").className = "";
           document.getElementById("rectangle").className = "";
-          // Highlight the last selected tool on toolbar
+
+          /** Highlight the last selected tool on toolbar **/
           document.getElementById(toolClicked).className = "selected";
-          // Change current tool used for drawing
+
+          /** Change current tool used for drawing **/
           currentTool = toolClicked;
         }
 
@@ -657,6 +666,7 @@
          **/
         function redrawCanvasImage() {
           if (savedImageData) ctx.putImageData(savedImageData, 0, 0);
+
           /** added this to cancel the bug of intial state **/
           else {
             saveCanvasImage()
