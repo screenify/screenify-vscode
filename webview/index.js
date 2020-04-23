@@ -214,8 +214,8 @@
         });
 
         // // Observe one or multiple elements
-        // ro.observe(snippetNode);
-        ro.observe(snippetContainerNode)
+        ro.observe(snippetNode);
+        // ro.observe(snippetContainerNode)
 
         function reactToContainerResize(width, height) {
 
