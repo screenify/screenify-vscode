@@ -6,50 +6,93 @@
     window.onload = function () {
       (function () {
 
-
         /**  PointerJs **/
         init_pointer({
           pointerColor: "#42445A"
         })
 
+        /** Snippet Container Background Color */
         let backgroundColor = "#f2f2f2";
 
 
-        /**  vscode-api **/
+        /**  vscode-Api **/
         const vscode = acquireVsCodeApi(),
           oldState = vscode.getState(),
-          snippetNode = document.getElementById("snippet"),
+
+          /** Main Snippet Container **/
           snippetContainerNode = document.getElementById("snippet-container"),
+
+          /** Snippet **/
+          snippetNode = document.getElementById("snippet"),
+
+          /** Snap Button **/
           obturateurLogo = document.getElementById("save_logo"),
+
+          /** Drawing Canvas **/
           canvas = document.getElementById('my-canvas'),
+
+          /** Canvas Context **/
           ctx = canvas.getContext('2d'),
+
+          /** Brush icon Tool **/
           brush = document.getElementById("brush"),
+
+          /** Line Tool **/
           line = document.getElementById("line"),
+
+          /** Rectangle Tool **/
           rectangle = document.getElementById("rectangle"),
+
+          /** Snippet Height Text **/
           snippetHeight = document.getElementById("snippetHeight"),
+
+          /** Snippet Width Text **/
           snippetWidth = document.getElementById("snippetWidth"),
+
+          /** Undo Tool **/
           undo = document.getElementById("undo"),
+
+          /** Copy Tool **/
           copyBtn = document.getElementById("copy"),
+          /** Upload Tool **/
           upload = document.getElementById("upload"),
-          uploadedImageContainer = document.getElementById("upload-container"),
+
+          /** Uploaded Url Container **/
+          uploadedUrlContainer = document.getElementById("upload-container"),
           clear = document.getElementById("clear");
 
+        /** Changing toolbar color to different color
+         * @Note TODO: Update toolbar color to  vscode color theme.  **/
         document.getElementsByClassName("toolbar")[0].style.backgroundColor = "#362b1b";
+
+        /** Post a message to vscode api, update cache and settings. **/
         vscode.postMessage({
           type: "getAndUpdateCacheAndSettings"
         });
 
+        /** Set @SnippetContainer node opacity to 1 **/
         snippetContainerNode.style.opacity = "1";
         if (oldState && oldState.innerHTML) {
           snippetNode.innerHTML = oldState.innerHTML;
         }
 
+        /**
+         * @function getInitialHtml
+         * @param {String} fontFamily 
+         * Setup Custom Html with to vscode webview interface wtih font family.
+         **/
         const getInitialHtml = fontFamily => {
           const cameraWithFlashEmoji = String.fromCodePoint(128248);
           const monoFontStack = `${fontFamily},SFMono-Regular,Consolas,DejaVu Sans Mono,Ubuntu Mono,Liberation Mono,Menlo,Courier,monospace`;
           return `<meta charset="utf-8"><div style="color: #d8dee9;background-color: #2e3440; font-family: ${monoFontStack};font-weight: normal;font-size: 12px;line-height: 18px;white-space: pre;"><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">0. Run command \`Screenify ${cameraWithFlashEmoji}\`</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">1. Copy some code</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">2. Paste into Screenify view</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div><div><span style="color: #8fbcbb;">console</span><span style="color: #eceff4;">.</span><span style="color: #88c0d0;">log</span><span style="color: #d8dee9;">(</span><span style="color: #eceff4;">'</span><span style="color: #a3be8c;">3. Click the button ${cameraWithFlashEmoji}</span><span style="color: #eceff4;">'</span><span style="color: #d8dee9;">)</span></div></div></div>`;
         };
 
+        /**
+         * @function serializeBlob  
+         * @param {Blob} blob 
+         * @param {CallBack} cb 
+         * Converts a blob into serialized blob.
+         **/
         const serializeBlob = (blob, cb) => {
           const fileReader = new FileReader();
 
@@ -57,14 +100,14 @@
             const bytes = new Uint8Array(fileReader.result);
             cb(Array.from(bytes).join(","));
           };
-
-          function getBrightness(color) {
-            const rgb = this.toRgb();
-            return (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
-          }
           fileReader.readAsArrayBuffer(blob);
         };
 
+        /**
+         * @function shoot 
+         * @param {Blob} serializedBlob
+         * Sends serializedBlob as post request to vscode api to save the blob locally.
+         **/
         function shoot(serializedBlob) {
           vscode.postMessage({
             type: "shoot",
@@ -74,8 +117,13 @@
           });
         }
 
+        /**
+         * @function copy 
+         * @param {Blob} serializedBlob
+         * @param {Boolean} upload
+         * Sends serializedBlob as post request to vscode api to either copy the blob to clipboard or updload the blob to online CDN.
+         **/
         function copy(serializedBlob, upload = false) {
-          // HERE IMPORTANT TO REFACTOR
           vscode.postMessage({
             type: "copy",
             data: {
@@ -85,6 +133,11 @@
           });
         }
 
+        /**
+         * @function getBrightness 
+         * @param {String} hexColor
+         * Converts hex color value into rgb value.
+         **/
         function getBrightness(hexColor) {
           const rgb = parseInt(hexColor.slice(1), 16);
           const r = (rgb >> 16) & 0xff;
@@ -93,23 +146,42 @@
           return (r * 299 + g * 587 + b * 114) / 1000;
         }
 
+        /**
+         * @function isDark 
+         * @param {String} hexColor
+         * checks if the color is dark.
+         **/
         function isDark(hexColor) {
           return getBrightness(hexColor) < 128;
         }
 
+        /**
+         * @function getSnippetBgColor 
+         * @param {String} html
+         * Gets snippet color from html string.
+         **/
         function getSnippetBgColor(html) {
           const match = html.match(/background-color: (#[a-fA-F0-9]+)/);
           return match ? match[1] : undefined;
         }
 
+        /**
+         * @function updateEnvironment 
+         * @param {String} snippetBgColor
+         * Updates the snippet background color
+         **/
         function updateEnvironment(snippetBgColor) {
-          // update snippet bg color
+
+          /** update snippet bg color **/
           document.getElementById("snippet").style.backgroundColor = snippetBgColor;
 
-          // update backdrop color
+          /** update backdrop color **/
           if (isDark(snippetBgColor)) {
+            /** set background colorof snippet container to white #f2f2f2 **/
             snippetContainerNode.style.backgroundColor = "#f2f2f2";
           } else {
+
+            /** set to none **/
             snippetContainerNode.style.background = "none";
           }
         }
@@ -140,7 +212,8 @@
         }
 
         document.addEventListener("paste", e => {
-          // clear the canvas
+
+          /** clear the canvas on new incoming code snippet **/
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           const innerHTML = e.clipboardData.getData("text/html");
 
@@ -170,78 +243,101 @@
           });
         });
 
+        /** Brush tool On Click Event Listener **/
         brush.addEventListener("click", () => {
           changeTool("brush")
         })
 
+        /** Line tool On Click Event Listener **/
         line.addEventListener("click", () => {
           changeTool("line")
         })
 
+        /** Rectangle tool On Click Event Listener **/
         rectangle.addEventListener("click", () => {
           changeTool("rectangle")
         })
-
+        /** Undo tool On Click Event Listener **/
         undo.addEventListener("click", () => {
           undoChanges()
         })
-
+        /** CopyBtn tool On Click Event Listener **/
         copyBtn.addEventListener("click", () => {
           copyImage()
         })
 
+        /** Upload tool On Click Event Listener **/
         upload.addEventListener("click", () => {
           uploadImage()
         })
+
+        /** Clear tool On Click Event Listener **/
         clear.addEventListener("click", () => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           // clear the undo array 
           undo_array = []
           brushPoints = []
           currentState = 0;
-          SaveCanvasImage()
-          RedrawCanvasImage()
+          saveCanvasImage()
+          redrawCanvasImage()
         })
 
-
+        /** Snap button  on click Event Listener **/
         obturateurLogo.addEventListener("click", () => {
-          nippetHandler();
+          snippetHandler();
         })
 
-        //  redsize event listener
-        const ro = new ResizeObserver((entries, containerName) => {
+        /** Snippet on Resize Event Observer  **/
+        const ro = new ResizeObserver((entries) => {
           for (let entry of entries) {
+
+            /** Content Rectangular dimentions **/
             const cr = entry.contentRect;
-            //Element size: ${cr.width}px x ${cr.height}px`);
-            reactToContainerResize(cr.width, cr.height, containerName)
+
+            reactToContainerResize(cr.width, cr.height)
           }
         });
 
-        // // Observe one or multiple elements
+        /** Observe one or multiple elements **/
         ro.observe(snippetNode);
-        // ro.observe(snippetContainerNode)
 
+
+        /**
+         * @function reactToContainerResize
+         * @param {Number} width 
+         * @param {Number} height 
+         * Updates the height and width of the snippet on the dom body and also updates the canvas height and width.
+         **/
         function reactToContainerResize(width, height) {
 
           /** HeightX Width conrdinates Update of the continer **/
           snippetHeight.innerText = Math.floor(new Number(height))
           snippetWidth.innerText = Math.floor(new Number(width))
 
-          /** @NOTE Saving and redrawing canvas is memory hungry I have to design a better solution **/
+          /** @NOTE The following Saving and redrawing canvas appraoch is expensive on the memroy, a better design has to be implemented! **/
 
-          /** save the image **/
-          SaveCanvasImage()
+          /** Save the canvas before update the size **/
+          saveCanvasImage()
 
           /** Update canvas height and width with continer with 20 as margin **/
           canvasHeight = canvas.height = height + 20;
           canvasWidth = canvas.width = width + 20;
+
           /**  redraw the image **/
-          RedrawCanvasImage()
-          SaveCanvasImage();
-          RedrawCanvasImage()
+          redrawCanvasImage()
+
+          /** Save the canvas again! **/
+          saveCanvasImage();
+
+          /** Redraw the canvas again! **/
+          redrawCanvasImage()
         }
 
-
+        /**
+         * @function html2blob
+         * @returns {Promise}
+         * An abstract function that calls @html2Canvas function as a promise, which convers the canvas to blob.
+         **/
         function html2blob() {
 
           /** Multiping the container height and width by 2 make room for scaling for the new canvas **/
@@ -286,25 +382,26 @@
         }
 
         /**
-         * Image Shooter function Than 
+         * @function snippetHandler 
          * @param {Boolean} copyFlag 
          * @param {Boolean} upload 
-         */
-        function nippetHandler(copyFlag = false, upload) {
+         * Main function that handles canvas capturing and blob serializing and sending blob to vscode api.
+         **/
+        function snippetHandler(copyFlag = false, upload) {
           html2blob()
             .then(blob => {
               serializeBlob(blob, serializedBlob => {
 
-                /** @parem {pa} */
                 if (copyFlag) copy(serializedBlob, upload);
                 else shoot(serializedBlob);
               });
             })
         }
 
+        /** Animation flag for the SNAP button to know if it's in animation or not **/
         let isInAnimation = false;
 
-        /**  Snap btn onhover event listener **/
+        /**  Snap button onhover Event Listener **/
         obturateurLogo.addEventListener("mouseover", () => {
           if (!isInAnimation) {
             isInAnimation = true;
@@ -340,15 +437,18 @@
                 innerHTML: initialHtml
               });
 
-              // update backdrop color, using bgColor from last pasted snippet
-              // cannot deduce from initialHtml since it's always using Nord color
+              /** update backdrop color, using bgColor from last pasted snippet **/
+              /** cannot deduce from initialHtml since it's always using Nord color **/
               if (isDark(bgColor)) {
                 snippetContainerNode.style.backgroundColor = "#f2f2f2";
               } else {
                 snippetContainerNode.style.background = "none";
               }
+              /** Event for successful Uplaod of the image from vscode api **/
             } else if (e.data.type === "successfulUplaod") {
-              uploadedImageContainer.innerHTML =
+
+              /** Append the Upload url of the image to the body of the @UploadedUrlContainer **/
+              uploadedUrlContainer.innerHTML =
                 `
                <div class="card" style="align-items:center">
                 <div class="card-body">
@@ -360,6 +460,7 @@
                 </div>
               </div>   
               `
+              /** On update event from vscode api **/
             } else if (e.data.type === "update") {
               document.execCommand("paste");
             } else if (e.data.type === "restore") {
@@ -382,17 +483,27 @@
             }
           }
         });
+
+        /** On key press event Listner **/
         window.addEventListener("keypress", ReactToKeyup)
+
+        /** On key up event Listner **/
         window.addEventListener("keyup", ReactToKeyup)
 
+        /**
+         * @function ReactToKeyup
+         * @param {Object} event 
+         * Reacts to key up keyboard key presses with toolbars functions such as saving the image on local directory or copying the image to clipboard.
+         **/
         function ReactToKeyup(event) {
-          // CTRL + S || cmd + S keypress
+
+          /** Ctrl + S or Cmd + S keyboard keypress for saving canvas as an image on the computer **/
           if (event.which == 115 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             event.preventDefault();
-            nippetHandler();
-            // CTRL + Z || cmd + Z keyboard keypress
+            snippetHandler();
+
+            /** Ctrl + Z or Cmd + Z keyboard keypress for undo drawing **/
           } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
-            // event.preventDefault();
             undoChanges()
           } else if (event.which == 67 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             copyImage()
@@ -402,32 +513,48 @@
         /**
          *                   PaintJS
          * JavaScript Paint App JavaScript Canvas API
-         */
+         **/
 
-        let savedImageData;
-        // Stores whether I'm currently dragging the mouse or not
-        let dragging = false;
-        let strokeColor = 'black';
-        let fillColor = 'black';
-        let line_Width = 1;
-        // Tool currently using
-        let currentTool = 'brush';
-        /** Changed canvas 's height and width to the innerheight of snippetnode. */
+        let savedImageData,
 
-        let canvasWidth = snippetContainerNode.clientWidth + 20;
-        let canvasHeight = snippetContainerNode.clientHeight + 20;
+          /**  Stores whether I'm currently dragging the mouse or not **/
+          dragging = false,
 
-        // Stores whether I'm currently using brush
-        let usingBrush = false;
-        // Stores whether mouse coordinat
-        let brushPoints = new Array();
-        // Stores the history of canvas data
-        let undo_array = new Array();
-        //  pointer to keep track of undo steps in canvas
-        let currentState = 0;
+          /**  Stroke Color of the brush **/
+          strokeColor = 'black',
 
-        // Stores size data used to create rubber band shapes
-        // that will redraw as the user moves the mouse
+          /**  Stroke Color of the rectangle **/
+          fillColor = 'black',
+
+          /**  Line width for the  **/
+          line_Width = 1,
+
+          /**  Tool currently used **/
+          currentTool = 'brush',
+
+          /** Set canvas width to snippet width with 20px margin. **/
+          canvasWidth = snippetNode.clientWidth + 20,
+
+          /** Set canvas height to snippet height with 20px margin. **/
+          canvasHeight = snippetNode.clientHeight + 20,
+
+          /**  Boolean for to check if Brush tool is being used. **/
+          usingBrush = false,
+
+          /** Brush Points Storage **/
+          brushPoints = new Array(),
+
+          /**  History of canvas Drawing Storage **/
+          undo_array = new Array(),
+
+          /** Pointer to track the currnet of the canvas drawing **/
+          currentState = 0;
+
+        /** 
+         * @class ShapeBoundingBox
+         * Stores size data used to create rubber band shapes
+           that will redraw as the user moves the mouse.   
+        **/
         class ShapeBoundingBox {
           constructor(left, top, width, height) {
             this.left = left;
@@ -437,7 +564,10 @@
           }
         }
 
-        // Holds x & y position where clicked
+        /** 
+         * @class MouseDownPos
+         *  Holds x & y position where clicked
+         **/
         class MouseDownPos {
           constructor(x, y) {
             this.x = x,
@@ -453,25 +583,31 @@
           }
         }
 
-        // Stores top left x & y and size of rubber band box 
+        /** Stores top left x & y and size of rubber band box **/
         let shapeBoundingBox = new ShapeBoundingBox(0, 0, 0, 0);
 
-        // Holds x & y position where clicked
+        /** Holds x & y position where clicked **/
         let mousedown = new MouseDownPos(0, 0);
 
-        // Holds x & y location of the mouse
+        /**  Holds x & y location of the mouse **/
         let loc = new Location(0, 0);
         ctx.strokeStyle = strokeColor;
         ctx.lineWidth = line_Width;
 
-        // Execute ReactToMouseDown when the mouse is clicked
+        /** Execute ReactToMouseDown when the mouse is clicked **/
         canvas.addEventListener("mousedown", ReactToMouseDown);
-        // Execute ReactToMouseMove when the mouse is clicked
-        canvas.addEventListener("mousemove", ReactToMouseMove);
-        // Execute ReactToMouseUp when the mouse is clicked
-        canvas.addEventListener("mouseup", ReactToMouseUp);
-        //  }
 
+        /** Execute ReactToMouseMove when the mouse is clicked **/
+        canvas.addEventListener("mousemove", ReactToMouseMove);
+
+        /**  Execute ReactToMouseUp when the mouse is clicked **/
+        canvas.addEventListener("mouseup", ReactToMouseUp);
+
+        /**
+         * @function changeTool
+         * @param {String} toolClicked 
+         * Changes the current tool to the tool selcted and applyies selected class on the currently used tool.
+         **/
         function changeTool(toolClicked) {
           document.getElementById("brush").className = "";
           document.getElementById("line").className = "";
@@ -482,9 +618,16 @@
           currentTool = toolClicked;
         }
 
-        // Returns mouse x & y position based on canvas position in page
+        /**
+         * @function GetMousePosition
+         * @param {Number} x 
+         * @param {Number} y 
+         * @returns {Object}
+         * Returns mouse x & y position based on canvas position in page
+         **/
         function GetMousePosition(x, y) {
-          // Get canvas size and position in web page
+
+          /**  Get canvas size and position in web page **/
           let canvasSizeData = canvas.getBoundingClientRect();
           return {
             x: (x - canvasSizeData.left) * (canvas.width / canvasSizeData.width),
@@ -492,8 +635,11 @@
           };
         }
 
-
-        function SaveCanvasImage() {
+        /**
+         * @function saveCanvasImage
+         * Saves the current canvas data.
+         **/
+        function saveCanvasImage() {
           if (currentState != undo_array.length - 1) {
             undo_array.splice(currentState + 1, undo_array.length);
           }
@@ -505,73 +651,90 @@
           currentState++
         }
 
-        function RedrawCanvasImage() {
+        /**
+         * @function redrawCanvasImage
+         * Redraws the last saved canvas data.
+         **/
+        function redrawCanvasImage() {
           if (savedImageData) ctx.putImageData(savedImageData, 0, 0);
-          // added this to cancel the bug of intial state
+          /** added this to cancel the bug of intial state **/
           else {
-            SaveCanvasImage()
-            RedrawCanvasImage()
+            saveCanvasImage()
+            redrawCanvasImage()
           }
-
         }
 
+        /**
+         * @function UpdateRubberbandBoxSizeData
+         * @param {Object} loc
+         * Updates Rubberband Box Size with mouse location
+         **/
         function UpdateRubberbandBoxSizeData(loc) {
-          // Height & width are the difference between were clicked
-          // and current mouse position
+          /** 
+           * Height & width are the difference between were clicked 
+           *  and current mouse position 
+           **/
           shapeBoundingBox.width = Math.abs(loc.x - mousedown.x);
           shapeBoundingBox.height = Math.abs(loc.y - mousedown.y);
 
-          // If mouse is below where mouse was clicked originally
+          /** If mouse is below where mouse was clicked originally **/
           if (loc.x > mousedown.x) {
 
-            // Store mousedown because it is farthest left
+            /** Store mousedown because it is farthest left **/
             shapeBoundingBox.left = mousedown.x;
           } else {
 
-            // Store mouse location because it is most left
+            /** Store mouse location because it is most left **/
             shapeBoundingBox.left = loc.x;
           }
 
-          // If mouse location is below where clicked originally
+          /** If mouse location is below where clicked originally **/
           if (loc.y > mousedown.y) {
 
-            // Store mousedown because it is closer to the top
-            // of the canvas
+            /** Store mousedown because it is closer to the top of the canvas**/
             shapeBoundingBox.top = mousedown.y;
           } else {
 
-            // Otherwise store mouse position
+            /** Otherwise store mouse position **/
             shapeBoundingBox.top = loc.y;
           }
         }
 
 
-        // Called to draw the line
+        /** Called to draw the line **/
         function drawRubberbandShape(loc) {
 
           ctx.strokeStyle = strokeColor;
           ctx.fillStyle = fillColor;
           if (currentTool === "brush") {
-            // Create paint brush
+
+            /** Create paint brush **/
             DrawBrush();
           } else if (currentTool === "line") {
-            // Draw Line
+
+            /** Draw Line **/
             ctx.beginPath();
             ctx.moveTo(mousedown.x, mousedown.y);
             ctx.lineTo(loc.x, loc.y);
             ctx.stroke();
           } else if (currentTool === "rectangle") {
-            // Creates rectangles
+
+            /** Draw rectangle **/
             ctx.strokeRect(shapeBoundingBox.left, shapeBoundingBox.top, shapeBoundingBox.width, shapeBoundingBox.height);
           }
         }
 
+        /**
+         * @function UpdateRubberbandBoxOnMove
+         * @param {Object} loc 
+         * Updates Rubberband Box On the Move with x and y mouse locations.
+         **/
         function UpdateRubberbandBoxOnMove(loc) {
-          // Stores changing height, width, x & y position of most 
-          // top left point being either the click or mouse location
+
+          /** Stores changing height, width, x & y position of most top left point being either the click or mouse location **/
           UpdateRubberbandBoxSizeData(loc);
 
-          // Redraw the shape
+          /** Redraw the shape **/
           drawRubberbandShape(loc);
         }
 
@@ -644,11 +807,11 @@
               ctx.stroke();
               AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = strokeColor, brushSize = line_Width, mode = "draw");
             }
-            RedrawCanvasImage();
+            redrawCanvasImage();
             DrawBrush();
           } else {
             if (dragging) {
-              RedrawCanvasImage();
+              redrawCanvasImage();
               UpdateRubberbandBoxOnMove(loc);
             }
 
@@ -656,13 +819,13 @@
         };
 
         function ReactToMouseUp(e) {
-          SaveCanvasImage()
+          saveCanvasImage()
           if (currentTool === "brush") AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = fillColor, brushSize = line_Width, mode = "end");
 
           canvas.style.cursor = "defualt";
           loc = GetMousePosition(e.clientX, e.clientY);
           dragging = false;
-          RedrawCanvasImage();
+          redrawCanvasImage();
           UpdateRubberbandBoxOnMove(loc);
           usingBrush = false;
 
@@ -680,7 +843,7 @@
             DrawBrush()
           }
           savedImageData = restore_state.savedImageData
-          RedrawCanvasImage()
+          redrawCanvasImage()
         }
 
         function deleteLastBrushPoint() {
@@ -700,7 +863,7 @@
          * @param {Boolean} upload 
          */
         function copyImage(upload = false) {
-          nippetHandler(copyFlag = true, upload);
+          snippetHandler(copyFlag = true, upload);
         }
 
         function uploadImage() {
