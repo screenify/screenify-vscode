@@ -296,7 +296,6 @@
 
             /** Content Rectangular dimentions **/
             const cr = entry.contentRect;
-
             reactToContainerResize(cr.width, cr.height)
           }
         });
