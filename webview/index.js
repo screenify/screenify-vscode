@@ -60,7 +60,6 @@
           /** Uploaded Url Container **/
           uploadedUrlContainer = document.getElementById("upload-container"),
 
-          // clipBoardBtn = document.getElementById("clipboardBtn"),
           /** clear tool **/
           clear = document.getElementById("clear");
 
@@ -291,9 +290,6 @@
           snippetHandler();
         })
 
-        /** Copy to Clipboard icon on uploaded Url container **/
-
-
         /** Snippet on Resize Event Observer  **/
         const ro = new ResizeObserver((entries) => {
           for (let entry of entries) {
@@ -455,7 +451,7 @@
               /** Event for successful Uplaod of the image from vscode api **/
             } else if (e.data.type === "successfulUplaod") {
 
-              /** Append the Upload url of the image to the body of the @UploadedUrlContainer **/
+              /** Append the Upload url of the image to the body of the @UploadedUrlContainer as Html tags. **/
               uploadedUrlContainer.innerHTML =
                 `
                <div class="card" style="align-items:center"  id="innerUrlContainer">
@@ -471,9 +467,11 @@
                 </div>
               </div>   
               `
+              /** Click Event Listener for clipboard button of the uploaded url **/
               document.getElementById("clipboardBtn").addEventListener("click", () => {
                 document.getElementById("copyNotif").className = "show"
               })
+
               /** On update event from vscode api **/
             } else if (e.data.type === "update") {
               document.execCommand("paste");
