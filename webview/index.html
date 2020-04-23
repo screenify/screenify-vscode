@@ -199,6 +199,24 @@
       z-index: 2;
       pointer-events: none;
     }
+
+    .hide {
+      opacity: 0;
+    }
+
+    .show {
+      animation: smooth 1s ease-in;
+    }
+
+    @keyframes smooth {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: .3;
+      }
+    }
   </style>
 
 </head>

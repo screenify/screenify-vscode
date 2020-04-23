@@ -59,6 +59,9 @@
 
           /** Uploaded Url Container **/
           uploadedUrlContainer = document.getElementById("upload-container"),
+
+          // clipBoardBtn = document.getElementById("clipboardBtn"),
+          /** clear tool **/
           clear = document.getElementById("clear");
 
         /** Changing toolbar color to different color
@@ -288,6 +291,9 @@
           snippetHandler();
         })
 
+        /** Copy to Clipboard icon on uploaded Url container **/
+
+
         /** Snippet on Resize Event Observer  **/
         const ro = new ResizeObserver((entries) => {
           for (let entry of entries) {
@@ -452,17 +458,22 @@
               /** Append the Upload url of the image to the body of the @UploadedUrlContainer **/
               uploadedUrlContainer.innerHTML =
                 `
-               <div class="card" style="align-items:center">
+               <div class="card" style="align-items:center"  id="innerUrlContainer">
                 <div class="card-body">
-                 <input style="align-self:center;" type = "text"
-                value = "${e.data.url}" >
-                 <button class="btn" data-clipboard-target="#foo">
+                 <input style ="width:100%"
+                 type = "text"
+                value = "${e.data.url}">
+                <br>
+                 <button id="clipboardBtn" class="btn"data-clipboard-target="#foo">
                      <img src="https://img.icons8.com/pastel-glyph/24/000000/clipboard--v1.png" alt="Copy to clipboard">
                     </button>
+                    <spna id="copyNotif" class="hide">Copied!<span>
                 </div>
               </div>   
               `
-
+              document.getElementById("clipboardBtn").addEventListener("click", () => {
+                document.getElementById("copyNotif").className = "show"
+              })
               /** On update event from vscode api **/
             } else if (e.data.type === "update") {
               document.execCommand("paste");
