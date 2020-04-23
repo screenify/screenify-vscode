@@ -259,7 +259,7 @@
         })
         /** Undo tool On Click Event Listener **/
         undo.addEventListener("click", () => {
-          undoChanges()
+          restoreState()
         })
         /** CopyBtn tool On Click Event Listener **/
         copyBtn.addEventListener("click", () => {
@@ -504,7 +504,7 @@
 
             /** Ctrl + Z or Cmd + Z keyboard keypress for undo drawing **/
           } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
-            undoChanges()
+            restoreState()
           } else if (event.which == 67 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             copyImage()
           }
@@ -670,10 +670,8 @@
          * Updates Rubberband Box Size with mouse location
          **/
         function UpdateRubberbandBoxSizeData(loc) {
-          /** 
-           * Height & width are the difference between were clicked 
-           *  and current mouse position 
-           **/
+
+          /** Height & width are the difference between were clicked and current mouse position **/
           shapeBoundingBox.width = Math.abs(loc.x - mousedown.x);
           shapeBoundingBox.height = Math.abs(loc.y - mousedown.y);
 
@@ -738,8 +736,17 @@
           drawRubberbandShape(loc);
         }
 
-        // Store each point as the mouse moves and whether the mouse
-        // button is currently being dragged
+        /**
+         * @function AddBrushPoint
+         * @param {Number} x 
+         * @param {Number} y 
+         * @param {Boolean} mouseDown 
+         * @param {String} brushColor 
+         * @param {String} brushSize 
+         * @param {String} mode 
+         * @param {String} tool 
+         * Store each point as the mouse moves and whether the mouse button is currently being dragged or not and the color being used and also the tool was used back 
+         **/
         function AddBrushPoint(x, y, mouseDown, brushColor, brushSize, mode = none, tool) {
 
           let point = {
@@ -754,14 +761,16 @@
           brushPoints.push(point)
         }
 
-        // Cycle through all brush points and connect them with lines
+        /**
+         * @function DrawBrush
+         * Cycle through all brush points and connect them with lines
+         **/
         function DrawBrush() {
-          if (brushPoints.length == 0) {
-            return;
-          }
+          if (brushPoints.length == 0) return;
 
           for (var i = 0; i < brushPoints.length; i++) {
             let pt = brushPoints[i];
+            if (pt.tool !== "brush" || !pt.mode || !pt) return;
             let begin = false;
             ctx.strokeStyle = pt.color
             if (pt.mode == "begin" || begin) {
@@ -776,37 +785,50 @@
           ctx.stroke();
         }
 
+        /**
+         * @function ReactToMouseDown
+         * @param {Object} e Event
+         * React on mouse down event.
+         **/
         function ReactToMouseDown(e) {
-          // Change the mouse pointer to a crosshair
+
+          /** Change the mouse pointer to a crosshair **/
           canvas.style.cursor = "crosshair";
 
-          // Store location 
+          /** Store location **/
           loc = GetMousePosition(e.clientX, e.clientY);
 
-          // Store mouse position when clicked
+          /** Store mouse position when clicked **/
           mousedown.x = loc.x;
           mousedown.y = loc.y;
-          // Store that yes the mouse is being held down
+
+          /** Store that yes the mouse is being held down **/
           dragging = true;
 
-          // Brush will store points in an array
+          /** Brush will store points in an array **/
           if (currentTool === 'brush') {
             usingBrush = true;
-            AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = strokeColor, brushSize = line_Width, mode = "begin");
+            AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = strokeColor, brushSize = line_Width, mode = "begin", tool = currentTool);
           }
         };
 
+        /**
+         * @function ReactToMouseMove
+         * @param {Object} e Event 
+         * React on mounse event move.
+         **/
         function ReactToMouseMove(e) {
           canvas.style.cursor = "crosshair"
           loc = GetMousePosition(e.clientX, e.clientY);
 
-          // If using brush tool and dragging store each point
+          /** If using brush tool and dragging store each point **/
           if (currentTool === 'brush' && dragging && usingBrush) {
             if (loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
               ctx.lineTo(loc.x, loc.y);
               ctx.stroke();
-              AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = strokeColor, brushSize = line_Width, mode = "draw");
+              AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = strokeColor, brushSize = line_Width, mode = "draw", tool = currentTool);
             }
+            // TODO: Make the drawing stops on exceding canvas bounderies
             redrawCanvasImage();
             DrawBrush();
           } else {
@@ -814,66 +836,113 @@
               redrawCanvasImage();
               UpdateRubberbandBoxOnMove(loc);
             }
-
           }
         };
 
+        /**
+         * @function ReactTomMouseUp
+         * @param {Event} e Event
+         * React to mouse Up event
+         **/
         function ReactToMouseUp(e) {
+
+          /** Save canvas **/
           saveCanvasImage()
-          if (currentTool === "brush") AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = fillColor, brushSize = line_Width, mode = "end");
 
+          /** If current tool is  "brush" tool then add brush point to draw **/
+          if (currentTool === "brush") AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = fillColor, brushSize = line_Width, mode = "end", tool = currentTool);
+
+          /** set cursor style to default **/
           canvas.style.cursor = "defualt";
-          loc = GetMousePosition(e.clientX, e.clientY);
-          dragging = false;
-          redrawCanvasImage();
-          UpdateRubberbandBoxOnMove(loc);
-          usingBrush = false;
 
+          /** Update mouse location **/
+          loc = GetMousePosition(e.clientX, e.clientY);
+
+          /** Set dragging flag to false **/
+          dragging = false;
+
+          /** Redraw canvas image **/
+          redrawCanvasImage();
+
+          /** Update Rubber Band On move **/
+          UpdateRubberbandBoxOnMove(loc);
+
+          /** Set usingbrush state to false **/
+          usingBrush = false;
         }
 
 
-        // restores the previos state of canvas.
-
+        /**
+         * @function restoreState
+         * Restores the previous state of canvas and set it the current state.
+         **/
         function restoreState() {
+
+          /**  if the array is empry or current status pointer is negtive return **/
           if (!undo_array.length || currentState <= 0) return;
 
+          /** take the previous canavas history **/
           restore_state = undo_array[--currentState]
+
+          /** if Brush tool was used deletes undo last brush points**/
           if (restore_state.currentTool === "brush") {
+
+            /** Delete last brush points **/
             deleteLastBrushPoint()
+
+            /** Draws brush points after delete **/
             DrawBrush()
           }
+          /** set current canvas image to previous canvas image **/
           savedImageData = restore_state.savedImageData
+
+          /** Redraw the canvas **/
           redrawCanvasImage()
         }
 
+        /**
+         * @function deleteLastBrushPoint
+         * Delete last brush points from the brushpoints array
+         **/
         function deleteLastBrushPoint() {
-          brushPoints.forEach((end, i) => {
-            if (end.mode === "begin") {
+
+          /** Iterates through the all brush points and remove the last one **/
+          brushPoints.forEach((pt, i) => {
+            if (pt.mode === "begin") {
               return brushPoints.splice(i, brushPoints.length)
             }
           })
         }
 
-        /** undo function **/
-        function undoChanges() {
-          restoreState()
-        }
+
         /**
-         * Copy image command
-         * @param {Boolean} upload 
+         * @function copyImage
+         * @param {Boolean} upload  default False
+         * Calls @snippetHandler that handles the snippet for uploading or copying functionality.
          */
         function copyImage(upload = false) {
+          /** calling @snippetHandler passing copyFlag set to True and upload paramater **/
           snippetHandler(copyFlag = true, upload);
         }
 
+        /**
+         * @function uploadImage
+         * Calls @snippetHandler that handles the snippet uploading functionality.
+         */
         function uploadImage() {
+          /** call @copyImage funciton with upload flag set to True for uploading **/
           copyImage(true)
         }
 
+        /** 
+         * @pickr
+         * Color Picker API 
+         **/
         const pickr = Pickr.create({
           el: '#pickr',
-          theme: 'nano', // or 'classic', or 'nano'
+          theme: 'nano',
 
+          /** Different Color options to pick from **/
           swatches: [
             'rgba(244, 67, 54, 1)',
             'rgba(233, 30, 99, 0.95)',
@@ -893,31 +962,43 @@
 
           components: {
 
-            // Main components
+            /** Main components **/
             preview: true,
             opacity: true,
             hue: true,
           }
         });
+
+        /**  Pickr Initialization  **/
         pickr.on('init', (instance) => {
-          const hexColor = color.toHEXA().toString();
-          fillColor = strokeColor = hexColor
 
+          /** convert color to hex value **/
+          const hexColor = color.toHEXA().toString();
+
+          /** Update fill and stroke color with picked color **/
+          fillColor = strokeColor = hexColor
         });
+
+        /**  On Pickr Color Change  **/
         pickr.on('change', (color, instance) => {
+
+          /** convert color to hex value **/
           const hexColor = color.toHEXA().toString();
+
+          /** Update fill and stroke color with picked color **/
           fillColor = strokeColor = hexColor
 
-          /**  PointerJs **/
+          /**  Update PointerJs Ring Color  **/
           init_pointer({
             pointerColor: hexColor,
           })
         })
 
         /**
-         * Redo feature
-         */
-        // 
+         * TODO:
+         * Redo feature 
+         * to able to redo the last undo drawing implemented on the canvas.
+         **/
       })
       ();
     }
