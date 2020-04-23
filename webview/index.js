@@ -989,8 +989,8 @@
           fillColor = strokeColor = hexColor
         });
 
-        /**  On Pickr Color Change  **/
-        pickr.on('change', (color, instance) => {
+        /**  Pickr Color Change  **/
+        pickr.on('change', (color) => {
 
           /** convert color to hex value **/
           const hexColor = color.toHEXA().toString();
