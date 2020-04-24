@@ -990,7 +990,7 @@
         /**  Pickr Initialization  **/
         pickr.on('init', (instance) => {
 
-          /** convert color to hex value **/
+          /** Convert color to hex value **/
           const hexColor = color.toHEXA().toString();
 
           /** Update fill and stroke color with picked color **/
@@ -1000,7 +1000,7 @@
         /**  Pickr Color Change  **/
         pickr.on('change', (color) => {
 
-          /** convert color to hex value **/
+          /** Convert color to hex value **/
           const hexColor = color.toHEXA().toString();
 
           /** Update fill and stroke color with picked color **/
