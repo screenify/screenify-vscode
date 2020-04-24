@@ -16,7 +16,9 @@ suite('Extension Test Suite', () => {
     test("should be able to register screenify commands", () => {
         return vscode.commands.getCommands(true).then((commands) => {
             const SCREENIFY_COMMANDS = [
-                "editor.action.clipboardCopyWithSyntaxHighlightingAction"
+                "editor.action.clipboardCopyWithSyntaxHighlightingAction",
+                "getAndUpdateCacheAndSettings.action.getAndUpdateCacheAndSettings"
+
             ]
             const foundScreenifyCommands = commands.filter((value) => {
                 return SCREENIFY_COMMANDS.indexOf(value) >= 0 || value.startsWith("screenify.");
