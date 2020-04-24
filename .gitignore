@@ -8,3 +8,4 @@ Thumbs.db
 */out/
 */.vs/
 node_modules
+.vscode
