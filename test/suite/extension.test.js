@@ -3,16 +3,15 @@ const assert = require('assert');
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 const vscode = require('vscode');
-const screenify = require("../../src/extension")
-const {
-    shootSnippet
-} = require("../../webview/index")
-console.log(shootSnippet)
+// const screenify = require("../../src/extension")
+// const {
+//     shootSnippet
+// } = require("../../webview/index")
 suite('Extension Test Suite', () => {
     vscode.window.showInformationMessage('Start all tests.');
 
     test("should be present", () => {
-        assert.ok(vscode.extensions.getExtension("screenify-vscode.screenify"));
+        assert.ok(vscode.extensions.getExtension("adammomen.screenify"));
     });
     test("should be able to register screenify commands", () => {
         return vscode.commands.getCommands(true).then((commands) => {
