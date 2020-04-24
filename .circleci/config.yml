@@ -10,16 +10,22 @@
 #       - node/with-cache:
 #           steps:
 #             - run: npm install
+# - test:
 version: 2
 jobs:
-  test:
+  build:
     docker:
-      - image: "circleci/node:9.11.2"
+      - image: circleci/node:10.15
     steps:
       - checkout
       - run:
-          name: Download depencies
+          name: install-npm
           command: npm install
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
       - run:
-          name: Test
+          name: test
           command: yarn test
