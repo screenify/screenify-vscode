@@ -953,7 +953,7 @@
         }
 
         /** 
-         * @pickr
+         * @
          * Color Picker API 
          **/
         const pickr = Pickr.create({
