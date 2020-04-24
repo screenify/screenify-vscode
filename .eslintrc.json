@@ -3,7 +3,8 @@
 		"browser": true,
 		"commonjs": true,
 		"es6": true,
-		"dom": true,
+		// "dom": true,
+		"dom": false,
 		"node": true,
 		"mocha": true,
 		"webextensions": true
