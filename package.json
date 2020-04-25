@@ -1,13 +1,16 @@
 {
     "name": "screenify",
     "displayName": "Screenify",
-    "description": "screenify your code snippet capturer",
-    "version": "0.0.1",
+    "description": "Captures your code snippet as an image and turn it into a canvas for drawing then uploads it online and more it can copy your image to the clipboard.",
+    "version": "0.0.2",
     "engines": {
         "vscode": "^1.42.0"
     },
     "categories": [
-        "Other"
+        "Other",
+        "Extension Packs",
+        "Snippets"
+
     ],
     "repository": {
         "type": "git",
