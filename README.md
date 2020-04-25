@@ -1,18 +1,17 @@
 # Screenify 📸
-[Screnify](demo/screenify.gif)
 
-[Screnify](demo/demo.gif)
+[!Screenify](demo/screenify.gif)
 
 ## Features
 
 * Capture a snippet of your code.
-    [capture](./demo/capture.gif)
+    [!capture](./demo/capture.gif)
 * Draw over your snippet.
-    [Draw](./demo/draw.gif)
+    [!Draw](./demo/draw.gif)
 * Upload your captured snippet online.
-    [upload](./demo/upload.gif)
+    [!upload](./demo/upload.gif)
 * Save your captured snippet as an image in PNG format file on your local directory.
-    [save](./demo/save.gif)
+    [!save](./demo/save.gif)
 
 > Tip: This extension requires Node.js installed.
 
