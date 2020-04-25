@@ -1,4 +1,5 @@
 # Screenify 📸
+[Screnify](demo/screenify.gif)
 
 [Screnify](demo/demo.gif)
 

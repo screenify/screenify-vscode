@@ -516,6 +516,8 @@
             /** Ctrl + Z or Cmd + Z keyboard keypress for undo drawing **/
           } else if (event.which == 90 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             restoreState()
+
+            /** Ctrl + C or Cmd + C keyboard keypress for copying image **/
           } else if (event.which == 67 && (event.ctrlKey || event.metaKey) || (event.which == 19)) {
             copyImage()
           }
@@ -537,7 +539,7 @@
           /**  Stroke Color of the rectangle **/
           fillColor = 'black',
 
-          /**  Line width for the  **/
+          /**  Line width for all tools **/
           line_Width = 1,
 
           /**  Tool currently used **/
@@ -836,17 +838,28 @@
          * React on mounse event move.
          **/
         function ReactToMouseMove(e) {
+
+          /** Set the cursor to crosshair**/
           canvas.style.cursor = "crosshair"
+
+          /** get and location on the move **/
           loc = GetMousePosition(e.clientX, e.clientY);
 
           /** If using brush tool and dragging store each point **/
           if (currentTool === 'brush' && dragging && usingBrush) {
-            if (loc.x > 0 && loc.x < canvasWidth && loc.y > 0 && loc.y < canvasHeight) {
+            if (loc.x > 0 && loc.x < canvasWidth - 5 && loc.y > 0 && loc.y < canvasHeight - 5) {
               ctx.lineTo(loc.x, loc.y);
               ctx.stroke();
               AddBrushPoint(loc.x, loc.y, mouseDown = true, brushColor = strokeColor, brushSize = line_Width, mode = "draw", tool = currentTool);
             }
-            // TODO: Make the drawing stops on exceding canvas bounderies
+
+            /** Make the drawing stops on exceding canvas bounderies **/
+            else if (loc.x < 0 || loc.x > canvasWidth - 5 || loc.y < 0 || loc.y > canvasHeight - 5) {
+              AddBrushPoint(loc.x, loc.y, mouseDown = false, brushColor = fillColor, brushSize = line_Width, mode = "end", tool = currentTool);
+              ctx.stroke();
+              dragging = false
+            }
+
             redrawCanvasImage();
             DrawBrush();
           } else {
@@ -863,6 +876,9 @@
          * React to mouse Up event
          **/
         function ReactToMouseUp(e) {
+
+          /** if the mouse is beign dragged return **/
+          if (!dragging) return;
 
           /** Save canvas **/
           saveCanvasImage()
