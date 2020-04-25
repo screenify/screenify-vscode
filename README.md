@@ -1,5 +1,5 @@
 # Screenify 📸
-[Screnify](demo/demo.gif)
+[Screnify](demo/screenify.gif)
 
 <!-- This is the README for your extension "screenify". After writing up a brief description, we recommend including the following sections. -->
 
