@@ -7,9 +7,12 @@
   Screenify
   <br>
 </h1>
-<h4 align="center"> Screenify your VS Code editor</h4>
 
+<h4 align="center"> Screenify your VS Code editor</h4>
 <p align="center">
+  <a href="https://marketplace.visualstudio.com/items?itemName=adammomen.screenify">
+    <img src="https://img.shields.io/circleci/build/github/AdamMomen/screenify-vscode/master" alt="CircleCI">
+  </a>
   <a href="https://marketplace.visualstudio.com/items?itemName=adammomen.screenify">
     <img src="https://vsmarketplacebadge.apphb.com/version-short/adammomen.screenify.svg?style=flat-square" alt="Version">
   </a>
@@ -20,7 +23,13 @@
     <img src="https://vsmarketplacebadge.apphb.com/rating/adammomen.screenify.svg?style=flat-square" alt="Ratings">
   </a>
 </p>
-Screenify is code snippet capturing tool built on top of [Polacode](https://marketplace.visualstudio.com/items?itemName=pnp.polacode&ssr=false#overview) which allow to turn your code into a canvas that and share it online with others.
+
+## Features
+
+- Quickly save screenshots of your code
+- Copy screenshots to your clipboard
+- Draw over your screenshot.
+- Upload your image online.
 
 ## Getting Started
 
@@ -28,13 +37,12 @@ Screenify is code snippet capturing tool built on top of [Polacode](https://mark
   - <img src="https://developer.apple.com/favicon.ico" width=16 height=16/> <a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-macos.pdf">macOS</a> `⌘Shift+S`
   - <img src="https://www.microsoft.com/favicon.ico" width=16 height=16/> <a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf">Windows</a> `Ctrl+Shift+S`
 
-### Or
+**Tips**:
 
-From statusbar click on the camera icon 📸 to start screenify.
-
-![launchWithActivityBar](./demo/activityBar.png )
-
-## Features
+- You can also start secreenify by clicking on the camera icon 📸 on the statusbar.
+- Default key binding to start Screenify is `Ctrl+Shift+S` or `⌘Shift+S` If you'd like to bind screenify to another hotkey, open up your keyboard shortcut settings and bind `screenify.activate` to a custom keybinding.
+- If you'd like to copy to clipboard instead of saving, click the image and press the copy keyboard shortcut (defaults are Ctrl+C on Windows and Linux, Cmd+C on OS X).
+## Demo
 
 ### *Capture a snippet of your code*
 
@@ -59,13 +67,9 @@ Share your code snippets online, screenify uploads your images that you can shar
 Save your code as an image on your local machine directory.
 
 
-## Demo
-
-
-
 ## Known Issues
 
->Note: drawing experiense is stil little bit buggy and not very smooth and it's still in development.
+>Note: drawing experiense is stil little bit laggy and not smooth and it's still in development.
 
 ## Tip
 
@@ -73,7 +77,7 @@ Save your code as an image on your local machine directory.
 
 ## Credit
 
-Thanks to [Dawn Labs](https://dawnlabs.io) for making [Carbon](https://carbon.now.sh) that inspired Polacode.
+Thanks to the great Polacode.
 
 Many color are taken from the elegant [Nord](https://github.com/arcticicestudio/nord) theme by [@arcticicestudio](https://github.com/arcticicestudio).
 
