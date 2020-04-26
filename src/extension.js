@@ -31,6 +31,9 @@
       statusBarItem.show()
       subscriptions.push(statusBarItem);
 
+      /** @class HelpDataProvider
+       *  Tree institation for view container tree items
+       **/
       class HelpDataProvider {
         constructor() {
           this.data = [
@@ -50,6 +53,10 @@
           return element.children;
         }
       }
+
+      /** @class GettingStartedDataProvider
+       *  Tree institation for view container tree items
+       **/
       class GettingStartedDataProvider {
         constructor() {
           this.data = [
@@ -90,18 +97,26 @@
           this.contextValue = cmd.context
         }
       }
-
+      /** Register Tree Data provider **/
       vscode.window.registerTreeDataProvider('help', new HelpDataProvider());
+
+      /** Register Tree Data provider **/
       vscode.window.registerTreeDataProvider('gettingStarted', new GettingStartedDataProvider());
+
+
+      /** Register command**/
       vscode.commands.registerCommand('help.openUri', node => {
         vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(node));
       });
 
+      /** Path to Html file **/
       const htmlPath = path.resolve(context.extensionPath, 'webview/index.html')
 
+      /** Path to the last saved image **/
       let lastUsedImageUri = vscode.Uri.file(path.resolve(os.homedir(), 'Desktop/code.png'))
       let panel
 
+      /** Regiseter Webview Pannl Serializer **/
       vscode.window.registerWebviewPanelSerializer('screenify', {
         async deserializeWebviewPanel(_panel, state) {
           panel = _panel
@@ -119,21 +134,28 @@
         }
       })
 
-
+      /** Regiseter Screenify Acitivation Command **/
       vscode.commands.registerCommand('screenify.activate', () => {
+
+        /** Show welcome inforamation message **/
         vscode.window.showInformationMessage("Screenify is enabled and running, happy shooting 📸 😊 ")
+
+        /** Creates Webview Panel  **/
         panel = vscode.window.createWebviewPanel('screenify', P_TITLE, 2, {
           enableScripts: true,
           localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, 'webview'))]
         })
 
+        /** Set webview Html content from the html path file **/
         panel.webview.html = getHtmlContent(htmlPath)
 
+        /** Selcetion Listener **/
         const selectionListener = setupSelectionSync()
         panel.onDidDispose(() => {
           selectionListener.dispose()
         })
 
+        const editor = vscode.workspace.getConfiguration('editor')
         setupMessageListeners()
 
         const fontFamily = vscode.workspace.getConfiguration('editor').fontFamily
