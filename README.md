@@ -41,9 +41,10 @@
 
 - You can also start secreenify by clicking on the camera icon 📸 on the statusbar.
 - Default key binding to start Screenify is `Ctrl+Shift+S` or `⌘Shift+S` If you'd like to bind screenify to another hotkey, open up your keyboard shortcut settings and bind `screenify.activate` to a custom keybinding.
+
 - If you'd like to copy to clipboard instead of saving, click the image and press the copy keyboard shortcut (defaults are Ctrl+C on Windows and Linux, Cmd+C on OS X).
 
-## Example
+## Examples
 
 [Nord](https://github.com/arcticicestudio/nord-visual-studio-code) + [Input Mono](http://input.fontbureau.com)
 
@@ -58,10 +59,6 @@
 ![demo3](https://raw.githubusercontent.com/octref/polacode/master/demo/3.png)
 
 ## Demo
-
-### *Capture and Draw your code*
-
-![capture](./demo/screenify1080.gif)
 
 ### *Share Your Code online*
 
