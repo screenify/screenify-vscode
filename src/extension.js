@@ -2,11 +2,9 @@
      * Copyright(c) Screenify📸.
      *  Licensed under the MIT License. See License.txt in the project root for license information.
      *--------------------------------------------------------------------------------------------*/
-
     const vscode = require('vscode'),
       fs = require('fs'),
       path = require('path'),
-      Shell = require('node-powershell'),
       os = require('os'),
       P_TITLE = 'Screenify 📸',
       fetch = require("node-fetch"),
