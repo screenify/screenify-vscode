@@ -6,11 +6,19 @@
     "engines": {
         "vscode": "^1.42.0"
     },
+    "keywords": [
+        "screenshot",
+        "snippet",
+        "snap",
+        "clipboard",
+        "share",
+        "polacode",
+        "carbon",
+        "codesnap",
+        "upload"
+    ],
     "categories": [
-        "Other",
-        "Extension Packs",
-        "Snippets"
-
+        "Other"
     ],
     "repository": {
         "type": "git",
