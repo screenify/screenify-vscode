@@ -8,7 +8,7 @@
   <br>
 </h1>
 
-<h4 align="center"> Screenify your VS Code editor</h4>
+<h4 align="center"> Screenify your code</h4>
 <p align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=adammomen.screenify">
     <img src="https://img.shields.io/circleci/build/github/AdamMomen/screenify-vscode/master" alt="CircleCI">
@@ -33,9 +33,9 @@
 
 ## Getting Started
 
-  - <img src="https://www.kernel.org/theme/images/logos/favicon.png" width=16 height=16/> <a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf">Linux</a> `Ctrl+Shift+S`
-  - <img src="https://developer.apple.com/favicon.ico" width=16 height=16/> <a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-macos.pdf">macOS</a> `⌘Shift+S`
-  - <img src="https://www.microsoft.com/favicon.ico" width=16 height=16/> <a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf">Windows</a> `Ctrl+Shift+S`
+- <img src="https://www.kernel.org/theme/images/logos/favicon.png" width=16 height=16/> <a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf">Linux</a> `Ctrl+Shift+S`
+- <img src="https://developer.apple.com/favicon.ico" width=16 height=16/> <a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-macos.pdf">macOS</a> `⌘Shift+S`
+- <img src="https://www.microsoft.com/favicon.ico" width=16 height=16/> <a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf">Windows</a> `Ctrl+Shift+S`
 
 **Tips**:
 
@@ -66,7 +66,6 @@ Share your code snippets online, screenify uploads your images that you can shar
 
 Save your code as an image on your local machine directory.
 
-
 ## Known Issues
 
 >Note: drawing experiense is stil little bit laggy and not smooth and it's still in development.
@@ -84,7 +83,6 @@ Many color are taken from the elegant [Nord](https://github.com/arcticicestudio/
 Download button animation is made with [Vivus](https://github.com/maxwellito/vivus).
 
 Special Thanks to [SougCrypto](https://github.com/Soug-crypto) for helping out with desgin concepts of the MVP.
-
 
 ## Contributing
 
