@@ -1,72 +1,93 @@
-# Screenify 📸
-[Screnify](demo/screenify.gif)
+<h1 align="center">
+  <br>
+  <a href="https://marketplace.visualstudio.com/items?itemName=adammomen.screenify">
+    <img src="https://avatars2.githubusercontent.com/u/61951664?s=200&v=4">
+  </a>
+  <br>
+  Screenify
+  <br>
+</h1>
+<h4 align="center"> Screenify your VS Code editor</h4>
 
-<!-- This is the README for your extension "screenify". After writing up a brief description, we recommend including the following sections. -->
+<p align="center">
+  <a href="https://marketplace.visualstudio.com/items?itemName=adammomen.screenify">
+    <img src="https://vsmarketplacebadge.apphb.com/version-short/adammomen.screenify.svg?style=flat-square" alt="Version">
+  </a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=adammomen.screenify">
+    <img src="https://vsmarketplacebadge.apphb.com/installs/adammomen.screenify.svg?style=flat-square" alt="Installs">
+  </a>
+  <a href="https://marketplace.visualstudio.com/items?itemName=adammomen.screenify">
+    <img src="https://vsmarketplacebadge.apphb.com/rating/adammomen.screenify.svg?style=flat-square" alt="Ratings">
+  </a>
+</p>
+Screenify is code snippet capturing tool built on top of [Polacode](https://marketplace.visualstudio.com/items?itemName=pnp.polacode&ssr=false#overview) which allow to turn your code into a canvas that and share it online with others.
+
+## Getting Started
+
+  - <img src="https://www.kernel.org/theme/images/logos/favicon.png" width=16 height=16/> <a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf">Linux</a> `Ctrl+Shift+S`
+  - <img src="https://developer.apple.com/favicon.ico" width=16 height=16/> <a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-macos.pdf">macOS</a> `⌘Shift+S`
+  - <img src="https://www.microsoft.com/favicon.ico" width=16 height=16/> <a href="https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf">Windows</a> `Ctrl+Shift+S`
+
+### Or
+
+From statusbar click on the camera icon 📸 to start screenify.
+
+![launchWithActivityBar](./demo/activityBar.png )
 
 ## Features
 
-<!-- Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### *Capture a snippet of your code*
 
-For example if there is an image subfolder under your extension project workspace: -->
+![capture](./demo/capture.gif)
 
- * Capture a snippet of your code.
-    [capture](./demo/capture.gif)
- * Draw over your snippet.
-    [Draw](./demo/draw.gif)
- * Upload your captured snippet online.
-    [upload](./demo/upload.gif)
- * Save your captured snippet as an image in PNG format file on your local directory.
-    [save](./demo/save.gif)
+### Draw over your snippet
 
+![Draw](./demo/draw.gif)
 
-> Tip: This extension requires Node.js installed.
+Sketch, draw, and highlight your code for better explaination for others.
 
-## Requirements
-* [Node.js](https://nodejs.org)
-<!-- If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point. -->
-
-<!-- For example: -->
-
-This extension contributes the following settings:
-
-* `screenify.activate`: enable/disable this extension
+### *Upload your captured snippet online*
   
-### OR
+![upload](./demo/upload.gif)
 
-<!-- [launchWithActivityBar](./demo/activityBar.gif) -->
+Share your code snippets online, screenify uploads your images that you can share the image url with others.
 
-<!-- * `myExtension.thing`: set to `blah` to do something -->
+### *Save your captured snippet on your local directory*
+
+![!save](./demo/save.gif)
+
+Save your code as an image on your local machine directory.
+
+
+## Demo
+
+
 
 ## Known Issues
 
 >Note: drawing experiense is stil little bit buggy and not very smooth and it's still in development.
 
-## Release Notes
+## Tip
 
-Users appreciate release notes as you update your extension.
+- When running out of horizontal space, try the command `View: Toggle Editor Group Vertical/Horizontal Layout`.
 
-### 1.0.0
+## Credit
 
-Initial release of Screenify
+Thanks to [Dawn Labs](https://dawnlabs.io) for making [Carbon](https://carbon.now.sh) that inspired Polacode.
+
+Many color are taken from the elegant [Nord](https://github.com/arcticicestudio/nord) theme by [@arcticicestudio](https://github.com/arcticicestudio).
+
+Download button animation is made with [Vivus](https://github.com/maxwellito/vivus).
+
+Special Thanks to [SougCrypto](https://github.com/Soug-crypto) for helping out with desgin concepts of the MVP.
 
 
+## Contributing
+
+Please, report issues/bugs and suggestions for improvements to the issue [here](https://github.com/screenify/screenify-vscode/issues).
+
+We're not users of Light versions so we need help to make light versions better. Please contribute if you have any suggestions. **PRs are welcomed!** :rocket:
+
+Copyright (C) 2020 by [AM](https://github.com/adammomen)
 -----------------------------------------------------------------------------------------------------------
-<!-- 
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/) -->
-
-**Enjoy! Screenifying**
+***Enjoy! Screenifying 📸***

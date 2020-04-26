@@ -6,6 +6,17 @@
     "engines": {
         "vscode": "^1.42.0"
     },
+    "keywords": [
+        "screenshot",
+        "snippet",
+        "snap",
+        "clipboard",
+        "share",
+        "polacode",
+        "carbon",
+        "codesnap",
+        "upload"
+    ],
     "categories": [
         "Other"
     ],
@@ -125,7 +136,7 @@
         "@types/node": "^12.11.7",
         "@types/vscode": "^1.42.0",
         "electron": "file:node_modules/electron",
-        "eslint": "^6.8.0",
+        "eslint": "*",
         "glob": "^7.1.6",
         "mocha": "^7.0.1",
         "typescript": "^3.7.5",

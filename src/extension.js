@@ -24,6 +24,7 @@
       const {
         subscriptions
       } = context
+
       /** Status Bar configuration **/
       statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
       statusBarItem.command = "screenify.activate"
@@ -205,10 +206,9 @@
                */
             case 'copy':
               serializedBlobHandler(data.serializedBlob, data.upload)
-                .then(res => {
+                .then(() => {
                   vscode.window.showInformationMessage("Snippet copied! 📋 ctrl + V to paste", "Close")
                 })
-                // })
                 .catch(err => {
                   vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
                 })
@@ -300,7 +300,7 @@
                 vscode.window.showInformationMessage(`Snippet uploaded! ✅    Url is copied to the clipboard 📋: `, url, "Copy")
               })
           })
-          .catch(e => {
+          .catch(err => {
             vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
           });
       }

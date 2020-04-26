@@ -1,13 +1,17 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
-		"lib": ["dom", "dom.iterable", "esnext", "es2016", "esnext.asynciterable"],
-		"target": "ES6",
+		"lib": [
+			// "dom", "dom.iterable",
+			"esnext", "es2016", "esnext.asynciterable"
+		],
+		"target": "es6",
 		"moduleResolution": "node",
-		"checkJs": false
+		"checkJs": false,
 		/* Typecheck .js files. */
 	},
 	"exclude": [
-		"node_modules"
+		"node_modules",
+		"**/node_modules/*"
 	]
 }
