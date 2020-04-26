@@ -17,10 +17,6 @@
     fetch.Promise = Bluebird
 
 
-
-
-
-
     /**
      * @param {vscode.ExtensionContext} context
      */
@@ -36,7 +32,7 @@
       statusBarItem.show()
       subscriptions.push(statusBarItem);
 
-      class TreeDataProvider {
+      class HelpDataProvider {
         constructor() {
           this.data = [
             new TreeItem("Give me your feedback", "twitter.svg", "https://twitter.com/adammuman81"),
@@ -56,22 +52,49 @@
           return element.children;
         }
       }
+      class GettingStartedDataProvider {
+        constructor() {
+          this.data = [
+            new TreeItem("Start Screenify 📸", "", "", {
+              title: "Start Screenify",
+              command: "screenify.activate",
+              context: "start"
+            }),
+          ];
+        }
+        getTreeItem(element) {
+          return element;
+        }
+
+        getChildren(element = undefined) {
+          if (element === undefined) {
+            return this.data;
+          }
+          return element.children;
+        }
+      }
       class TreeItem extends vscode.TreeItem {
 
-        constructor(label, icon, uri) {
+        constructor(label, icon, uri,
+          cmd = {
+            title: "Open Uri",
+            command: "help.openUri",
+            context: "openUrl"
+          }) {
           super(label, vscode.TreeItemCollapsibleState.None);
           this.iconPath = path.join(context.extensionPath, 'resources', icon);
           this.command = {
-            title: "Open Uri",
-            command: "help.openUri",
+            title: cmd.title,
+            command: cmd.command,
             arguments: [uri]
           }
           this._uri = uri;
-          this.contextValue = "openUrl";
+          this.contextValue = cmd.context
         }
       }
 
-      vscode.window.registerTreeDataProvider('help', new TreeDataProvider());
+      vscode.window.registerTreeDataProvider('help', new HelpDataProvider());
+      vscode.window.registerTreeDataProvider('gettingStarted', new GettingStartedDataProvider());
       vscode.commands.registerCommand('help.openUri', node => {
         vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(node));
       });
