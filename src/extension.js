@@ -38,7 +38,6 @@
           this.data = [
             new TreeItem("Give me your feedback", "twitter.svg", "https://twitter.com/adammuman81"),
             new TreeItem("Report an issue", "github.png", "https://github.com/AdamMomen/screenify-vscode/issues"),
-            new TreeItem("More Info", "question.png", "../README.md"),
             new TreeItem("Support", "icon-heart.svg", "https://www.patreon.com/adammomen")
           ];
         }
