@@ -59,18 +59,12 @@
 
 ## Demo
 
-### *Capture a snippet of your code*
+### *Capture and Draw your code*
 
-![capture](./demo/capture.gif)
+![capture](./demo/screenify1080.gif)
 
-### Draw over your snippet
+### *Share Your Code online*
 
-![Draw](./demo/draw.gif)
-
-Sketch, draw, and highlight your code for better explaination for others.
-
-### *Upload your captured snippet online*
-  
 ![upload](./demo/upload.gif)
 
 Share your code snippets online, screenify uploads your images that you can share the image url with others.
