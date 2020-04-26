@@ -1,7 +1,7 @@
 {
     "name": "screenify",
     "displayName": "Screenify",
-    "description": "Capture your code snippets and turn them to canvas for drawing, then share with others by uploading the image to screenify CDN server.",
+    "description": "Capture your code snippets and turn them into canvas for drawing, then share them others by uploading the image to screenify CDN server.",
     "version": "0.0.4",
     "engines": {
         "vscode": "^1.42.0"
