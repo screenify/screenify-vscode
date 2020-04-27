@@ -17,7 +17,8 @@
 
     /**
      * @param {vscode.ExtensionContext} context
-     */
+     * Extension Acativation
+     **/
     function activate(context) {
       const {
         subscriptions
@@ -155,20 +156,24 @@
           selectionListener.dispose()
         })
 
-        const editor = vscode.workspace.getConfiguration('editor')
         setupMessageListeners()
 
+        /** Get fontFamily from the editor configuration **/
         const fontFamily = vscode.workspace.getConfiguration('editor').fontFamily
+
+        /** Get bgColor and if NULL set it to #2e3440 **/
         const bgColor = context.globalState.get('screenify.bgColor', '#2e3440')
+
+        /** Post resquest to webview **/
         panel.webview.postMessage({
           type: 'init',
           fontFamily,
           bgColor
         })
-
         syncSettings()
       })
 
+      /** Syncs Updates **/
       vscode.workspace.onDidChangeConfiguration(e => {
         if (e.affectsConfiguration('screenify') || e.affectsConfiguration('editor')) {
           syncSettings()
@@ -181,9 +186,17 @@
        * @return {Promise} 
        */
       function serializedBlobHandler(serializeBlob, isUpload) {
-        if (!serializeBlob) return; // returns null
+
+        /** if blob is undefined  */
+        if (!serializeBlob) return;
+
+        /** Convert Serialize Blob to array of butes **/
         const bytes = new Uint8Array(serializeBlob.split(','))
-        if (isUpload) return upload(serializeBlob) // upload
+
+        /** uploads state is true, then uploads the blob **/
+        if (isUpload) return upload(serializeBlob)
+
+        /** else it will copy the blob to clipboard **/
         return copyImg(Buffer.from(bytes));
       }
 
@@ -194,7 +207,11 @@
        * @return {Promise} 
        */
       function writeSerializedBlobToFile(serializeBlob, fileName) {
+
+        /** Convert Serialize Blob to array of butes **/
         const bytes = new Uint8Array(serializeBlob.split(','))
+
+        /** write buffer into file **/
         fs.writeFileSync(fileName, Buffer.from(bytes))
       }
 
@@ -203,7 +220,10 @@
           type,
           data
         }) => {
+
           switch (type) {
+
+            /** Save the image locally **/
             case 'shoot':
               vscode.window
                 .showSaveDialog({
@@ -220,9 +240,8 @@
                   }
                 })
               break
-              /**
-               * Copy image to the clipboard
-               */
+
+              /** Copy image to the clipboard **/
             case 'copy':
               serializedBlobHandler(data.serializedBlob, data.upload)
                 .then(() => {
@@ -233,6 +252,7 @@
                 })
               break
 
+              /** Updates Cache Settings **/
             case 'getAndUpdateCacheAndSettings':
               panel.webview.postMessage({
                 type: 'restoreBgColor',
@@ -282,10 +302,14 @@
        * @function upload
        * @param {Buffer} image 
        * @return {Promise} 
+       * Sends Http requset  to screenify backend API to upload the image online. 
        */
       function upload(buffer) {
+
+        /** Server Url **/
         let serverUrl = `https://${settings.get("serverUrl")}/api/upload`
 
+        /** Show a progress loader... **/
         vscode.window.withProgress({
             location: 15,
             title: "Uploading Image...",
@@ -294,6 +318,8 @@
             token.onCancellationRequested(() => {
               return;
             });
+
+            /** Sending POST requset send with image buffer as the body **/
             return fetch(serverUrl, {
               method: 'POST',
               body: JSON.stringify({
@@ -305,27 +331,41 @@
             })
           })
 
+          /** convert the response into JSON **/
           .then(res => res.json())
+
           .then(response => {
             const {
               url
             } = response
+
+            /** Copy url to the clipboard **/
             vscode.env.clipboard.writeText(url)
               .then(() => {
+
+                /** Sends post message with the uploaded image url to webview api **/
                 panel.webview.postMessage({
                   type: 'successfulUplaod',
                   url
                 })
+
+                /** Sucessful Upload info message **/
                 vscode.window.showInformationMessage(`Snippet uploaded! ✅    Url is copied to the clipboard 📋: `, url, "Copy")
               })
           })
           .catch(err => {
+
+            /** Error message **/
             vscode.window.showErrorMessage(`Ops! Something went wrong! ❌: ${err}`, "Close")
           });
       }
     }
 
-
+    /**
+     * @function getHtmlContent
+     * @param {String} htmlPath 
+     * Parse the html content and prepare that for vscode html encoding.
+     */
     function getHtmlContent(htmlPath) {
       const htmlContent = fs.readFileSync(htmlPath, 'utf-8')
       return htmlContent.replace(/script src="([^"]*)"/g, (match, src) => {
@@ -333,9 +373,11 @@
         return `script src="${realSource}"`
       })
     }
+
+    /** Get Screenify settings  **/
     const settings = vscode.workspace.getConfiguration('screenify')
 
-
+    /** Extension Decativation **/
     function deactivate() {
       // TODO:complete
       // #1 Clear cache
