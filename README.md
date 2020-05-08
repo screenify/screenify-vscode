@@ -1,7 +1,7 @@
 <h1 align="center">
   <br>
   <a href="https://marketplace.visualstudio.com/items?itemName=adammomen.screenify">
-    <img src="https://avatars2.githubusercontent.com/u/61951664?s=200&v=4">
+    <img src="./resources/market-icon.png" width="400" height="200">
   </a>
   <br>
   Screenify
@@ -41,21 +41,27 @@
 
 - You can also start secreenify by clicking on the camera icon 📸 on the statusbar.
 - Default key binding to start Screenify is `Ctrl+Shift+S` or `⌘Shift+S` If you'd like to bind screenify to another hotkey, open up your keyboard shortcut settings and bind `screenify.activate` to a custom keybinding.
+
 - If you'd like to copy to clipboard instead of saving, click the image and press the copy keyboard shortcut (defaults are Ctrl+C on Windows and Linux, Cmd+C on OS X).
+
+## Examples
+
+[Nord](https://github.com/arcticicestudio/nord-visual-studio-code) + [Input Mono](http://input.fontbureau.com)
+
+![demo1](https://raw.githubusercontent.com/octref/polacode/master/demo/1.png)
+
+[Monokai Pro](https://marketplace.visualstudio.com/items?itemName=monokai.theme-monokai-pro-vscode) + [Operator Mono](https://www.typography.com/blog/introducing-operator)
+
+![demo2](https://raw.githubusercontent.com/octref/polacode/master/demo/2.png)
+
+[Material Theme Palenight](https://marketplace.visualstudio.com/items?itemName=Equinusocio.vsc-material-theme) + [Fira Code](https://github.com/tonsky/FiraCode)
+
+![demo3](https://raw.githubusercontent.com/octref/polacode/master/demo/3.png)
+
 ## Demo
 
-### *Capture a snippet of your code*
+### *Share Your Code online*
 
-![capture](./demo/capture.gif)
-
-### Draw over your snippet
-
-![Draw](./demo/draw.gif)
-
-Sketch, draw, and highlight your code for better explaination for others.
-
-### *Upload your captured snippet online*
-  
 ![upload](./demo/upload.gif)
 
 Share your code snippets online, screenify uploads your images that you can share the image url with others.
