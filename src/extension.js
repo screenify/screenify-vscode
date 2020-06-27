@@ -136,19 +136,6 @@ function activate(context) {
     );
     let panel;
 
-    // const createPanel = async context => {
-    //   const panel = vscode.window.createWebviewPanel('codesnap', 'CodeSnap 📸', vscode.ViewColumn.Two, {
-    //     enableScripts: true,
-    //     localResourceRoots: [vscode.Uri.file(context.extensionPath)]
-    //   });
-    //   panel.webview.html = await readHtml(
-    //     path.resolve(context.extensionPath, 'webview/index.html'),
-    //     panel
-    //   );
-
-    //   return panel;
-    // };
-
     /** Regiseter Webview Pannl Serializer **/
     vscode.window.registerWebviewPanelSerializer(
         "screenify", {
@@ -405,26 +392,12 @@ function activate(context) {
     }
 }
 
-/**
- * @function getHtmlContent
- * @param {String} htmlPath 
- * Parse the html content and prepare that for vscode html encoding.
- */
-// function getHtmlContent(htmlPath) {
-//   const htmlContent = fs.readFileSync(htmlPath, 'utf-8')
-//   return htmlContent.replace(/script src="([^"]*)"/g,
-//     (match, src) => {
-//       const realSource = 'vscode-resource:' + path.resolve(htmlPath, '..', src)
-//       return `script src="${realSource}"`
-//     })
-// }
-
 /** Get Screenify settings  **/
 const settings = vscode.workspace.getConfiguration("screenify");
 
 /** Extension Decativation **/
 function deactivate() {
-    // TODO:complete
+    // TODO:complete implementing extension deactivation routine
     // #1 Clear cache
     // #2 Garbage collection
 }
