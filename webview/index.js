@@ -1021,7 +1021,7 @@
             });
 
             /**  Pickr Initialization  **/
-            pickr.on('init', (instance) => {
+            pickr.on('init', () => {
 
                 /** Convert color to hex value **/
                 const hexColor = color.toHEXA().toString();
