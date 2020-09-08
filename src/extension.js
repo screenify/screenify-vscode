@@ -27,7 +27,7 @@ function activate(context) {
     } = context;
 
     /** Status Bar configuration **/
-    statusBarItem = vscode.window.createStatusBarItem(
+    const statusBarItem = vscode.window.createStatusBarItem(
         vscode.StatusBarAlignment.Right,
         100,
     );

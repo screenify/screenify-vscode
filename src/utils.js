@@ -7,7 +7,7 @@ const {
     writeFile
 } = require('fs').promises;
 
-const readHtml = async (htmlPath, panel) =>
+const readHtml = async(htmlPath, panel) =>
     (await readFile(htmlPath, 'utf-8'))
     .replace(/%CSP_SOURCE%/gu, panel.webview.cspSource)
     .replace(
