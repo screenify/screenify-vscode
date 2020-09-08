@@ -62,7 +62,9 @@
 
                 /** clear tool **/
                 clear = document.getElementById("clear"),
-                flashFx = document.getElementById("flash-fx");
+                flashFx = document.getElementById("flash-fx"),
+                record = document.getElementById("record"),
+                video = document.getElementById("video");
 
             const cameraFlashAnimation = async() => {
                 flashFx.style.display = 'block';
@@ -289,6 +291,10 @@
             /** Upload tool On Click Event Listener **/
             upload.addEventListener("click", () => {
                 uploadImage()
+            })
+
+            record.addEventListener("click", () => {
+                recordCanvas()
             })
 
             /** Clear tool On Click Event Listener **/
@@ -1045,6 +1051,11 @@
                 })
             })
 
+            function recordCanvas() {
+                const stream = canvas.createStream()
+                video.srcObject = stream;
+                video.play()
+            }
             /**
              * TODO:
              * Redo feature 
