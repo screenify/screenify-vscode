@@ -292,9 +292,11 @@ function activate(context) {
                             );
                         });
                     break;
+                case "video_stream":
+                    console.log(data.stream);
+                    break;
 
                     /** Updates Cache Settings **/
-
                 case "getAndUpdateCacheAndSettings":
                     panel.webview.postMessage({
                         type: "restoreBgColor",

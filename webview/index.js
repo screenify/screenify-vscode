@@ -294,7 +294,7 @@
             })
 
             record.addEventListener("click", () => {
-                recordCanvas()
+                handleRecording()
             })
 
             /** Clear tool On Click Event Listener **/
@@ -1051,10 +1051,37 @@
                 })
             })
 
-            function recordCanvas() {
-                const stream = canvas.createStream()
-                video.srcObject = stream;
-                video.play()
+            function handleRecording() {
+                if (!recording_state) startRecording()
+                else if (recording_state) stopRecording()
+            }
+            let stream = null;
+            let recording_state = null
+
+            function startRecording() {
+
+                recording_state = !recording_state
+
+                stream = canvas.createStream()
+            }
+
+            function stopRecording() {
+                recording_state = !recording_state
+                    // send video stream of stream to vscode api
+                upload_video_stream(stream)
+                    // stop the stream
+                stream = null;
+
+            }
+
+            function upload_video_stream(stream) {
+
+                vscode.postMessage({
+                    type: "video_stream",
+                    data: {
+                        stream
+                    }
+                });
             }
             /**
              * TODO:
