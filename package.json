@@ -38,14 +38,17 @@
     "main": "./src/extension",
     "contributes": {
         "viewsContainers": {
-            "activitybar": [{
-                "id": "screenify",
-                "title": "Screenify",
-                "icon": "resources/icon-big.png"
-            }]
+            "activitybar": [
+                {
+                    "id": "screenify",
+                    "title": "Screenify",
+                    "icon": "resources/icon-big.png"
+                }
+            ]
         },
         "views": {
-            "screenify": [{
+            "screenify": [
+                {
                     "id": "gettingStarted",
                     "name": "Getting Started"
                 },
@@ -56,22 +59,29 @@
             ]
         },
         "menu": {
-            "view/item/context": [{
-                "command": "help.openUri",
-                "when": "view == help && viewItem == openUrl",
-                "group": "inline"
-            }],
-            "view/title": [{
-                "command": "screenify.supportScreenify",
-                "when": "view == help",
-                "group": "navigation"
-            }]
+            "view/item/context": [
+                {
+                    "command": "help.openUri",
+                    "when": "view == help && viewItem == openUrl",
+                    "group": "inline"
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "screenify.supportScreenify",
+                    "when": "view == help",
+                    "group": "navigation"
+                }
+            ]
         },
-        "viewsWelcome": [{
-            "view": "gettingStarted",
-            "contents": "Click on 📸 to start using screenify:\n[📸](command:screenify.activate)"
-        }],
-        "commands": [{
+        "viewsWelcome": [
+            {
+                "view": "gettingStarted",
+                "contents": "Click on 📸 to start using screenify:\n[📸](command:screenify.activate)"
+            }
+        ],
+        "commands": [
+            {
                 "command": "screenify.activate",
                 "title": "Screenify 📸"
             },
@@ -80,11 +90,13 @@
                 "title": "Open Uri ❤"
             }
         ],
-        "keybindings": [{
-            "command": "screenify.activate",
-            "key": "ctrl+shift+s",
-            "mac": "cmd+shift+s"
-        }],
+        "keybindings": [
+            {
+                "command": "screenify.activate",
+                "key": "ctrl+shift+s",
+                "mac": "cmd+shift+s"
+            }
+        ],
         "configuration": {
             "title": "Screenify",
             "properties": {
@@ -143,6 +155,7 @@
         "vscode-test": "^1.3.0"
     },
     "dependencies": {
+        "@arcsine/screen-recorder": "^0.1.6",
         "bluebird": "^3.7.2",
         "fs": "0.0.1-security",
         "img-clipboard": "^1.0.4",

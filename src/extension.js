@@ -292,8 +292,19 @@ function activate(context) {
                             );
                         });
                     break;
-                case "video_stream":
-                    console.log(data.stream);
+                case "startRecording":
+                    console.log(data.video);
+
+                    // TODO: call startRecordingSteam():
+                    break;
+                case "pauseRecording":
+                    console.log(data.video);
+
+                    // TODO: call pauseRecordingSteam():
+                    break;
+                case "stopRecording":
+
+                    // TODO: call stopRecordingSteam():
                     break;
 
                     /** Updates Cache Settings **/

@@ -1052,36 +1052,50 @@
             })
 
             function handleRecording() {
-                if (!recording_state) startRecording()
-                else if (recording_state) stopRecording()
+                if (recording_state) stopRecording()
+                else startRecording()
             }
-            let stream = null;
-            let recording_state = null
 
             function startRecording() {
 
                 recording_state = !recording_state
+                    // handle resume video capturing. should it be on the extension host? whhy?
 
-                stream = canvas.createStream()
+                //  TODO: send a api to vscode api to start recording
             }
 
-            function stopRecording() {
+            function stopRecording(pause = false) {
                 recording_state = !recording_state
                     // send video stream of stream to vscode api
-                upload_video_stream(stream)
-                    // stop the stream
-                stream = null;
+                    //  TODO: send a api to vscode api to STOP recording
+                    // we should use recoding other 
 
             }
 
-            function upload_video_stream(stream) {
+            function uploadVideoStream(video) {
+                video.innerText = "hello World"
 
                 vscode.postMessage({
                     type: "video_stream",
                     data: {
-                        stream
+                        video: new Blob(recordedChunks)
                     }
                 });
+            }
+
+            function getCodecsOptions() {
+                if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+                    return { mimeType: 'video/webm; codecs=vp9' };
+                } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
+                    return { mimeType: 'video/webm; codecs=vp8' };
+                }
+                return {}
+            }
+
+            function handleDataAvailable(event) {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                } else {}
             }
             /**
              * TODO:
